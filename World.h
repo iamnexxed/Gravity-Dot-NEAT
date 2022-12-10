@@ -14,7 +14,8 @@ class World {
     Circle* circle;
     GLFWwindow* window;
     public:
-        float gravity =  -0.0025;
+        float gravity = -0.0025;
+        float jumpForce = 0.015;
         World( GLFWwindow* window, int windowWidth, int windowHeight );
         void Start();
         void Update();

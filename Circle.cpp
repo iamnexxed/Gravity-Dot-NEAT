@@ -40,7 +40,7 @@ Circle::Circle() {
 
     std::vector<Texture> tex;
 
-    this->circleMesh = new Mesh( circle_vertices, indices, tex, true );
+    this->circleMesh = new Mesh( circle_vertices, indices, tex );
     this->translation = this->initialPosition;
 }
 

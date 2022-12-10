@@ -4,7 +4,7 @@
 // GLM Reference: https://openframeworks.cc//documentation/glm/detail_func_geometric/#!show_glm::cross
 #include "Primitives/Utils.h"
 #include "Model.h"
-#include "Primitives/primitives.h"
+#include "Primitives.h"
 
 #include "Physics/physics.h"
 

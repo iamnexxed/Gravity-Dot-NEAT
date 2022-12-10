@@ -1,5 +1,5 @@
-#ifndef HEAD_CLASS_H
-#define HEAD_CLASS_H
+#ifndef MESH_CLASS_H
+#define MESH_CLASS_H
 
 #include <string>
 
@@ -13,7 +13,6 @@ class Mesh
 public:
 
 	int triangleCount;
-	bool is2D;
 
 	std::vector <Vertex> vertices;
 	std::vector <GLuint> indices;
@@ -29,8 +28,7 @@ public:
 	(
 		std::vector <Vertex>& vertices, 
 		std::vector <GLuint>& indices, 
-		std::vector <Texture>& textures,
-		bool is2D = false
+		std::vector <Texture>& textures
 	);
 
 	void Draw
@@ -51,10 +49,10 @@ public:
 		bool isWire = false
 	);
 
-	std::vector<glm::vec3> GetTransformedCoordinates(int triangleIndex) const;
+	std::vector<glm::vec3> GetTransformedCoordinates( int triangleIndex ) const;
 	std::vector<glm::vec3> GetTransformedTriangles() const;
 
-	glm::vec3 GetTriangleCentroid(int triangleIndex) const;
+	glm::vec3 GetTriangleCentroid( int triangleIndex ) const;
 
 };
 

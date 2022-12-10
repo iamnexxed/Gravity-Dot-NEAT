@@ -1,13 +1,12 @@
 #include "Mesh.h"
 
 // TO DO: Create material class to pass instead of a texture
-Mesh::Mesh( std::vector <Vertex>& vertices, std::vector <GLuint>& indices, std::vector <Texture>& textures, bool is2D )
+Mesh::Mesh( std::vector <Vertex>& vertices, std::vector <GLuint>& indices, std::vector <Texture>& textures )
 {
 	this->triangleCount = indices.size() / 3;
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
-	this->is2D = is2D;
 
 	matrix = glm::mat4(1.0f);
 	translation = glm::vec3(0.0f, 0.0f, 0.0f);
