@@ -4,7 +4,7 @@
 // GLM Reference: https://openframeworks.cc//documentation/glm/detail_func_geometric/#!show_glm::cross
 #include "Primitives/Utils.h"
 #include "Model.h"
-#include "Primitives.h"
+
 
 #include "Physics/physics.h"
 
@@ -65,7 +65,7 @@ int main()
 	//glViewport( 0, 0, WIDTH, HEIGHT );
 
 
-	World world( window, WIDTH, HEIGHT );
+	World world( *window, WIDTH, HEIGHT );
 	world.Start();
 	
 	

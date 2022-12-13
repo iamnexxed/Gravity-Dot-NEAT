@@ -1,34 +1,37 @@
 #include "Rectangle.h"
 
-Rectangle::Rectangle( glm::vec3 min, glm::vec3 max ) {
-    this->minBound = min;
-    this->maxBound = max;
-    this->center.x = ( min.x + max.x) / 2;
-    this->center.y = ( min.y + max.y) / 2;
-    this->width = max.x - min.x;
-    this->height = max.y - min.y;
-
-
+Rectangle::Rectangle( 
+    const Primitives& primitives, 
+    float width,
+    float height ) : 
+    primitives( primitives ), 
+    width( width ), 
+    height( height ) {
+    this->scale.x = width;
+    this->scale.y = height;
+    this->UpdateBounds();
 }
 
-Rectangle::Rectangle( glm::vec3 center, float width, float height ) {
-    this->center = center;
-    this->width = width;
-    this->height = height;
+void Rectangle::UpdateBounds() {
+    this->minBound.x = this->translation.x - this->width / 2;
+    this->minBound.y = this->translation.y - this->height / 2;
 
-    this->minBound.x = center.x - width / 2;
-    this->minBound.y = center.y - height / 2;
-
-    this->maxBound.x = center.x + width / 2;
-    this->maxBound.y = center.y + height / 2;
+    this->maxBound.x = this->translation.x + this->width / 2;
+    this->maxBound.y = this->translation.y + this->height / 2;
 }
 
-void Rectangle::Draw( Primitives& primitive, Shader& shader, Camera& camera ) {
-    primitive.DrawRectangle( 
+void Rectangle::Draw( Shader& shader, Camera& camera ) {
+    this->primitives.DrawRectangle( 
         shader, 
         camera, 
         this->matrix, 
         this->translation, 
+        this->rotation,
         this->scale
     );
+}
+
+void Rectangle::Translate( glm::vec3 displacementVec ) {
+    this->translation += displacementVec;
+    this->UpdateBounds();
 }

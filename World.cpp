@@ -1,28 +1,39 @@
 #include "World.h"
 
-World::World( GLFWwindow* window, int windowWidth, int windowHeight ) {
-    this->window = window;
-    this->camera = new Camera ( windowWidth, windowHeight, glm::vec3( 0.0f, 0.0f, 5.0f ) );
+World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
+    window(window) {
+    this->camera = new Camera( 
+        windowWidth, 
+        windowHeight, 
+        glm::vec3( 0.0f, 0.0f, 5.0f ) 
+    );
     this->shaderProgram = new Shader( "sprite.vert", "sprite.frag" );
     shaderProgram->Activate();
+
+    this->primitives = new Primitives();
+    this->rectangle = new Rectangle( *this->primitives, 0.2f, 0.7f );
+
+    this->circle = new Circle();
 }
 
 void World::Start() {
-    this->circle = new Circle();
-    this->circle->scale = glm::vec3(0.15, 0.15, 0.15);
+    
+    this->circle->scale = glm::vec3( 0.15, 0.15, 0.15 );
 }
 
 void World::Update() {
-    camera->UpdateMatrix( 60.0f, 0.1f, 100.0f );
-    circle->ApplyForce( glm::vec3( 0, gravity, 0 ) );
+    this->camera->UpdateMatrix( 60.0f, 0.1f, 100.0f );
+    this->circle->ApplyForce( glm::vec3( 0, gravity, 0 ) );
 
-    if ( glfwGetKey( window, GLFW_KEY_SPACE ) == GLFW_PRESS )
-	{
-        circle->ApplyForce( glm::vec3( 0, this->jumpForce, 0 ) );
+    if ( glfwGetKey( &this->window, GLFW_KEY_SPACE ) == GLFW_PRESS ) {
+        this->circle->ApplyForce( glm::vec3( 0, this->jumpForce, 0 ) );
 	}
 
-    circle->Update();
-    circle->DrawInstance( *shaderProgram, *camera );
+    this->circle->Update();
+    this->circle->DrawInstance( *shaderProgram, *camera );
+
+    this->rectangle->Draw( *shaderProgram, *camera );
+
 }
 
 void World::Destroy() {
@@ -30,7 +41,9 @@ void World::Destroy() {
 }
 
 World::~World() {
-   delete circle;
-   delete camera;
-   delete shaderProgram;
+    delete camera;
+    delete shaderProgram;
+    delete circle;
+    delete rectangle;
+    delete primitives;
 }
