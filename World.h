@@ -14,7 +14,9 @@ class World {
     Shader* shaderProgram;
     Primitives* primitives;
     Circle* circle;
-    Rectangle* rectangle;
+
+    Rectangle* groundRectangle;
+    Rectangle* ceilRectangle;
 
     GLFWwindow& window;
     

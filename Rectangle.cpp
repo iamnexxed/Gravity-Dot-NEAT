@@ -7,8 +7,8 @@ Rectangle::Rectangle(
     primitives( primitives ), 
     width( width ), 
     height( height ) {
-    this->scale.x = width;
-    this->scale.y = height;
+    this->scale.x = width / 2;
+    this->scale.y = height / 2;
     this->UpdateBounds();
 }
 
