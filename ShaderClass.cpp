@@ -62,11 +62,10 @@ void Shader::Delete()
 }
 
 
-void Shader::compileErrors(unsigned int shader, const char* type, const char* name)
-{
+void Shader::compileErrors( unsigned int shader, const char* type, const char* name ) {
 	GLint hasCompiled;
 	char infoLog[1024];
-	if (std::strcmp(type,  "PROGRAM") != 0)
+	if ( std::strcmp(type,  "PROGRAM") != 0 )
 	{
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
 		if (hasCompiled == GL_FALSE)
@@ -79,7 +78,7 @@ void Shader::compileErrors(unsigned int shader, const char* type, const char* na
 	}
 	else
 	{
-		glGetProgramiv(shader, GL_LINK_STATUS, &hasCompiled);
+		glGetProgramiv( shader, GL_LINK_STATUS, &hasCompiled );
 		if (hasCompiled == GL_FALSE)
 		{
 			GLsizei length;
@@ -92,5 +91,47 @@ void Shader::compileErrors(unsigned int shader, const char* type, const char* na
 	if (hasCompiled == GL_TRUE)
 	{
 		std::cout << name << " has compiled successfully. \n\n";
+	}
+}
+
+void Shader::SetFloatUniform1f( const char* uniform, float value ) {
+	GLint getUniform = glGetUniformLocation(this->ID, uniform);
+	if( getUniform != -1 )
+		glUniform1f( getUniform, value );
+	else
+	{
+		// Inactive shader uniform variable also returns -1
+		// Ref: https://stackoverflow.com/questions/47871575/glgetuniformlocation-returns-1-for-samplers-other-than-first
+		std::cout << "Shader Error: " << __FILE__ << " line " << __LINE__ << ": GLSL uniform variable " << uniform << " not active!" << std::endl;
+		exit(1);
+		//std::cin.get();
+	}
+}
+
+void Shader::SetFloatUniform3f( const char* uniform, float v0, float v1, float v2 ) {
+	GLint getUniform = glGetUniformLocation( this->ID, uniform );
+	if( getUniform != -1 )
+		glUniform3f( getUniform, v0, v1, v2 );
+	else
+	{
+		// Inactive shader uniform variable also returns -1
+		// Ref: https://stackoverflow.com/questions/47871575/glgetuniformlocation-returns-1-for-samplers-other-than-first
+		std::cout << "Shader Error: " << __FILE__ << " line " << __LINE__ << ": GLSL uniform variable " << uniform << " not active!" << std::endl;
+		exit(1);
+		//std::cin.get();
+	}
+}
+
+void Shader::SetFloatVecUniform3fv( const char* uniform, glm::vec3 v) {
+	GLint getUniform = glGetUniformLocation( this->ID, uniform );
+	if( getUniform != -1 )
+		glUniform3fv( getUniform, 1, &v[0] );
+	else
+	{
+		// Inactive shader uniform variable also returns -1
+		// Ref: https://stackoverflow.com/questions/47871575/glgetuniformlocation-returns-1-for-samplers-other-than-first
+		std::cout << "Shader Error: " << __FILE__ << " line " << __LINE__ << ": GLSL uniform variable " << uniform << " not active!" << std::endl;
+		exit(1);
+		//std::cin.get();
 	}
 }

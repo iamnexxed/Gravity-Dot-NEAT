@@ -2,6 +2,7 @@
 #define CIRCLE_CLASS_H
 
 #include "Mesh.h"
+#include "Rectangle.h"
 
 class Circle {
     private:
@@ -11,15 +12,18 @@ class Circle {
         glm::vec3 initialPosition = glm::vec3(-3.3, 0, 0);
 
     public:
+        float radius = 1.0f;
         glm::vec3 translation = glm::vec3( 0.0f, 0.0f, 0.0f );
 		glm::vec3 scale = glm::vec3( 1.0f, 1.0f, 1.0f );
 
-        Circle();
+        Circle( float rad );
+        void MoveTo( glm::vec3 position );
         void DrawInstance( Shader& shader, Camera& camera );
         void ApplyForce( glm::vec3 force );
         void Update();
+        void Translate( glm::vec3 translationVec );
         // void CheckDeath();
-        // void CheckCollision(Rectangle other)
+        bool CheckCollision( const Rectangle& rect );
 };
 
 
