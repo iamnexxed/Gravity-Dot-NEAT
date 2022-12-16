@@ -6,7 +6,7 @@
 #include "Camera.h"
 #include "Rectangle.h"
 #include "Primitives.h"
-
+#include "Pillar.h"
 
 
 class World {
@@ -17,6 +17,8 @@ class World {
 
     Rectangle* groundRectangle;
     Rectangle* ceilRectangle;
+
+    Pillar* pillar;
 
     GLFWwindow& window;
     
