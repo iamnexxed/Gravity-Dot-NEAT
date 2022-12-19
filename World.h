@@ -6,7 +6,7 @@
 #include "Camera.h"
 #include "Rectangle.h"
 #include "Primitives.h"
-#include "Pillar.h"
+#include "PillarManager.h"
 
 
 class World {
@@ -17,18 +17,21 @@ class World {
 
     Rectangle* groundRectangle;
     Rectangle* ceilRectangle;
+    PillarManager* pillarManager;
 
-    Pillar* pillar;
 
     GLFWwindow& window;
     
     public:
-        float gravity = -0.0025;
-        float jumpForce = 0.015;
+        const float gravity = -0.0025;
+        const float jumpForce = 0.015;
+        const float spawnInterval = 2.0f;
         World( GLFWwindow& window, int windowWidth, int windowHeight );
         void Start();
         void Update();
         void Destroy();
+        bool IsDead();
+        void Restart();
 
         virtual ~World();
 };

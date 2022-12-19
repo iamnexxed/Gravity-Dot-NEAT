@@ -35,3 +35,8 @@ void Rectangle::Translate( glm::vec3 displacementVec ) {
     this->translation += displacementVec;
     this->UpdateBounds();
 }
+
+void Rectangle::MoveTo( glm::vec3 newPosition ) {
+    this->translation = newPosition;
+    this->UpdateBounds();
+}

@@ -2,26 +2,36 @@
 #define PILLAR_CLASS_H
 
 #include "Rectangle.h"
+#include "Primitives/Mathematics.h"
+
 
 class Pillar {
     private:
-        //const Primitives& primitives;
         Rectangle* upperRect;
         Rectangle* lowerRect;
         glm::vec3 translation;
-        float currentVelocity;
+        glm::vec3 currentVelocity;
+        glm::vec3 initialPosition;
+
+        bool shouldMove;
+   
+
         const float acceleration = 0.001f;
-        const float pillarWidth = 0.2f;
-        const float pillarHeight = 0.7f;
+        const float pillarWidth = 0.5f;
+        const float pillarHeight = 4.5f;
+        const float gapDistance = 1.2f;
+        const float yBoundDistance = 2.0f;
+        const glm::vec3 initialVelocity = glm::vec3( -0.02f, 0, 0 );
 
     public:
-        float initialVelocity;
-        float gapDistance;
-        Pillar( const Primitives& primitives, float initialVelocity, float gap );
+
+        Pillar( const Primitives& primitives, glm::vec3 iPosition );
         void Spawn();
         void Update();
         void Draw( Shader& shader, Camera& camera );
         void Reset();
+        void MoveRectangles();
+        void IncreaseVelocity();
 };
 
 #endif

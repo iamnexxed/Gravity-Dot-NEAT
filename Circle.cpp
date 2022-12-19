@@ -75,6 +75,11 @@ void Circle::Translate( glm::vec3 translationVec ) {
     this->translation += translationVec;
 }
 
+void Circle::ResetPosition() {
+    this->MoveTo( glm::vec3( this->translation.x, 0, 0 ) );
+    this->velocity = glm::vec3( 0, 0, 0 );
+}
+
 bool Circle::CheckCollision( const Rectangle& rect ) {
     glm::vec3 circleDistance;
 

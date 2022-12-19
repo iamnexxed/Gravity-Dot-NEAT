@@ -22,6 +22,7 @@ class Circle {
         void ApplyForce( glm::vec3 force );
         void Update();
         void Translate( glm::vec3 translationVec );
+        void ResetPosition();
         // void CheckDeath();
         bool CheckCollision( const Rectangle& rect );
 };

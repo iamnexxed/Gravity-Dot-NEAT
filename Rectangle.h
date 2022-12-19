@@ -28,6 +28,7 @@ class Rectangle {
         Rectangle( const Primitives& primitives, float width, float height );
         void Draw( Shader& shader, Camera& camera );
         void Translate( glm::vec3 diplacementVec );
+        void MoveTo( glm::vec3 newPosition );
 };
 
 #endif
