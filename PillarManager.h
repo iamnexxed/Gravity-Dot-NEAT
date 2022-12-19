@@ -8,7 +8,7 @@
 class PillarManager {
     private:
         std::vector<Pillar*> pillars;
-        std::queue<Pillar*> queue;
+        std::queue<int> queue;
         const int numOfPillars = 5;
         const float respawnXLocation = -5.0f;
         const float spawnTime = 2.0f;
