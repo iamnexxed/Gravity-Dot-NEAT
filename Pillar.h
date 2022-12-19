@@ -7,8 +7,7 @@
 
 class Pillar {
     private:
-        Rectangle* upperRect;
-        Rectangle* lowerRect;
+
         glm::vec3 translation;
         glm::vec3 currentVelocity;
         glm::vec3 initialPosition;
@@ -24,7 +23,8 @@ class Pillar {
         const glm::vec3 initialVelocity = glm::vec3( -0.02f, 0, 0 );
 
     public:
-     
+        Rectangle* upperRect;
+        Rectangle* lowerRect;
         Pillar( const Primitives& primitives, glm::vec3 iPosition );
         void Spawn();
         void Update();
@@ -34,6 +34,7 @@ class Pillar {
         void IncreaseVelocity();
         float GetXPos();
         bool CanMove();
+
 };
 
 #endif

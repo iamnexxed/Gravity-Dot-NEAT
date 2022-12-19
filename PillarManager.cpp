@@ -33,7 +33,7 @@ void PillarManager::Update() {
 
         this->pillars[i]->Update();
         if( !this->pillars[i]->CanMove() ) {
-            this->queue.push(i);
+            this->queue.push( i );
         }
         
     }
@@ -41,7 +41,7 @@ void PillarManager::Update() {
 }
 
 void PillarManager::Draw( Shader& shader, Camera& camera ) {
-    for( int i = 0; i < this->numOfPillars; ++i)
+    for( int i = 0; i < this->numOfPillars; ++i )
             this->pillars[i]->Draw( shader, camera );
 }
 
@@ -49,6 +49,15 @@ void PillarManager::Reset() {
     time( &this->startTime ); 
     for( int i = 0; i < this->numOfPillars; ++i )
         this->pillars[i]->Reset();
+}
+
+std::vector<Rectangle*> PillarManager::GetAllRectangles() {
+    std::vector<Rectangle*> rects;
+    for( int i = 0; i < this->numOfPillars; ++i ) {
+        rects.push_back( pillars[i]->lowerRect );
+        rects.push_back( pillars[i]->upperRect );
+    }
+    return rects;
 }
 
 PillarManager::~PillarManager() {

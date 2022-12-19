@@ -20,7 +20,7 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
 
     this->circle = new Circle( 0.15f );
     this->pillarManager = new PillarManager( *this->primitives, glm::vec3 ( 5.0f, 0, 0 ) );
-   
+    this->rects = this->pillarManager->GetAllRectangles();
 
 }
 
@@ -29,7 +29,7 @@ void World::Start() {
 
 void World::Update() {
 
-    if( IsDead() ) {
+    if( this->IsDead() ) {
         // Restart Level
         this->Restart();
     }
@@ -93,6 +93,15 @@ bool World::IsDead() {
         //std::cout << "Collision with rect. ";
         this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 0.0f ) );
         return true;
+    }
+
+    for( int i = 0; i < this->rects.size(); ++i ) {
+        if( this->circle->CheckCollision( *this->rects[i] ) ) {
+            this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 0.0f ) );
+            std::cout << "Collided with rect: " << i << std::endl;
+            std::cout << "XTranslation: " << this->rects[i]->translation.x << std::endl;
+            return true;
+        }
     }
 
     this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 1.0f, 1.0f ) );

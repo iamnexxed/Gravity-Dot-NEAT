@@ -21,6 +21,7 @@ class PillarManager {
         void Draw( Shader& shader, Camera& camera );
         void Reset();
         ~PillarManager();
+        std::vector<Rectangle*> GetAllRectangles();
 
 };
 

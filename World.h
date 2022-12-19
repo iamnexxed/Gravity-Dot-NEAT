@@ -18,6 +18,7 @@ class World {
     Rectangle* groundRectangle;
     Rectangle* ceilRectangle;
     PillarManager* pillarManager;
+    std::vector<Rectangle*> rects;
 
 
     GLFWwindow& window;

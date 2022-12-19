@@ -54,7 +54,9 @@ void Pillar::Draw( Shader& shader, Camera& camera ) {
 
 void Pillar::Reset() {
     this->currentVelocity = this->initialVelocity;    
+    this->translation = this->initialPosition;
     this->shouldMove = false;
+    this->MoveRectangles();
 }
 
 void Pillar::MoveRectangles() {
@@ -87,3 +89,4 @@ float Pillar::GetXPos() {
 bool Pillar::CanMove() {
     return this->shouldMove;
 }
+
