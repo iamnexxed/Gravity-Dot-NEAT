@@ -34,6 +34,7 @@ class Pillar {
         void IncreaseVelocity();
         float GetXPos();
         bool CanMove();
+        float GetCurrentVelocity();
 
 };
 

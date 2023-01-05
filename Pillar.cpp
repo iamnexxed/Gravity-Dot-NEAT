@@ -90,3 +90,6 @@ bool Pillar::CanMove() {
     return this->shouldMove;
 }
 
+float Pillar::GetCurrentVelocity() {
+     return -this->currentVelocity.x;
+}

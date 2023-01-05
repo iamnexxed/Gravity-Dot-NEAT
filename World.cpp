@@ -8,8 +8,8 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
         glm::vec3( 0.0f, 0.0f, 5.0f ) 
     );
     this->shaderProgram = new Shader( "sprite.vert", "sprite.frag" );
-    shaderProgram->Activate();
-
+    this->shaderProgram->Activate();
+    this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 1.0f, 1.0f ) );
     this->primitives = new Primitives();
 
     this->groundRectangle = new Rectangle( *this->primitives, 10.0f, 0.4f );
@@ -30,6 +30,9 @@ void World::Start() {
 void World::Update() {
 
     if( this->IsDead() ) {
+        // Remove the dot object from the scene
+
+        // If there are no dot objects left restart the level
         // Restart Level
         this->Restart();
     }
@@ -91,20 +94,20 @@ bool World::IsDead() {
         this->circle->CheckCollision( *this->ceilRectangle ) 
     ) {
         //std::cout << "Collision with rect. ";
-        this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 0.0f ) );
+        //this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 0.0f ) );
         return true;
     }
 
     for( int i = 0; i < this->rects.size(); ++i ) {
         if( this->circle->CheckCollision( *this->rects[i] ) ) {
-            this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 0.0f ) );
-            std::cout << "Collided with rect: " << i << std::endl;
-            std::cout << "XTranslation: " << this->rects[i]->translation.x << std::endl;
-            return true;
+            //this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 0.0f ) );
+            //std::cout << "Collided with rect: " << i << std::endl;
+            //std::cout << "XTranslation: " << this->rects[i]->translation.x << std::endl;
+           return true;
         }
     }
 
-    this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 1.0f, 1.0f ) );
+    //this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 1.0f, 1.0f ) );
     return false;
 }
 

@@ -22,6 +22,8 @@ class PillarManager {
         void Reset();
         ~PillarManager();
         std::vector<Rectangle*> GetAllRectangles();
+        void IncreaseVelocity();
+        float GetVelocity();
 
 };
 

@@ -21,11 +21,13 @@ void PillarManager::Update() {
    
         
     
-    if( difftime( this->timer, this->startTime ) >= this->spawnTime ) {
+    if( difftime( this->timer, this->startTime ) >= 
+        ( ( this->spawnTime ) ) ) {
         if( !this->queue.empty() ) {
             this->pillars[this->queue.front()]->Spawn();
             this->queue.pop();
             time( &this->startTime ); 
+            //this->IncreaseVelocity();
         }
     }
 
@@ -58,6 +60,16 @@ std::vector<Rectangle*> PillarManager::GetAllRectangles() {
         rects.push_back( pillars[i]->upperRect );
     }
     return rects;
+}
+
+void PillarManager::IncreaseVelocity() {
+    for( int i = 0; i < this->numOfPillars; ++i ) {
+        pillars[i]->IncreaseVelocity();
+    }
+}
+
+float PillarManager::GetVelocity() {
+    return pillars[0]->GetCurrentVelocity();
 }
 
 PillarManager::~PillarManager() {
