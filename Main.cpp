@@ -2,6 +2,7 @@
 // /usr/bin/clang++ -std=c++17 -ILibraries/include -g **.cpp glad.cc -o Main -LLibraries/lib -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit && ./Main
 
 // GLM Reference: https://openframeworks.cc//documentation/glm/detail_func_geometric/#!show_glm::cross
+
 #include "Primitives/Utils.h"
 #include "Model.h"
 

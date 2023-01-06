@@ -45,6 +45,9 @@ Circle::Circle( float rad ) {
     this->radius = rad;
     this->scale.x = rad;
     this->scale.y = rad;
+    
+    Genome newGene;
+    this->brain = new NeuralNetwork( newGene );
 }
 
 

@@ -1,7 +1,8 @@
-#ifndef NEURALNETWORK_CLASS_H
-#define NEURALNETWORK_CLASS_H
+#ifndef GENOME_CLASS_H
+#define GENOME_CLASS_H
 
 #include <vector>
+#include "Primitives/Mathematics.h"
 
 enum NodeType {
     Sensor,
@@ -20,14 +21,19 @@ struct Connection {
     float weight;
     bool isEnabled;
     int innovNum;
-}
+};
 
 class Genome {
 
     // Consists of Nodes and Connections
     private:
+        int nodeCounter = 0;
+    public:
         std::vector<Node> nodes;
         std::vector<Connection> connections;
+
+        Genome();
+        void Initialize( int inputCount, int outputCount );
 };
 
 #endif

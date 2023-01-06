@@ -3,6 +3,7 @@
 
 #include "Mesh.h"
 #include "Rectangle.h"
+#include "NeuralNetwork.h"
 
 class Circle {
     private:
@@ -10,6 +11,7 @@ class Circle {
         Mesh *circleMesh;
         glm::vec3 velocity = glm::vec3( 0.0f, 0.0f, 0.0f );
         glm::vec3 initialPosition = glm::vec3(-3.3, 0, 0);
+        NeuralNetwork *brain;
 
     public:
         float radius = 1.0f;

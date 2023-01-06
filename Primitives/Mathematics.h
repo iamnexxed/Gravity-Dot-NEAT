@@ -6,7 +6,8 @@
 #include <time.h>
 #include <cmath>
 
-#define PI glm::pi<float>()
+#define PI 3.1415927
+#define E 2.718281828
 
 class Mathematics
 {
@@ -19,8 +20,8 @@ class Mathematics
         lat = rand() % 180;
         lon = rand() % 360;
         // Reference: https://stackoverflow.com/questions/39937628/howto-use-glm-constants-in-c-opengl
-        float theta = lat * glm::pi<float>() / 180.0f;
-        float phi = lon * glm::pi<float>() / 180.0f;
+        float theta = lat * PI / 180.0f;
+        float phi = lon * PI / 180.0f;
         float x = radius * std::sin( theta ) * std::cos( phi );
         float y = radius * std::sin( theta ) * std::sin( phi );
         float z = radius * std::cos( theta) ;
