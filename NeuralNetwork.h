@@ -4,42 +4,31 @@
 #include "Genome.h"
 #include "Matrix.h"
 
-
-class NeuralNetwork;
 class Layer {
 
     private: 
-       friend class NeuralNetwork;
+        // Node references
+        std::vector<Node*> nodes;
+        LayerType type;
 
     public:
-        // WeightMatrix - RowCol
-        Matrix weightMatrix;
-
-        // Bias Matrix - Col
-        Matrix biasMatrix;
-
-        Layer( int inputCount, int nodeCount );
-
-        // ColMatrx GetOutput( InputMatrix )
-        Matrix GetOutput( 
-            const Matrix& inputMatrix, 
-            bool shouldUseActivation = true
-        );
-    
+        Layer();
+        void AddNode( Node& node );
+        // Activate neuron nodes
+        void ActivateNeurons();
+        std::vector<float> GetActivationOutput();
 };
 
 class NeuralNetwork {
     
     // Layers
     std::vector<Layer> layers;
-    public:
-        NeuralNetwork();
-        NeuralNetwork( const Genome& genome );
-        void CreateLayers(const Genome& genome );
-        // Activation function
-        static float SigmoidActivation( float value );
 
-        Matrix Predict( const Matrix& inputMatrix );
+    const Genome& genome;
+    public:
+        NeuralNetwork( const Genome& genome );
+    
+        std::vector<float> Predict( const std::vector<float>& inputs );
 };
 
 

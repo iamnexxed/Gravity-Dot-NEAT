@@ -1,56 +1,61 @@
 #include "NeuralNetwork.h" 
 
 
-Layer::Layer( int inputCount, int nodeCount ) {
-    this->weightMatrix.Resize( nodeCount, inputCount );
-    this->biasMatrix.Resize( nodeCount, 1 );
+Layer::Layer() {
 
-    std::cout << "\nWeight Matrix:\n";
-    this->weightMatrix.Print();
-
-    std::cout << "\nBias Matrix:\n";
-    this->biasMatrix.Print();
+   
 }
 
-Matrix Layer::GetOutput( 
-    const Matrix& inputMatrix, bool shouldUseActivation 
-) {
-    Matrix res = this->weightMatrix.Multiply( inputMatrix );
-    res.Accumulate( this->biasMatrix );
-    if( shouldUseActivation ) {
-        for( int i = 0; i < res.data.size(); ++i ) {
-            for( int j = 0; j < res.data[i].size(); ++j ) {
-                res.data[i][j] = NeuralNetwork::SigmoidActivation( res.data[i][j] );
-            }
-        }
+void Layer::AddNode( Node& node ) {
+    this->nodes.push_back(&node);
+}
+
+void Layer::ActivateNeurons() {
+    for( int i = 0; i < this->nodes.size(); ++i ) {
+        this->nodes[i]->Activate();
     }
-    return res;
 }
 
-NeuralNetwork::NeuralNetwork() {
-    Layer l( 3, 2 );
-    Matrix iM( 3, 1 );
-    iM.FillFloat( 2.0f );
-    std::cout << "\nInput Matrix:\n";
-    iM.Print();
-    Matrix m = l.GetOutput( iM );
-    std::cout << "\nResult Matrix:\n";
-    m.Print();
+std::vector<float> Layer::GetActivationOutput() {
+    std::vector<float> outputs;
+    for( int i = 0; i < this->nodes.size(); ++i ) {
+        outputs.push_back( this->nodes[i]->outputActivation );
+    }
+    return outputs;
 }
 
-NeuralNetwork::NeuralNetwork( const Genome& genome ) {
-    // Based on node connections in the genome create a Layer and add values to the Weight and Bias Matrices
+
+NeuralNetwork::NeuralNetwork( const Genome& genome ): genome( genome ) {
+
+
+    // First inputCount nodes will be input nodes
+    // Indices ranging from inputCount to outputCount will be outputNodes
+
+    // int totalLayers;
+    // For each connection
+    //  nodes[outIndex].layerIndex = nodes[inIndex].layerIndex + 1;
+    //  if(nodes[outIndex].layerIndex > totalLayers) totalLayers = nodes[outIndex].layerIndex
+    //  Add connectionIndex associated with the outputNode to the outputNode
+
+    // For i 0 to totalLayers
+    //  create a new Layer
+
+    // For each node in the genome
+    //  layers[node.layerIndex].Add(ref node);
+
 }
 
-void NeuralNetwork::CreateLayers( const Genome& genome ) {
-    // Based on node connections in the genome create a Layer and add values to the Weight and Bias Matrices
 
-}
 
-float NeuralNetwork::SigmoidActivation( float value ) {
-    return 1 / ( 1 + std::pow( E, -value ) );
-}
+std::vector<float> NeuralNetwork::Predict( const std::vector<float>& inputs ) {
 
-Matrix NeuralNetwork::Predict( const Matrix& inputMatrix ) {
-    return inputMatrix;
+    // For each Layer
+    //  for each node of the layer
+    //      Iterate through each connection associated
+    //          If the connection is enabled
+    //              Add the inNode.output * weight to the node
+    //      Activate the node
+
+    // OutputLayer.GetActivationOutput()
+    return inputs;
 }
