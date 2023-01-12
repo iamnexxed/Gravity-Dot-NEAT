@@ -46,8 +46,11 @@ Circle::Circle( float rad ) {
     this->scale.x = rad;
     this->scale.y = rad;
     
-    Genome newGene;
+    Genome newGene = Genome::GenerateTestGenome();
     this->brain = new NeuralNetwork( newGene );
+    std::vector<float> inputs = { 0.5f, 0.2f, 0.3f };
+    std::vector<float> outputs = this->brain->Predict( inputs );
+    Utils::showFloatVector( outputs );
 }
 
 

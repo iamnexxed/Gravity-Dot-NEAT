@@ -2,6 +2,7 @@
 #define GENOME_CLASS_H
 
 #include <vector>
+#include <iostream>
 #include "Primitives/Mathematics.h"
 
 enum LayerType {
@@ -24,7 +25,7 @@ class Node {
         // Activation Function
         void Activate();
         static float SigmoidActivation( float value );
-
+        void ShowData();
 
 };
 
@@ -41,6 +42,7 @@ class Genome {
     // Consists of Nodes and Connections
     private:
         int nodeCounter = 0;
+        int innovNumber = 1;
     public:
         int inputCount = 0;
         int outputCount = 0;
@@ -50,15 +52,17 @@ class Genome {
         // Default Genome Configuration:
 
 
-        Genome();
+        Genome( int inputCount, int outputCount );
         void Initialize( int inputCount, int outputCount );
         void CreateConnection( 
             int inNodeIndex, 
             int outNodeIndex, 
             float weight, 
-            bool isEnabled, 
-            int innovNum 
+            bool isEnabled
         );
+        void ShowNodeData();
+        void AddNode( LayerType type );
+        static Genome GenerateTestGenome();
 };
 
 #endif

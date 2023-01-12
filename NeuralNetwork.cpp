@@ -24,38 +24,117 @@ std::vector<float> Layer::GetActivationOutput() {
     return outputs;
 }
 
+int Layer::GetNodeCount() {
+    return this->nodes.size();
+}
 
-NeuralNetwork::NeuralNetwork( const Genome& genome ): genome( genome ) {
+void Layer::ShowLayerData() {
+    //std::cout << "\n\nLayer type: " << this->type;
+    for( int i = 0; i < this->nodes.size(); ++i ) {
+        this->nodes[i]->ShowData();
+    }
+}
+
+
+NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
 
 
     // First inputCount nodes will be input nodes
     // Indices ranging from inputCount to outputCount will be outputNodes
 
-    // int totalLayers;
+    int totalLayers = 0;
     // For each connection
-    //  nodes[outIndex].layerIndex = nodes[inIndex].layerIndex + 1;
-    //  if(nodes[outIndex].layerIndex > totalLayers) totalLayers = nodes[outIndex].layerIndex
-    //  Add connectionIndex associated with the outputNode to the outputNode
+    for( int i = 0; i < genome.connections.size(); ++i ) {
+        int outIndex = genome.connections[i].outNodeIndex;
+        int inIndex = genome.connections[i].inNodeIndex;
+        //  nodes[outIndex].layerIndex = nodes[inIndex].layerIndex + 1;
+        genome.nodes[outIndex].layerIndex = genome.nodes[inIndex].layerIndex + 1;
+        //  if(nodes[outIndex].layerIndex > totalLayers) totalLayers = nodes[outIndex].layerIndex
+        // Store last layer index
+        if( genome.nodes[outIndex].layerIndex > totalLayers )
+            totalLayers = genome.nodes[outIndex].layerIndex;
+
+        //  If the connection is enabled
+        //  Add connectionIndex associated with the outputNode to the outputNode
+        if( genome.connections[i].isEnabled )
+            genome.nodes[outIndex].connectionIndices.push_back( i );
+    }
+    
+    // Set layer count based on prev last layer index
+    totalLayers += 1;
 
     // For i 0 to totalLayers
-    //  create a new Layer
+    for( int i = 0; i < totalLayers; ++i ) {
+        //  create a new Layer
+        this->layers.push_back( Layer() );
+    }
+
+    //genome.ShowNodeData();
 
     // For each node in the genome
-    //  layers[node.layerIndex].Add(ref node);
+    for( int i = 0; i < genome.nodes.size(); ++i ) {
+        //  layers[node.layerIndex].Add(ref node);
+        if( genome.nodes[i].layerIndex < this->layers.size() )
+            this->layers[genome.nodes[i].layerIndex].AddNode( genome.nodes[i] );        
+    }
 
+    this->ShowLayers();    
+    
+
+}
+
+void NeuralNetwork::ShowLayers() {
+    std::cout << "\n---------------NN Layers------------------------------\n";
+    for( int i = 0; i < this->layers.size(); ++i ) {
+        std::cout << "\n\n----------------- i: " << i;
+        this->layers[i].ShowLayerData();
+    }
+    std::cout << "\n\n";
 }
 
 
 
 std::vector<float> NeuralNetwork::Predict( const std::vector<float>& inputs ) {
 
-    // For each Layer
-    //  for each node of the layer
-    //      Iterate through each connection associated
-    //          If the connection is enabled
-    //              Add the inNode.output * weight to the node
-    //      Activate the node
+    // Map each input to each node of the input layer
+    if( inputs.size() != this->layers[0].GetNodeCount() ) {
+        // Incorrect sensor node count 
+        return std::vector<float>();
+    }
+    for( int i = 0; i < inputs.size(); ++i ) {
+        this->layers[0].nodes[i]->outputActivation = inputs[i];
+    }
 
-    // OutputLayer.GetActivationOutput()
-    return inputs;
+    // For each Layer after the sensory layer
+    for( int i = 1; i < this->layers.size(); ++i ) {
+        //  for each node of the layer
+        for( int j = 0; j < this->layers[i].nodes.size(); ++j ) {
+            // Iterate through each connection associated
+            for( 
+                int k = 0; 
+                k < this->layers[i].nodes[j]->connectionIndices.size(); 
+                ++k 
+            ) {
+                // Add the nodes[inNodeIndex].output * weight to the input of the node
+                this->layers[i].nodes[j]->input += 
+                    this->genome.nodes[
+                        this->genome.connections[
+                            this->layers[i].nodes[j]->connectionIndices[k]
+                        ].inNodeIndex
+                    ].outputActivation * 
+                        this->genome.connections[
+                            this->layers[i].nodes[j]->connectionIndices[k]
+                        ].weight;
+                        
+                
+            }
+            // Activate the node
+            this->layers[i].nodes[j]->Activate();
+        }
+       
+
+    }
+    
+    // Get Output associated with the last layer
+    return this->layers[this->layers.size() - 1].GetActivationOutput();
 }

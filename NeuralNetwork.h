@@ -7,16 +7,20 @@
 class Layer {
 
     private: 
-        // Node references
-        std::vector<Node*> nodes;
-        LayerType type;
+       
+        //LayerType type;
 
     public:
+         // Node references
+        std::vector<Node*> nodes;
+
         Layer();
         void AddNode( Node& node );
+        void ShowLayerData();
         // Activate neuron nodes
         void ActivateNeurons();
         std::vector<float> GetActivationOutput();
+        int GetNodeCount();
 };
 
 class NeuralNetwork {
@@ -26,8 +30,8 @@ class NeuralNetwork {
 
     const Genome& genome;
     public:
-        NeuralNetwork( const Genome& genome );
-    
+        NeuralNetwork( Genome& genome );
+        void ShowLayers();
         std::vector<float> Predict( const std::vector<float>& inputs );
 };
 
