@@ -38,21 +38,26 @@ void Layer::ShowLayerData() {
 
 NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
 
-
     // First inputCount nodes will be input nodes
     // Indices ranging from inputCount to outputCount will be outputNodes
-
+    
     int totalLayers = 0;
     // For each connection
     for( int i = 0; i < genome.connections.size(); ++i ) {
         int outIndex = genome.connections[i].outNodeIndex;
         int inIndex = genome.connections[i].inNodeIndex;
-        //  nodes[outIndex].layerIndex = nodes[inIndex].layerIndex + 1;
-        genome.nodes[outIndex].layerIndex = genome.nodes[inIndex].layerIndex + 1;
-        //  if(nodes[outIndex].layerIndex > totalLayers) totalLayers = nodes[outIndex].layerIndex
-        // Store last layer index
-        if( genome.nodes[outIndex].layerIndex > totalLayers )
-            totalLayers = genome.nodes[outIndex].layerIndex;
+        if( 
+            genome.nodes[outIndex].layerIndex < 
+            genome.nodes[inIndex].layerIndex + 1
+        ) {
+            //  nodes[outIndex].layerIndex = nodes[inIndex].layerIndex + 1;
+            genome.nodes[outIndex].layerIndex = genome.nodes[inIndex].layerIndex + 1;
+            //  if(nodes[outIndex].layerIndex > totalLayers) totalLayers = nodes[outIndex].layerIndex
+            // Store last layer index
+            if( genome.nodes[outIndex].layerIndex > totalLayers )
+                totalLayers = genome.nodes[outIndex].layerIndex;
+        }
+        
 
         //  If the connection is enabled
         //  Add connectionIndex associated with the outputNode to the outputNode
@@ -73,8 +78,13 @@ NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
 
     // For each node in the genome
     for( int i = 0; i < genome.nodes.size(); ++i ) {
-        //  layers[node.layerIndex].Add(ref node);
-        if( genome.nodes[i].layerIndex < this->layers.size() )
+        // Add nodes to the layers if it has connections
+        if( 
+            genome.nodes[i].layerIndex < this->layers.size() && (
+                genome.nodes[i].type != LayerType::Hidden ||
+                genome.nodes[i].connectionIndices.size() > 0  
+            )
+        )
             this->layers[genome.nodes[i].layerIndex].AddNode( genome.nodes[i] );        
     }
 
@@ -99,6 +109,7 @@ std::vector<float> NeuralNetwork::Predict( const std::vector<float>& inputs ) {
     // Map each input to each node of the input layer
     if( inputs.size() != this->layers[0].GetNodeCount() ) {
         // Incorrect sensor node count 
+        std::cout << "\nIncorrect input size!....";
         return std::vector<float>();
     }
     for( int i = 0; i < inputs.size(); ++i ) {

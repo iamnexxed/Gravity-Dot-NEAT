@@ -14,9 +14,12 @@ class Utils
     public:
 
     static constexpr float EPSILON = 0.0000001f;
-    static void showFloatVector(const std::vector<float>& v, const int breakInt = 1)
-    {
-        std::cout << "Float Vector: " << std::endl;
+    static void showFloatVector(
+        const std::vector<float>& v, 
+        const int breakInt = 1, 
+        const char* preText = ""
+    ) {
+        std::cout << preText << "\nFloat Vector: " << std::endl;
         for(int i = 0; i < v.size(); ++i)
         { 
             char br = (i % (breakInt) == 0) ? '\n' : '\t';

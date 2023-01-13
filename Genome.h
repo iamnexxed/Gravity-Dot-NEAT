@@ -54,7 +54,7 @@ class Genome {
 
         Genome( int inputCount, int outputCount );
         void Initialize( int inputCount, int outputCount );
-        void CreateConnection( 
+        bool CreateConnection( 
             int inNodeIndex, 
             int outNodeIndex, 
             float weight, 

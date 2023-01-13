@@ -6,8 +6,13 @@ Node::Node( int id, LayerType type ) {
     this->outputActivation = 0;
     this->input = 0;
     this->layerIndex = 0;
-    // If type is sensor, layer->0
-    // Else, layer->1
+    // If type is sensor, layer->0 Else, layer->1
+    if( this->type == LayerType::Sensor ) {
+        this->layerIndex = 0;
+    } else {
+        this->layerIndex = 1;
+    }
+   
 }
 
 float Node::SigmoidActivation( float value ) {
@@ -61,14 +66,22 @@ void Genome::Initialize( int inputCount, int outputCount ) {
 
 }
 
-void Genome::CreateConnection( 
+bool Genome::CreateConnection( 
     int inNodeIndex, 
     int outNodeIndex, 
     float weight, 
     bool isEnabled
 ) {
-    
-    if( inNodeIndex < this->nodes.size() && 
+    // Don't create connections if the inputs are connected to the inputs or if the outputs are connected to the outputs
+    if( 
+        this->nodes[inNodeIndex].type != LayerType::Hidden && (
+            this->nodes[inNodeIndex].type == LayerType::Output ||
+            this->nodes[outNodeIndex].type == LayerType::Sensor
+        )
+    ) return false; 
+
+    if( 
+        inNodeIndex < this->nodes.size() && 
         outNodeIndex < this->nodes.size() 
     ) {
         this->connections.push_back({
@@ -80,8 +93,9 @@ void Genome::CreateConnection(
         });
         // For each connection increment the innovation number
         //this->innovNumber++;
+        return true;
     }
-    
+    return false; 
 }
 
 void Genome::AddNode( LayerType type ) {

@@ -50,7 +50,9 @@ Circle::Circle( float rad ) {
     this->brain = new NeuralNetwork( newGene );
     std::vector<float> inputs = { 0.5f, 0.2f, 0.3f };
     std::vector<float> outputs = this->brain->Predict( inputs );
+    std::cout << "\nSize of outputs: " << outputs.size();
     Utils::showFloatVector( outputs );
+    std::cout << "\n\n";
 }
 
 
