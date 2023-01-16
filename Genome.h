@@ -1,3 +1,5 @@
+// Main reference: https://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf
+
 #ifndef GENOME_CLASS_H
 #define GENOME_CLASS_H
 
@@ -43,6 +45,8 @@ class Genome {
     private:
         int nodeCounter = 0;
         int innovNumber = 1;
+        std::vector<int> GetRandomConnIndices();
+
     public:
         int inputCount = 0;
         int outputCount = 0;
@@ -61,8 +65,12 @@ class Genome {
             bool isEnabled
         );
         void ShowNodeData();
-        void AddNode( LayerType type );
+        int AddNode( LayerType type );
         static Genome GenerateTestGenome();
+
+        void Mutate();
+        bool AddRandomConnection();
+        void InsertNodeRandom();
 };
 
 #endif

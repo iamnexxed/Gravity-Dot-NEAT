@@ -58,12 +58,6 @@ void Genome::Initialize( int inputCount, int outputCount ) {
     for( int i = 0; i < outputCount; ++i ) {
         this->AddNode( LayerType::Output );
     } 
-
-    // Create a new hidden node based on probability
-    // Create connections to the other nodes based on probability
-    // Assign weights randomly to the connections created
-    // Enable/Disable connections based on probability
-
 }
 
 bool Genome::CreateConnection( 
@@ -98,10 +92,10 @@ bool Genome::CreateConnection(
     return false; 
 }
 
-void Genome::AddNode( LayerType type ) {
+int Genome::AddNode( LayerType type ) {
     Node node( this->nodeCounter, type );
     this->nodes.push_back( node );
-    this->nodeCounter++;
+    return this->nodeCounter++;
 }
 
 void Genome::ShowNodeData() {
@@ -144,4 +138,97 @@ Genome Genome::GenerateTestGenome() {
     g.CreateConnection( 0, 4,   0.6f, true );
 
     return g;
+}
+
+void Genome::Mutate() {
+    // Create a new hidden node based on probability
+    // Create connections to the other nodes based on probability
+    // Assign weights randomly to the connections created
+    // Enable/Disable connections based on probability
+}
+
+std::vector<int> Genome::GetRandomConnIndices() {
+    std::vector<int> indices;
+    // Get a hidden or output node randomly
+    int index1 =
+        Mathematics::RandomInRange( this->inputCount, this->nodes.size() - 1 ); 
+    int index2 = -1;
+
+    int repeatCounter = 0;
+    int maxRepetitions = this->nodes.size() * this->nodes.size();
+    bool shouldLoop = true;
+    while( repeatCounter++ < maxRepetitions && shouldLoop ) {
+        // Generate a randomIndex 
+        index2 = Mathematics::RandomInRange( 0, this->nodes.size() - 1 ); 
+        // If the index is present as an input index in any of its connections or if the index is an output index go to previous step
+        for( 
+            int i = 0; 
+            i < this->nodes[index1].connectionIndices.size(); 
+            ++i 
+        ) {
+            if( 
+                index2 != 
+                    this->connections[this->nodes[index1]
+                        .connectionIndices[i]].inNodeIndex &&
+                this->nodes[index2].type != LayerType::Output
+            ) {
+                    shouldLoop = false;
+                    break;
+            }
+         
+        }
+    }
+
+    // Other wise store it in the array
+    indices.push_back( index1 );
+    indices.push_back( index2 );
+
+    // Return the array
+    return indices;
+}
+
+bool Genome::AddRandomConnection() {
+    // Get two distinct nodeIndices randomly which are not connected
+    // Either of them can be input or output node but not both
+    std::vector<int> nodeIndices = this->GetRandomConnIndices();
+   
+    // Create connection between the two by randomly assigning a weight between -1 and 1
+    if( nodeIndices[0] != -1 && nodeIndices[1] != -1 &&
+        this->CreateConnection(
+            nodeIndices[1],
+            nodeIndices[0],
+            Mathematics::RandomInRange( -1.0f, 1.0f ),
+            true
+        )
+    ) return true;
+
+    return false;
+}
+
+void Genome::InsertNodeRandom() {
+    // Select a random connection index
+    int rndIndex = Mathematics::RandomInRange( 0, this->connections.size() - 1 );
+    // Disable the connection at that index
+    this->connections[rndIndex].isEnabled = false;
+    // Create a new hidden node
+    int newIndex = this->AddNode( LayerType::Hidden );
+
+    // Create a new connection from the previous connection's inIndex to newNodeIndex 
+    // Assign weight as 1
+    this->CreateConnection( 
+        this->connections[rndIndex].inNodeIndex, 
+        newIndex,
+        1.0f,
+        true
+    );
+   
+    // Create a new connection from newNodeIndex to previous connection's outIndex 
+    // Assign weight as previous connection
+    this->CreateConnection( 
+        newIndex,
+        this->connections[rndIndex].outNodeIndex, 
+        this->connections[rndIndex].weight,
+        true
+    );
+
 }

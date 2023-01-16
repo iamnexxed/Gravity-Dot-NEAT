@@ -35,6 +35,10 @@ class Mathematics
                 ( static_cast <float> ( RAND_MAX / ( max - min ) ) );
 
     }
+
+    static int RandomInRange( int min, int max ) {
+        return min + ( rand() / ( RAND_MAX / ( max - min ) ) );
+    }
 };
 
 
