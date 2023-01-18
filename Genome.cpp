@@ -149,41 +149,74 @@ void Genome::Mutate() {
 
 std::vector<int> Genome::GetRandomConnIndices() {
     std::vector<int> indices;
-    // Get a hidden or output node randomly
-    int index1 =
-        Mathematics::RandomInRange( this->inputCount, this->nodes.size() - 1 ); 
-    int index2 = -1;
 
-    int repeatCounter = 0;
-    int maxRepetitions = this->nodes.size() * this->nodes.size();
-    bool shouldLoop = true;
-    while( repeatCounter++ < maxRepetitions && shouldLoop ) {
-        // Generate a randomIndex 
-        index2 = Mathematics::RandomInRange( 0, this->nodes.size() - 1 ); 
-        // If the index is present as an input index in any of its connections or if the index is an output index go to previous step
-        for( 
-            int i = 0; 
-            i < this->nodes[index1].connectionIndices.size(); 
-            ++i 
-        ) {
-            if( 
-                index2 != 
-                    this->connections[this->nodes[index1]
-                        .connectionIndices[i]].inNodeIndex &&
-                this->nodes[index2].type != LayerType::Output
-            ) {
-                    shouldLoop = false;
-                    break;
-            }
-         
-        }
+    // Create a list
+    std::list<int> inIds;
+    std::list<int> outIds;
+
+    int randomIndexOut = -1;
+    int randomIndexIn = -1;
+
+    // Assign all nodes to the outlist except the input nodes
+    for( int i = this->inputCount; i < this->nodes.size(); ++i ) {
+        outIds.push_back( this->nodes[i].index );       
     }
 
-    // Other wise store it in the array
-    indices.push_back( index1 );
-    indices.push_back( index2 );
+    // While a certain count is reached loop true
+    while( outIds.size() > 0 ) {
+        // Assign all node ids to the list except the output nodes
+        for( int i = 0; i < this->nodes.size(); ++i ) {
+            if( this->nodes[i].type != LayerType::Output ) {
+                inIds.push_back( this->nodes[i].index );
+            }      
+        }
 
-    // Return the array
+        // Choose a randomIndex from the Hidden and the Output Nodes
+        int rndOut = Mathematics::RandomInRange( 
+            0, outIds.size() - 1 
+        );
+        
+        // TO DO: Create a helper function to get the value at index for a list
+        std::list<int>::iterator itOut = outIds.begin();
+        for( int i = 0; i < rndOut; ++i, ++itOut ) {}
+        randomIndexOut = *itOut;
+
+        // remove the randomIndexOut from the outids list
+        outIds.remove( randomIndexOut );
+
+        // Remove the randomIndexOut from the inids list
+        inIds.remove( randomIndexOut );
+
+        // For each connection
+        for( int i = 0; i < this->connections.size(); ++i ) {
+            // If the randomIndex == outConnectionIndex
+            if( randomIndexOut == this->connections[i].outNodeIndex ) {
+                // Remove the input connection id from the list if present
+                inIds.remove( this->connections[i].inNodeIndex );
+            }
+            
+        }
+
+        // If the list is not empty
+        //   break from the while loop
+        if( inIds.size() > 0) break; 
+    }
+   
+    // Select a randomIndexIn from the remaining List
+    if(inIds.size() > 0 ) {
+        int rndInt = Mathematics::RandomInRange( 0, inIds.size() - 1 );
+        std::list<int>::iterator it = inIds.begin();
+
+        for( int i = 0; i < rndInt; ++i, ++it ) {}
+        randomIndexIn = *it;
+    }
+   
+    //std::cout << "\nIndices: " << randomIndexOut << ", " << randomIndexIn;
+    // Put randomIndexOut and randomIndexIn into the vector
+    indices.push_back( randomIndexOut );
+    indices.push_back( randomIndexIn );
+
+    // Return the vector array
     return indices;
 }
 
@@ -214,7 +247,7 @@ void Genome::InsertNodeRandom() {
     int newIndex = this->AddNode( LayerType::Hidden );
 
     // Create a new connection from the previous connection's inIndex to newNodeIndex 
-    // Assign weight as 1
+        // Assign weight as 1
     this->CreateConnection( 
         this->connections[rndIndex].inNodeIndex, 
         newIndex,

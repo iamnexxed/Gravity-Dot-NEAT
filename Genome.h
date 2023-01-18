@@ -4,6 +4,7 @@
 #define GENOME_CLASS_H
 
 #include <vector>
+#include <list>
 #include <iostream>
 #include "Primitives/Mathematics.h"
 

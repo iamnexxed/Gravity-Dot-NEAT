@@ -37,7 +37,22 @@ class Mathematics
     }
 
     static int RandomInRange( int min, int max ) {
+        if( min == max ) return min;
         return min + ( rand() / ( RAND_MAX / ( max - min ) ) );
+    }
+
+    static float Map(
+        float currentVal, 
+        float prevMin, 
+        float prevMax, 
+        float newMin, 
+        float newMax
+    ) {
+        return (
+            newMin + (newMax - newMin) / (prevMax - prevMin) * (
+                currentVal - prevMin
+            )
+        );
     }
 };
 

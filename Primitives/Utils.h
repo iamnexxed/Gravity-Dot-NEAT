@@ -1,6 +1,7 @@
 #ifndef UTILS_CLASS_H
 #define UTILS_CLASS_H
 #include <vector>
+#include <list>
 #include <iostream>
 #include <algorithm>
 #include <glm/glm.hpp>
@@ -115,12 +116,14 @@ class Utils
 
     }
 
-    static float map(float currentVal, float prevMin, float prevMax, float newMin, float newMax)
-    {
-        return (
-            newMin + (newMax - newMin) / (prevMax - prevMin) * (currentVal - prevMin)
-        );
+    static void showIntList( std::list<int>& l ) {
+        std::list<int>::iterator ir = l.begin();
+        std::cout << "\nItems:\n";
+        for( int i = 0; i <= l.size(); ++i, ++ir ) { 
+            std::cout << "\t" << *ir; 
+        }
     }
+  
 
 };
 

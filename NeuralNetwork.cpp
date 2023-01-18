@@ -40,7 +40,7 @@ NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
 
     // First inputCount nodes will be input nodes
     // Indices ranging from inputCount to outputCount will be outputNodes
-    
+
     int totalLayers = 0;
     // For each connection
     for( int i = 0; i < genome.connections.size(); ++i ) {
@@ -88,7 +88,7 @@ NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
             this->layers[genome.nodes[i].layerIndex].AddNode( genome.nodes[i] );        
     }
 
-    this->ShowLayers();    
+    //this->ShowLayers();    
     
 
 }
