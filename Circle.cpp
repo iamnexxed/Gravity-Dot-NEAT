@@ -59,6 +59,7 @@ Circle::Circle( float rad ) {
         std::cout << "\nAdded Random connection 3..";
     }
 
+
     newGene.ShowNodeData();
 
     this->brain = new NeuralNetwork( newGene );

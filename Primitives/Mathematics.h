@@ -36,9 +36,10 @@ class Mathematics
 
     }
 
+    // Reference: https://www.simplilearn.com/tutorials/cpp-tutorial/random-number-generator-in-cpp
     static int RandomInRange( int min, int max ) {
         if( min == max ) return min;
-        return min + ( rand() / ( RAND_MAX / ( max - min ) ) );
+        return min + ( rand() % ( max - min + 1 ) );
     }
 
     static float Map(
