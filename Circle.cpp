@@ -48,7 +48,7 @@ Circle::Circle( float rad ) {
     
     Genome newGene = Genome::GenerateTestGenome();
     newGene.AddRandomConnection();
-    //newGene.ShowNodeData();
+    newGene.ShowNodeData();
 
     this->brain = new NeuralNetwork( newGene );
     std::vector<float> inputs = { 0.5f, 0.2f, 0.3f };

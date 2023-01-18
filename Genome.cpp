@@ -171,15 +171,11 @@ std::vector<int> Genome::GetRandomConnIndices() {
             }      
         }
 
-        // Choose a randomIndex from the Hidden and the Output Nodes
+        // Choose a randomIndexOut from the Hidden and the Output Nodes
         int rndOut = Mathematics::RandomInRange( 
             0, outIds.size() - 1 
         );
-        
-        // TO DO: Create a helper function to get the value at index for a list
-        std::list<int>::iterator itOut = outIds.begin();
-        for( int i = 0; i < rndOut; ++i, ++itOut ) {}
-        randomIndexOut = *itOut;
+        randomIndexOut = Utils::GetIntValueAt( outIds, rndOut );
 
         // remove the randomIndexOut from the outids list
         outIds.remove( randomIndexOut );
@@ -205,10 +201,7 @@ std::vector<int> Genome::GetRandomConnIndices() {
     // Select a randomIndexIn from the remaining List
     if(inIds.size() > 0 ) {
         int rndInt = Mathematics::RandomInRange( 0, inIds.size() - 1 );
-        std::list<int>::iterator it = inIds.begin();
-
-        for( int i = 0; i < rndInt; ++i, ++it ) {}
-        randomIndexIn = *it;
+        randomIndexIn = Utils::GetIntValueAt( inIds, rndInt );
     }
    
     //std::cout << "\nIndices: " << randomIndexOut << ", " << randomIndexIn;

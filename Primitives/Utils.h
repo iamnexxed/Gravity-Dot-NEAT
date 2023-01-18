@@ -124,6 +124,12 @@ class Utils
         }
     }
   
+    
+    static int GetIntValueAt( std::list<int>& l, int index ) {
+        std::list<int>::iterator itOut = l.begin();
+        for( int i = 0; i < index; ++i, ++itOut ) {}
+        return *itOut;
+    }
 
 };
 

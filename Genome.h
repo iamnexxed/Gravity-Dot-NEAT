@@ -7,6 +7,7 @@
 #include <list>
 #include <iostream>
 #include "Primitives/Mathematics.h"
+#include "Primitives/Utils.h"
 
 enum LayerType {
     Sensor,
