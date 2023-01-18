@@ -40,33 +40,34 @@ NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
 
     // First inputCount nodes will be input nodes
     // Indices ranging from inputCount to outputCount will be outputNodes
-
+    //std::cout << "\nConnections size: " << this->genome.connections.size();
     int totalLayers = 0;
     // For each connection
-    for( int i = 0; i < genome.connections.size(); ++i ) {
-        int outIndex = genome.connections[i].outNodeIndex;
-        int inIndex = genome.connections[i].inNodeIndex;
+    for( int i = 0; i < this->genome.connections.size(); ++i ) {
+        int outIndex = this->genome.connections[i].outNodeIndex;
+        int inIndex = this->genome.connections[i].inNodeIndex;
         if( 
-            genome.nodes[outIndex].layerIndex < 
-            genome.nodes[inIndex].layerIndex + 1
+            this->genome.nodes[outIndex].layerIndex <= 
+            this->genome.nodes[inIndex].layerIndex + 1
         ) {
             //  nodes[outIndex].layerIndex = nodes[inIndex].layerIndex + 1;
-            genome.nodes[outIndex].layerIndex = genome.nodes[inIndex].layerIndex + 1;
+            this->genome.nodes[outIndex].layerIndex = this->genome.nodes[inIndex].layerIndex + 1;
             //  if(nodes[outIndex].layerIndex > totalLayers) totalLayers = nodes[outIndex].layerIndex
             // Store last layer index
-            if( genome.nodes[outIndex].layerIndex > totalLayers )
-                totalLayers = genome.nodes[outIndex].layerIndex;
+            if( this->genome.nodes[outIndex].layerIndex > totalLayers )
+                totalLayers = this->genome.nodes[outIndex].layerIndex;
         }
         
 
         //  If the connection is enabled
         //  Add connectionIndex associated with the outputNode to the outputNode
-        if( genome.connections[i].isEnabled )
-            genome.nodes[outIndex].connectionIndices.push_back( i );
+        if( this->genome.connections[i].isEnabled )
+            this->genome.nodes[outIndex].connectionIndices.push_back( i );
     }
     
     // Set layer count based on prev last layer index
     totalLayers += 1;
+    //std::cout << "\nLayers to create: " << totalLayers;
 
     // For i 0 to totalLayers
     for( int i = 0; i < totalLayers; ++i ) {
@@ -77,15 +78,15 @@ NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
     //genome.ShowNodeData();
 
     // For each node in the genome
-    for( int i = 0; i < genome.nodes.size(); ++i ) {
+    for( int i = 0; i < this->genome.nodes.size(); ++i ) {
         // Add nodes to the layers if it has connections
         if( 
-            genome.nodes[i].layerIndex < this->layers.size() && (
-                genome.nodes[i].type != LayerType::Hidden ||
-                genome.nodes[i].connectionIndices.size() > 0  
+            this->genome.nodes[i].layerIndex < this->layers.size() && (
+                this->genome.nodes[i].type != LayerType::Hidden ||
+                this->genome.nodes[i].connectionIndices.size() > 0  
             )
         )
-            this->layers[genome.nodes[i].layerIndex].AddNode( genome.nodes[i] );        
+            this->layers[this->genome.nodes[i].layerIndex].AddNode( this->genome.nodes[i] );        
     }
 
     //this->ShowLayers();    

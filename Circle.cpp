@@ -46,11 +46,23 @@ Circle::Circle( float rad ) {
     this->scale.x = rad;
     this->scale.y = rad;
     
-    Genome newGene = Genome::GenerateTestGenome();
-    newGene.AddRandomConnection();
+    Genome newGene( 3, 1 );
+    if( newGene.AddRandomConnection() ) {
+        std::cout << "\nAdded Random connection 1..";
+    }
+
+    if( newGene.AddRandomConnection() ) {
+        std::cout << "\nAdded Random connection 2..";
+    }
+
+    if( newGene.AddRandomConnection() ) {
+        std::cout << "\nAdded Random connection 3..";
+    }
+
     newGene.ShowNodeData();
 
     this->brain = new NeuralNetwork( newGene );
+    this->brain->ShowLayers();
     std::vector<float> inputs = { 0.5f, 0.2f, 0.3f };
     std::vector<float> outputs = this->brain->Predict( inputs );
     //std::cout << "\nSize of outputs: " << outputs.size();

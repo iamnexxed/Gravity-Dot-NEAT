@@ -28,7 +28,7 @@ class NeuralNetwork {
     // Layers
     std::vector<Layer> layers;
 
-    const Genome& genome;
+    Genome& genome;
     public:
         NeuralNetwork( Genome& genome );
         void ShowLayers();
