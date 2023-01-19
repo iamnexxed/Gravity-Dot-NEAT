@@ -97,10 +97,10 @@ NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
 void NeuralNetwork::ShowLayers() {
     std::cout << "\n---------------NN Layers------------------------------\n";
     for( int i = 0; i < this->layers.size(); ++i ) {
-        std::cout << "\n\n----------------- i: " << i;
+        std::cout << "\n\n----------------- layer: " << i;
         this->layers[i].ShowLayerData();
     }
-    std::cout << "\n\n";
+    std::cout << "\n--------------------------------------------------------\n\n";
 }
 
 

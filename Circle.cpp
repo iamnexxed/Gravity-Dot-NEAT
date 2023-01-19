@@ -59,6 +59,12 @@ Circle::Circle( float rad ) {
         std::cout << "\nAdded Random connection 3..";
     }
 
+    newGene.InsertNodeRandom();
+
+    if( newGene.AddRandomConnection() ) {
+        std::cout << "\nAdded Random connection 4..";
+    }
+
 
     newGene.ShowNodeData();
 

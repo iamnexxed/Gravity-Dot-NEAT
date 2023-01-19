@@ -24,10 +24,11 @@ void Node::Activate() {
 }
 
 void Node::ShowData() {
-    std::cout << "\n\nNode Id: " << this->index;
+    std::cout << "\n\n===============";
+    std::cout << "\nNode Id: " << this->index;
     std::cout << "\nType: " << this->type;
+    std::cout << "\n===============";
     std::cout << "\nLayer Index: " << this->layerIndex;
-
     std::cout << "\nInput: " << this->input;
     std::cout << "\nOutput: " << this->outputActivation;
     if( this->connectionIndices.size() > 0) {
@@ -99,6 +100,8 @@ int Genome::AddNode( LayerType type ) {
 }
 
 void Genome::ShowNodeData() {
+    std::cout << "\n\n-------------------GENOME----------------\n";
+    std::cout << "\nNodes:\n";
     // Show Nodes
     for( int i = 0; i < this->nodes.size(); ++i ) {
 
@@ -141,6 +144,10 @@ Genome Genome::GenerateTestGenome() {
 }
 
 void Genome::Mutate() {
+
+    // Mutation in NEAT can change both connection weights and network structures
+    // Connection weights mutate as in any NE system at each generation
+
     // Create a new hidden node based on probability
     // Create connections to the other nodes based on probability
     // Assign weights randomly to the connections created
@@ -240,7 +247,7 @@ void Genome::InsertNodeRandom() {
     int newIndex = this->AddNode( LayerType::Hidden );
 
     // Create a new connection from the previous connection's inIndex to newNodeIndex 
-        // Assign weight as 1
+    // Assign weight as 1
     this->CreateConnection( 
         this->connections[rndIndex].inNodeIndex, 
         newIndex,
