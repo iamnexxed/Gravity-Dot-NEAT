@@ -5,6 +5,8 @@
 
 #include <vector>
 #include <list>
+#include <map>
+#include <string>
 #include <iostream>
 #include "Primitives/Mathematics.h"
 #include "Primitives/Utils.h"
@@ -41,13 +43,21 @@ struct Connection {
     int innovNum;
 };
 
+ // Consists of Nodes and Connections
 class Genome {
+    private:    
+        // static global innovation Number
+        static int innovNumber;
+        // HashMap var containing connection innovation history
+        static std::map<std::string, int> innoDictionary;
 
-    // Consists of Nodes and Connections
-    private:
+        static int GetInnovationNum( int inIndex, int outIndex );
+
+        // Counter for assigning node ids
         int nodeCounter = 0;
-        int innovNumber = 1;
+
         std::vector<int> GetRandomConnIndices();
+        
 
     public:
         int inputCount = 0;

@@ -74,7 +74,7 @@ bool Genome::CreateConnection(
             this->nodes[outNodeIndex].type == LayerType::Sensor
         )
     ) return false; 
-
+    
     if( 
         inNodeIndex < this->nodes.size() && 
         outNodeIndex < this->nodes.size() 
@@ -84,10 +84,10 @@ bool Genome::CreateConnection(
             outNodeIndex,
             weight,
             isEnabled,
-            this->innovNumber++
+            // Get Innovation number based on the history
+            Genome::GetInnovationNum( inNodeIndex, outNodeIndex )
         });
-        // For each connection increment the innovation number
-        //this->innovNumber++;
+
         return true;
     }
     return false; 
@@ -218,6 +218,31 @@ std::vector<int> Genome::GetRandomConnIndices() {
 
     // Return the vector array
     return indices;
+}
+
+// Initialize static variables
+int Genome::innovNumber = 0;
+std::map<std::string, int> Genome::innoDictionary;
+
+int Genome::GetInnovationNum( int inIndex, int outIndex ) {
+    std::string checkKey = std::to_string( inIndex ) +
+        "-" + std::to_string( outIndex );
+    std::map<std::string, int>::iterator it = Genome::innoDictionary.find( 
+        checkKey 
+    );
+    // if the new connection "inIndex-outIndex" key is present in the hashmap
+    if( it != Genome::innoDictionary.end() ) {
+        // return the value of the key from the hashmap as the innovation number for the new connection
+        return Genome::innoDictionary[checkKey];
+    } 
+
+    // Otherwise
+    // increment the global innovation number
+    // assign the number as the innovation number for the new connection
+    // Insert the connection's "inIndex-outIndex" and innovation number as key value into the hashmap
+    Genome::innoDictionary.insert( { checkKey, ++Genome::innovNumber } );
+    // return the global innovation number
+    return Genome::innovNumber;
 }
 
 bool Genome::AddRandomConnection() {
