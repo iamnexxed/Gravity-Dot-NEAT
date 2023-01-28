@@ -244,7 +244,7 @@ std::vector<int> Genome::GetRandomConnIndices() {
 int Genome::innovNumber = 0;
 std::map<std::string, int> Genome::innoDictionary;
 
-// Static function for getting th global innovation number
+// Static function for getting the global innovation number
 int Genome::GetInnovationNum( int inIndex, int outIndex ) {
     std::string checkKey = std::to_string( inIndex ) +
         "-" + std::to_string( outIndex );
@@ -309,7 +309,6 @@ void Genome::InsertNodeRandom() {
         this->connections[rndIndex].weight,
         true
     );
-
 }
 
 Genome Genome::CrossOver( const Genome& other ) {
@@ -318,73 +317,6 @@ Genome Genome::CrossOver( const Genome& other ) {
 
     Genome g( this->inputCount, this->outputCount );
 
-    // Set variables i and j to 0
-    int i = 0, j = 0; 
-
-    while( i < this->connections.size() || j < other.connections.size() ) {
-        if( j < other.connections.size() ) {
-            if( ( i >= this->connections.size() ) || ( 
-                    i < this->connections.size() && 
-                    this->connections[i].innovNum > other.connections[j].innovNum 
-                )
-            ) { // Excess found in other genome OR Disjoint found
-                    if( this->fitness < other.fitness ) {
-                        // Include other.connections[j] in the child connections
-                        g.CreateConnection( other.connections[j] );
-                    }
-                    else if( this->fitness == other.fitness ) {
-                        // Include other.connections[j] in the child connections based on random probability
-                        int rndInt = Mathematics::RandomInRange( 0, 1);
-                        if( rndInt == 1 ) {
-                            g.CreateConnection( other.connections[j] );
-                        }
-                    }   
-                // Increment j
-                j++;
-                // continue
-                continue;
-            } 
-        }
-        
-        if( i < this->connections.size() ) {
-            if ( ( j >= other.connections.size() ) || ( 
-                    j < other.connections.size() && 
-                    this->connections[i].innovNum < other.connections[j].innovNum 
-                )
-            ) { // Disjoint found
-                if( this->fitness > other.fitness ) {
-                    // Include this->connections[i] in the child connections
-                    g.CreateConnection( this->connections[i] );
-                }
-                else if( this->fitness == other.fitness ) {
-                    // Include this->connections[i] in the child connections based on random probability
-                    int rndInt = Mathematics::RandomInRange( 0, 1 );
-                    if( rndInt == 0 ) {
-                        g.CreateConnection( this->connections[i] );
-                    }
-                }   
-                // Increment i
-                i++;
-                // continue
-                continue;
-            }     
-        }
-            
-        // Matching genes are inherited randomly
-        if( this->connections[i].innovNum == other.connections[j].innovNum ) {
-            // Include any of this->connections[i] and other.connections[j] in the child connections randomly
-            int rndInt = Mathematics::RandomInRange( 0, 1 );
-            if( rndInt == 0 ) {
-                g.CreateConnection( this->connections[i] );
-            } else {
-                g.CreateConnection( other.connections[j] );
-            }
-            // Increment i and j
-            i++;
-            j++;
-        }    
-    }
-        
     // Create nodes in genome for connections if they don't exist
     int hiddenCount = std::max( 
         this->GetHiddenNodeCount(), 
@@ -394,5 +326,89 @@ Genome Genome::CrossOver( const Genome& other ) {
         g.AddNode( LayerType::Hidden );
     }
 
+
+    // Set variables i and j to 0
+    int i = 0, j = 0; 
+
+    while( i < this->connections.size() || j < other.connections.size() ) {
+        if( j < other.connections.size() ) {
+            //std::cout << "\n\nThis Genome Conn Size: " << this->connections.size();
+            //std::cout << "\nThis Genome i InnoNum: " << this->connections[i].innovNum;
+            //std::cout << "\nOther Genome j InnoNum: " << other.connections[j].innovNum;
+            if( ( i >= this->connections.size() ) || ( 
+                    i < this->connections.size() && 
+                    this->connections[i].innovNum > other.connections[j].innovNum 
+                )
+            ) { // Excess found in other genome OR Disjoint found
+                if( this->fitness < other.fitness && g.CreateConnection( other.connections[j] ) ) {
+                    // Include other.connections[j] in the child connections
+                    std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
+                }
+                else if( this->fitness == other.fitness ) {
+                    // Include other.connections[j] in the child connections based on random probability
+                    int rndInt = Mathematics::RandomInRange( 0, 1 );
+                    std::cout << "\nrndInt: " << rndInt;
+                    if( rndInt == 1 && g.CreateConnection( other.connections[j] ) ) {
+                        std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
+                    }
+                }   
+                // Increment j
+                j++;
+                // continue
+                continue;
+            } 
+        }
+        
+        if( i < this->connections.size() ) {
+            //std::cout << "\n\nOther Genome Conn Size: " << other.connections.size();
+            //std::cout << "\nThis Genome i InnoNum: " << this->connections[i].innovNum;
+            //std::cout << "\nOther Genome j InnoNum: " << other.connections[j].innovNum;
+            if ( ( j >= other.connections.size() ) || ( 
+                    j < other.connections.size() && 
+                    this->connections[i].innovNum < other.connections[j].innovNum 
+                )
+            ) { // Disjoint found
+                if( this->fitness > other.fitness && g.CreateConnection( this->connections[i] ) ) {
+                    // Include this->connections[i] in the child connections
+                    std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
+
+                }
+                else if( this->fitness == other.fitness ) {
+                    // Include this->connections[i] in the child connections based on random probability
+                    int rndInt = Mathematics::RandomInRange( 0, 1 );
+                    std::cout << "\nrndInt: " << rndInt;
+                    if( rndInt == 0 && g.CreateConnection( this->connections[i] ) ) {
+                        std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
+                    }
+                }   
+                // Increment i
+                i++;
+                // continue
+                continue;
+            }     
+        }
+            
+        //std::cout << "\n\nThis Genome i InnoNum: " << this->connections[i].innovNum;
+        //std::cout << "\nOther Genome j InnoNum: " << other.connections[j].innovNum;
+        // Matching genes are inherited randomly
+        if( this->connections[i].innovNum == other.connections[j].innovNum ) {
+            // Include any of this->connections[i] and other.connections[j] in the child connections randomly
+            int rndInt = Mathematics::RandomInRange( 0, 1 );
+            std::cout << "\nrndInt: " << rndInt;
+            if( rndInt == 0 && g.CreateConnection( this->connections[i] ) ) {
+                std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
+            } else if( g.CreateConnection( other.connections[j] ) ) {
+                std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
+            }
+            // Increment i and j
+            i++;
+            j++;
+        }    
+    }
+
+    //std::cout << "\nI reached: " << i ;
+    //std::cout << "\nJ reached: " << j;
+        
+    
     return g;
 }

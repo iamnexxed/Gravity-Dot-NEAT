@@ -46,46 +46,7 @@ Circle::Circle( float rad ) {
     this->scale.x = rad;
     this->scale.y = rad;
     
-    Genome newGene( 3, 1 );
-    if( newGene.AddRandomConnection() ) {
-        std::cout << "\n1-Added Random connection 1..";
-    }
-    if( newGene.AddRandomConnection() ) {
-        std::cout << "\n1-Added Random connection 2..";
-    }
-    if( newGene.AddRandomConnection() ) {
-        std::cout << "\n1-Added Random connection 3..";
-    }
-    newGene.InsertNodeRandom();
-    if( newGene.AddRandomConnection() ) {
-        std::cout << "\n1-Added Random connection 4..";
-    }
-    newGene.ShowNodeData();
-
-
-    Genome newGen2( 3, 1 );
-    if( newGen2.AddRandomConnection() ) {
-        std::cout << "\n2-Added Random connection 1..";
-    }
-    if( newGen2.AddRandomConnection() ) {
-        std::cout << "\n2-Added Random connection 2..";
-    }
-    if( newGen2.AddRandomConnection() ) {
-        std::cout << "\n2-Added Random connection 3..";
-    }
-    newGen2.InsertNodeRandom();
-    if( newGen2.AddRandomConnection() ) {
-        std::cout << "\n2-Added Random connection 4..";
-    }
-    newGen2.ShowNodeData();
-
-    this->brain = new NeuralNetwork( newGene );
-    //this->brain->ShowLayers();
-    std::vector<float> inputs = { 0.5f, 0.2f, 0.3f };
-    std::vector<float> outputs = this->brain->Predict( inputs );
-    //std::cout << "\nSize of outputs: " << outputs.size();
-    Utils::showFloatVector( outputs );
-    std::cout << "\n\n";
+    this->CreateBrain();
 }
 
 
@@ -138,4 +99,40 @@ bool Circle::CheckCollision( const Rectangle& rect ) {
         std::pow( circleDistance.y - rect.height / 2, 2 );
 
     return cornerDistanceSquared <= std::pow( this->radius, 2 );
+}
+
+void Circle::CreateBrain() {
+    Genome g1( 3, 1 );
+    g1.AddNode( LayerType::Hidden );
+    g1.CreateConnection( 2, 3, 1, false );
+    g1.CreateConnection( 0, 3, 1, true );
+    g1.CreateConnection( 1, 3, 1, true );
+    g1.CreateConnection( 2, 4, 1, true );
+    g1.CreateConnection( 4, 3, 1, true );
+    g1.CreateConnection( 0, 4, 1, true );
+
+    Genome g2( 3, 1 );
+    g2.AddNode( LayerType::Hidden );
+    g2.CreateConnection( 2, 3, 1, true );
+    g2.CreateConnection( 0, 3, 1, true );
+    g2.CreateConnection( 1, 3, 1, false );
+    g2.CreateConnection( 2, 4, 1, true );
+    g2.CreateConnection( 4, 3, 1, true );
+    g2.CreateConnection( 1, 4, 1, true );
+
+    Genome g3( 3, 1 );
+    g3.AddNode( LayerType::Hidden );
+    g3.CreateConnection( 2, 3, 1, true );
+    g3.CreateConnection( 0, 3, 1, true );
+  
+    Genome offspring = g1.CrossOver( g3 );
+    offspring.ShowNodeData();
+
+    this->brain = new NeuralNetwork( offspring );
+    this->brain->ShowLayers();
+    std::vector<float> inputs = { 0.5f, 0.2f, 0.3f };
+    std::vector<float> outputs = this->brain->Predict( inputs );
+    //std::cout << "\nSize of outputs: " << outputs.size();
+    Utils::showFloatVector( outputs );
+    std::cout << "\n\n";
 }

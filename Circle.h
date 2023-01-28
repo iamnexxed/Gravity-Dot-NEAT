@@ -20,6 +20,7 @@ class Circle {
 		glm::vec3 scale = glm::vec3( 1.0f, 1.0f, 1.0f );
 
         Circle( float rad );
+        void CreateBrain();
         void MoveTo( glm::vec3 position );
         void DrawInstance( Shader& shader, Camera& camera );
         void ApplyForce( glm::vec3 force );
