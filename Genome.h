@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include "Primitives/Mathematics.h"
 #include "Primitives/Utils.h"
 
@@ -60,13 +61,20 @@ class Genome {
         
 
     public:
+
+    
         int inputCount = 0;
         int outputCount = 0;
+
+        float fitness = 0;
+
         std::vector<Node> nodes;
         std::vector<Connection> connections;
 
         // Default Genome Configuration:
 
+
+        static Genome GenerateTestGenome();
 
         Genome( int inputCount, int outputCount );
         void Initialize( int inputCount, int outputCount );
@@ -76,13 +84,14 @@ class Genome {
             float weight, 
             bool isEnabled
         );
+        bool CreateConnection( const Connection& connection );
         void ShowNodeData();
         int AddNode( LayerType type );
-        static Genome GenerateTestGenome();
-
+        int GetHiddenNodeCount() const;
         void Mutate();
         bool AddRandomConnection();
         void InsertNodeRandom();
+        Genome CrossOver( const Genome& other );
 };
 
 #endif

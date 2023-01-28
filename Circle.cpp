@@ -48,28 +48,39 @@ Circle::Circle( float rad ) {
     
     Genome newGene( 3, 1 );
     if( newGene.AddRandomConnection() ) {
-        std::cout << "\nAdded Random connection 1..";
+        std::cout << "\n1-Added Random connection 1..";
     }
-
     if( newGene.AddRandomConnection() ) {
-        std::cout << "\nAdded Random connection 2..";
+        std::cout << "\n1-Added Random connection 2..";
     }
-
     if( newGene.AddRandomConnection() ) {
-        std::cout << "\nAdded Random connection 3..";
+        std::cout << "\n1-Added Random connection 3..";
     }
-
     newGene.InsertNodeRandom();
-
     if( newGene.AddRandomConnection() ) {
-        std::cout << "\nAdded Random connection 4..";
+        std::cout << "\n1-Added Random connection 4..";
     }
-
-
     newGene.ShowNodeData();
 
+
+    Genome newGen2( 3, 1 );
+    if( newGen2.AddRandomConnection() ) {
+        std::cout << "\n2-Added Random connection 1..";
+    }
+    if( newGen2.AddRandomConnection() ) {
+        std::cout << "\n2-Added Random connection 2..";
+    }
+    if( newGen2.AddRandomConnection() ) {
+        std::cout << "\n2-Added Random connection 3..";
+    }
+    newGen2.InsertNodeRandom();
+    if( newGen2.AddRandomConnection() ) {
+        std::cout << "\n2-Added Random connection 4..";
+    }
+    newGen2.ShowNodeData();
+
     this->brain = new NeuralNetwork( newGene );
-    this->brain->ShowLayers();
+    //this->brain->ShowLayers();
     std::vector<float> inputs = { 0.5f, 0.2f, 0.3f };
     std::vector<float> outputs = this->brain->Predict( inputs );
     //std::cout << "\nSize of outputs: " << outputs.size();

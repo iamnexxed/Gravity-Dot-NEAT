@@ -88,15 +88,35 @@ bool Genome::CreateConnection(
             Genome::GetInnovationNum( inNodeIndex, outNodeIndex )
         });
 
+        // Sort the connections array based on innovation number
+        std::sort( this->connections.begin(), this->connections.end(),  
+            [&]( Connection a, Connection b ) {
+                return a.innovNum < b.innovNum;
+            }
+        );
+
         return true;
     }
     return false; 
+}
+
+bool Genome::CreateConnection( const Connection& connection ) {
+    return this->CreateConnection(
+        connection.inNodeIndex,
+        connection.outNodeIndex,
+        connection.weight,
+        connection.isEnabled
+    );
 }
 
 int Genome::AddNode( LayerType type ) {
     Node node( this->nodeCounter, type );
     this->nodes.push_back( node );
     return this->nodeCounter++;
+}
+
+int Genome::GetHiddenNodeCount() const { 
+    return this->nodeCounter - this->inputCount - this->outputCount;
 }
 
 void Genome::ShowNodeData() {
@@ -224,6 +244,7 @@ std::vector<int> Genome::GetRandomConnIndices() {
 int Genome::innovNumber = 0;
 std::map<std::string, int> Genome::innoDictionary;
 
+// Static function for getting th global innovation number
 int Genome::GetInnovationNum( int inIndex, int outIndex ) {
     std::string checkKey = std::to_string( inIndex ) +
         "-" + std::to_string( outIndex );
@@ -289,4 +310,89 @@ void Genome::InsertNodeRandom() {
         true
     );
 
+}
+
+Genome Genome::CrossOver( const Genome& other ) {
+    // Preconditions
+    // 1. Connections of this and the other genome should be sorted in ascending order
+
+    Genome g( this->inputCount, this->outputCount );
+
+    // Set variables i and j to 0
+    int i = 0, j = 0; 
+
+    while( i < this->connections.size() || j < other.connections.size() ) {
+        if( j < other.connections.size() ) {
+            if( ( i >= this->connections.size() ) || ( 
+                    i < this->connections.size() && 
+                    this->connections[i].innovNum > other.connections[j].innovNum 
+                )
+            ) { // Excess found in other genome OR Disjoint found
+                    if( this->fitness < other.fitness ) {
+                        // Include other.connections[j] in the child connections
+                        g.CreateConnection( other.connections[j] );
+                    }
+                    else if( this->fitness == other.fitness ) {
+                        // Include other.connections[j] in the child connections based on random probability
+                        int rndInt = Mathematics::RandomInRange( 0, 1);
+                        if( rndInt == 1 ) {
+                            g.CreateConnection( other.connections[j] );
+                        }
+                    }   
+                // Increment j
+                j++;
+                // continue
+                continue;
+            } 
+        }
+        
+        if( i < this->connections.size() ) {
+            if ( ( j >= other.connections.size() ) || ( 
+                    j < other.connections.size() && 
+                    this->connections[i].innovNum < other.connections[j].innovNum 
+                )
+            ) { // Disjoint found
+                if( this->fitness > other.fitness ) {
+                    // Include this->connections[i] in the child connections
+                    g.CreateConnection( this->connections[i] );
+                }
+                else if( this->fitness == other.fitness ) {
+                    // Include this->connections[i] in the child connections based on random probability
+                    int rndInt = Mathematics::RandomInRange( 0, 1 );
+                    if( rndInt == 0 ) {
+                        g.CreateConnection( this->connections[i] );
+                    }
+                }   
+                // Increment i
+                i++;
+                // continue
+                continue;
+            }     
+        }
+            
+        // Matching genes are inherited randomly
+        if( this->connections[i].innovNum == other.connections[j].innovNum ) {
+            // Include any of this->connections[i] and other.connections[j] in the child connections randomly
+            int rndInt = Mathematics::RandomInRange( 0, 1 );
+            if( rndInt == 0 ) {
+                g.CreateConnection( this->connections[i] );
+            } else {
+                g.CreateConnection( other.connections[j] );
+            }
+            // Increment i and j
+            i++;
+            j++;
+        }    
+    }
+        
+    // Create nodes in genome for connections if they don't exist
+    int hiddenCount = std::max( 
+        this->GetHiddenNodeCount(), 
+        other.GetHiddenNodeCount() 
+    ); 
+    for( int i = 0; i < hiddenCount; ++i ) {
+        g.AddNode( LayerType::Hidden );
+    }
+
+    return g;
 }
