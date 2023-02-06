@@ -58,9 +58,14 @@ class Genome {
         int nodeCounter = 0;
 
         std::vector<int> GetRandomConnIndices();
+
+        void getExcessDisjointCount( const Genome& other, int& eCount, int& dCount );
         
 
     public:
+
+
+        // Default Genome Configuration:
 
     
         int inputCount = 0;
@@ -70,9 +75,6 @@ class Genome {
 
         std::vector<Node> nodes;
         std::vector<Connection> connections;
-
-        // Default Genome Configuration:
-
 
         static Genome GenerateTestGenome();
 
@@ -92,6 +94,9 @@ class Genome {
         bool AddRandomConnection();
         void InsertNodeRandom();
         Genome CrossOver( const Genome& other );
+
+        // Compare function that inputs other genome. Returns the number of Disjoint, Excess genes, avg diff weights, and N
+        bool IsCompatible( const Genome& other );
 };
 
 #endif

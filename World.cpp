@@ -30,40 +30,23 @@ void World::Start() {
 void World::Update() {
 
     if( this->IsDead() ) {
-        // Remove the dot object from the scene
+        
 
-        // If there are no dot objects left restart the level
-        // Restart Level
+        // If there are no dot organisms left restart the level
         this->Restart();
     }
+
+    // Play the game
     
     // Update Calls
     this->circle->ApplyForce( glm::vec3( 0, gravity, 0 ) );
-    //this->rectangle->Translate( glm::vec3( gravity, 0, 0 ) );
+
+
+
+
     if ( glfwGetKey( &this->window, GLFW_KEY_SPACE ) == GLFW_PRESS ) {
         this->circle->ApplyForce( glm::vec3( 0, this->jumpForce, 0 ) );
 	}
-
-    // // Forward
-	// if (glfwGetKey(&this->window, GLFW_KEY_W) == GLFW_PRESS)
-	// {
-	// 	this->circle->Translate( glm::vec3( 0, this->jumpForce, 0 ) );
-	// }
-	// // Left
-	// if (glfwGetKey(&this->window, GLFW_KEY_A) == GLFW_PRESS)
-	// {
-	// 	this->circle->Translate( glm::vec3( -this->jumpForce, 0, 0 ) );
-	// }
-	// // Backward
-	// if (glfwGetKey(&this->window, GLFW_KEY_S) == GLFW_PRESS)
-	// {
-	// 	this->circle->Translate( glm::vec3( 0, -this->jumpForce, 0 ) );
-	// }
-	// // Right
-	// if (glfwGetKey(&this->window, GLFW_KEY_D) == GLFW_PRESS)
-	// {
-	// 	this->circle->Translate( glm::vec3( this->jumpForce, 0, 0 ) );
-	// }
 
     this->camera->UpdateMatrix( 60.0f, 0.1f, 100.0f );
     this->circle->Update();
@@ -90,10 +73,19 @@ void World::Restart() {
 }
 
 bool World::IsDead() {
+    // if the organism collides 
+        // Evaluate the fitness of the organism based on the distance traveled, the energy spent and the brain size
+        // Remove the organism from the scene
+
+    // If all the organisms have collided
+        // Perform Speciation
+        // Increment Generation
+        // Perform crossover of the best parents
+        // Perform mutation on the new offsprings
+
     if( this->circle->CheckCollision( *this->groundRectangle ) || 
         this->circle->CheckCollision( *this->ceilRectangle ) 
     ) {
-        //std::cout << "Collision with rect. ";
         //this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 0.0f ) );
         return true;
     }
@@ -101,8 +93,6 @@ bool World::IsDead() {
     for( int i = 0; i < this->rects.size(); ++i ) {
         if( this->circle->CheckCollision( *this->rects[i] ) ) {
             //this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 0.0f ) );
-            //std::cout << "Collided with rect: " << i << std::endl;
-            //std::cout << "XTranslation: " << this->rects[i]->translation.x << std::endl;
            return true;
         }
     }

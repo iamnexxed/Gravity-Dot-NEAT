@@ -23,6 +23,8 @@ class World {
 
 
     GLFWwindow& window;
+
+    // Boolean to enable Neuroevolution
     
     public:
         const float gravity = -0.0025;

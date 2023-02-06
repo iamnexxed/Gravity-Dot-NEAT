@@ -42,6 +42,48 @@ void Node::ShowData() {
     
 }
 
+void Genome::getExcessDisjointCount( const Genome& other, int& eCount, int& dCount ) {
+    // Disjoint Genes-  Genes that occur within the range of the other parent's innovation numbers
+    // Excess Genes-  Genes that occur outside the range of the other parent's innovation numbers
+
+    // thisLength = this->connections.size()
+    // otherLength = other.connections.size()
+    // Calculate lowerbound = max( this->connections[0].innovNum, other.connections[0].innovNum )
+    // Calculate upperbound = min( this->connections[thisLength - 1].innovNum, other.connections[otherLength - 1].innovNum )
+    // Initialize i, j = 0
+   
+    // while( i < thisLength || j < otherLength )
+        // if( i < thisLength && this->connections[i].innovNum < lowerbound )
+            // eCount++;
+            // i++;
+        // if( j < otherLength && other.connections[j].innovNum < lowerbound )
+            // eCount++;
+            // j++;
+        
+        // if( i < thisLength && j < otherLength && 
+        //      ( this->connections[i].innovNum >= lowerbound && this->connections[i].innovNum <= upperbound ||
+        //       other.connections[j].innovNum  >= lowerbound && other.connections[j].innovNum <= upperbound )
+        // )
+            // if( this->connections[i].innovNum < other.connections[j].innovNum  )
+                // dCount++;
+                // i++;
+            // else if( this->connections[i].innovNum > other.connections[j].innovNum  )
+                // dCount++;
+                // j++;
+            // else
+                // i++;
+                // j++;
+        
+        // if( i < thisLength && this->connections[i].innovNum > upperbound )
+            // eCount++;
+            // i++;
+  
+        // if( j < otherLength && other.connections[j].innovNum > upperbound )
+            // eCount++;
+            // j++;
+     
+}
+
 Genome::Genome( int inputCount, int outputCount ) {
 
     this->Initialize( inputCount, outputCount );
@@ -411,4 +453,11 @@ Genome Genome::CrossOver( const Genome& other ) {
         
     
     return g;
+}
+
+bool Genome::IsCompatible( const Genome& other ) {
+    
+
+
+    return false;
 }
