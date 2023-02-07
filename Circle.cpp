@@ -124,8 +124,13 @@ void Circle::CreateBrain() {
     g3.AddNode( LayerType::Hidden );
     g3.CreateConnection( 2, 3, 1, true );
     g3.CreateConnection( 0, 3, 1, true );
+
+    Genome g4( 3, 1 );
+    g4.AddNode( LayerType::Hidden );
+    g4.CreateConnection( 2, 3, 1, true );
+    g4.CreateConnection( 0, 3, 1, true );
   
-    Genome offspring = g1.CrossOver( g3 );
+    Genome offspring = g1.CrossOver( g4 );
     offspring.ShowNodeData();
 
     this->brain = new NeuralNetwork( offspring );

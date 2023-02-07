@@ -46,13 +46,14 @@ NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
     for( int i = 0; i < this->genome.connections.size(); ++i ) {
         int outIndex = this->genome.connections[i].outNodeIndex;
         int inIndex = this->genome.connections[i].inNodeIndex;
-        if( 
-            this->genome.nodes[outIndex].layerIndex <= 
-            this->genome.nodes[inIndex].layerIndex + 1
+        if( (
+                this->genome.nodes[outIndex].layerIndex <= 
+                this->genome.nodes[inIndex].layerIndex + 1
+            ) && this->genome.nodes[outIndex].type == LayerType::Hidden
         ) {
-            //  nodes[outIndex].layerIndex = nodes[inIndex].layerIndex + 1;
+
             this->genome.nodes[outIndex].layerIndex = this->genome.nodes[inIndex].layerIndex + 1;
-            //  if(nodes[outIndex].layerIndex > totalLayers) totalLayers = nodes[outIndex].layerIndex
+     
             // Store last layer index
             if( this->genome.nodes[outIndex].layerIndex > totalLayers )
                 totalLayers = this->genome.nodes[outIndex].layerIndex;
@@ -65,17 +66,23 @@ NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
             this->genome.nodes[outIndex].connectionIndices.push_back( i );
     }
     
-    // Set layer count based on prev last layer index
-    totalLayers += 1;
-    //std::cout << "\nLayers to create: " << totalLayers;
+    // Set layer count based on last hidden layer index and output layer
+    totalLayers += 2;
+
+    // Set the output nodes to be of the last layer index
+    for( 
+        int i = this->genome.inputCount; 
+        i < this->genome.inputCount + this->genome.outputCount;
+        ++i
+    ) {
+        this->genome.nodes[i].layerIndex = totalLayers - 1;
+    }
 
     // For i 0 to totalLayers
     for( int i = 0; i < totalLayers; ++i ) {
         //  create a new Layer
         this->layers.push_back( Layer() );
     }
-
-    //genome.ShowNodeData();
 
     // For each node in the genome
     for( int i = 0; i < this->genome.nodes.size(); ++i ) {
@@ -85,13 +92,11 @@ NeuralNetwork::NeuralNetwork( Genome& genome ): genome( genome ) {
                 this->genome.nodes[i].type != LayerType::Hidden ||
                 this->genome.nodes[i].connectionIndices.size() > 0  
             )
-        )
+        ) {
+            // If the node is not an output node and that node serves as an input to any other node
             this->layers[this->genome.nodes[i].layerIndex].AddNode( this->genome.nodes[i] );        
+        }
     }
-
-    //this->ShowLayers();    
-    
-
 }
 
 void NeuralNetwork::ShowLayers() {
