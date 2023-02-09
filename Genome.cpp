@@ -42,7 +42,7 @@ void Node::ShowData() {
     
 }
 
-void Genome::getExcessDisjointCount( const Genome& other, int& eCount, int& dCount ) {
+void Genome::GetExcessDisjointCount( const Genome& other, int& eCount, int& dCount ) {
     // Disjoint Genes-  Genes that occur within the range of the other parent's innovation numbers
     // Excess Genes-  Genes that occur outside the range of the other parent's innovation numbers
 
@@ -408,14 +408,14 @@ Genome Genome::CrossOver( const Genome& other ) {
             ) { // Excess found in other genome OR Disjoint found
                 if( this->fitness < other.fitness && g.CreateConnection( other.connections[j] ) ) {
                     // Include other.connections[j] in the child connections
-                    std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
+                    //std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
                 }
                 else if( this->fitness == other.fitness ) {
                     // Include other.connections[j] in the child connections based on random probability
                     int rndInt = Mathematics::RandomInRange( 0, 1 );
-                    std::cout << "\nrndInt: " << rndInt;
+                    //std::cout << "\nrndInt: " << rndInt;
                     if( rndInt == 1 && g.CreateConnection( other.connections[j] ) ) {
-                        std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
+                        //std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
                     }
                 }   
                 // Increment j
@@ -436,15 +436,15 @@ Genome Genome::CrossOver( const Genome& other ) {
             ) { // Disjoint found
                 if( this->fitness > other.fitness && g.CreateConnection( this->connections[i] ) ) {
                     // Include this->connections[i] in the child connections
-                    std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
+                    //std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
 
                 }
                 else if( this->fitness == other.fitness ) {
                     // Include this->connections[i] in the child connections based on random probability
                     int rndInt = Mathematics::RandomInRange( 0, 1 );
-                    std::cout << "\nrndInt: " << rndInt;
+                    //std::cout << "\nrndInt: " << rndInt;
                     if( rndInt == 0 && g.CreateConnection( this->connections[i] ) ) {
-                        std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
+                        //std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
                     }
                 }   
                 // Increment i
@@ -460,28 +460,46 @@ Genome Genome::CrossOver( const Genome& other ) {
         if( this->connections[i].innovNum == other.connections[j].innovNum ) {
             // Include any of this->connections[i] and other.connections[j] in the child connections randomly
             int rndInt = Mathematics::RandomInRange( 0, 1 );
-            std::cout << "\nrndInt: " << rndInt;
+            //std::cout << "\nrndInt: " << rndInt;
             if( rndInt == 0 && g.CreateConnection( this->connections[i] ) ) {
-                std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
+                //std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
             } else if( g.CreateConnection( other.connections[j] ) ) {
-                std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
+                //std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
             }
             // Increment i and j
             i++;
             j++;
         }    
     }
-
-    //std::cout << "\nI reached: " << i ;
-    //std::cout << "\nJ reached: " << j;
-        
-    
+            
     return g;
 }
 
 bool Genome::IsCompatible( const Genome& other ) {
     
+    int excess = 0, disjoint = 0;
+    // Calculate Disjoint and Excess Genes
+    this->GetExcessDisjointCount( other, excess, disjoint );
 
+    // Calculate N- Number of Genes in larger genome
+    int N = std::max( this->connections.size(), other.connections.size() );
+    N = N < DEFAULT_SMALL_GENOME_SIZE ? 1 : N;
 
-    return false;
+    // Calculate WBar- Average weight differences of matching genes
+    float thisW = this->GetAverageGeneWeight();
+    float otherW = other.GetAverageGeneWeight();
+    float barW = std::abs( thisW - otherW );
+
+    // Calulate delta = c1 * E / N + c2 * D / N + c3 * WBar
+    float delta = C1 * excess / N + C2 * disjoint / N + C3 * barW;
+
+    return delta < COMPATIBILITY_THRESHOLD;
+}
+
+float Genome::GetAverageGeneWeight() const {
+    float sum = 0;
+    for( int i = 0; i < this->connections.size(); ++i ) {
+        sum += this->connections[i].weight;
+    }
+    return sum / (float) this->connections.size();
 }

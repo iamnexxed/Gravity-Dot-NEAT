@@ -130,11 +130,14 @@ void Circle::CreateBrain() {
     g4.CreateConnection( 2, 3, 1, true );
     g4.CreateConnection( 0, 3, 1, true );
   
+    std::cout << "\nIs G1 compatible with G4 ? " << g1.IsCompatible( g4 );
+    std::cout << "\nIs G1 compatible with G2 ? " << g1.IsCompatible( g2 );
+
     Genome offspring = g1.CrossOver( g4 );
-    offspring.ShowNodeData();
+    //offspring.ShowNodeData();
 
     this->brain = new NeuralNetwork( offspring );
-    this->brain->ShowLayers();
+    //this->brain->ShowLayers();
     std::vector<float> inputs = { 0.5f, 0.2f, 0.3f };
     std::vector<float> outputs = this->brain->Predict( inputs );
     //std::cout << "\nSize of outputs: " << outputs.size();

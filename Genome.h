@@ -12,6 +12,15 @@
 #include "Primitives/Mathematics.h"
 #include "Primitives/Utils.h"
 
+
+// Default Genome Configuration variables:
+const float C1 = 1.0f;
+const float C2 = 1.0f;
+const float C3 = 0.4f;
+const float COMPATIBILITY_THRESHOLD = 3.0f;
+const int DEFAULT_SMALL_GENOME_SIZE = 20;
+
+
 enum LayerType {
     Sensor,
     Hidden,
@@ -59,15 +68,7 @@ class Genome {
 
         std::vector<int> GetRandomConnIndices();
 
-        void getExcessDisjointCount( const Genome& other, int& eCount, int& dCount );
-        
-
-    public:
-
-
-        // Default Genome Configuration:
-
-    
+    public:    
         int inputCount = 0;
         int outputCount = 0;
 
@@ -94,7 +95,8 @@ class Genome {
         bool AddRandomConnection();
         void InsertNodeRandom();
         Genome CrossOver( const Genome& other );
-
+        float GetAverageGeneWeight() const;
+        void GetExcessDisjointCount( const Genome& other, int& eCount, int& dCount );
         // Compare function that inputs other genome. Returns the number of Disjoint, Excess genes, avg diff weights, and N
         bool IsCompatible( const Genome& other );
 };
