@@ -505,6 +505,7 @@ bool Genome::IsCompatible( const Genome& other ) {
 }
 
 float Genome::GetAverageGeneWeight() const {
+    if( this->connections.size() <= 0 ) return 0;
     float sum = 0;
     for( int i = 0; i < this->connections.size(); ++i ) {
         sum += this->connections[i].weight;
