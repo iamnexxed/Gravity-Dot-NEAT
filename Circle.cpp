@@ -2,6 +2,17 @@
 
 Circle::Circle( float rad ) {
 
+    this->createSprite( rad );
+    this->hasBrain = false;
+    //this->CreateBrain();
+}
+
+Circle:: Circle( const Genome& genome, float rad ) {
+    this->createSprite( rad );
+    this->hasBrain = true;
+}
+
+void Circle::createSprite( float rad ) {
     std::vector<Vertex> circle_vertices = { 
         Vertex { 
             glm::vec3( 0.0f, 0.0f, 0.0f ),	
@@ -45,8 +56,6 @@ Circle::Circle( float rad ) {
     this->radius = rad;
     this->scale.x = rad;
     this->scale.y = rad;
-    
-    this->CreateBrain();
 }
 
 
@@ -101,7 +110,7 @@ bool Circle::CheckCollision( const Rectangle& rect ) {
     return cornerDistanceSquared <= std::pow( this->radius, 2 );
 }
 
-void Circle::CreateBrain() {
+void Circle::CreateTestBrain() {
     Genome g1( 3, 1 );
     g1.AddNode( LayerType::Hidden );
     g1.CreateConnection( 2, 3, 1, false );
@@ -143,4 +152,12 @@ void Circle::CreateBrain() {
     //std::cout << "\nSize of outputs: " << outputs.size();
     Utils::showFloatVector( outputs );
     std::cout << "\n\n";
+}
+
+float Circle::CalculateFitness() {
+    return 0;
+}
+
+void Circle::CreateBrain( Genome& genome ) {
+    this->brain = new NeuralNetwork( genome );
 }

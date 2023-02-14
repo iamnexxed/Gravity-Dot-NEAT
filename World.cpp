@@ -22,16 +22,20 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
     this->pillarManager = new PillarManager( *this->primitives, glm::vec3 ( 5.0f, 0, 0 ) );
     this->rects = this->pillarManager->GetAllRectangles();
 
+    // Construct NeuroEvolution Object
+    this->neuroEvolution = new NeuroEvolution();
+    std::cout << "\nWorld Constructor";
 }
 
 void World::Start() {
+    std::cout << "\nWorld Start";
+    this->neuroEvolution->Initiate();
+    this->neuroEvolution->Speciate();
 }
 
 void World::Update() {
 
     if( this->IsDead() ) {
-        
-
         // If there are no dot organisms left restart the level
         this->Restart();
     }
@@ -44,7 +48,10 @@ void World::Update() {
 
 
 
-    if ( glfwGetKey( &this->window, GLFW_KEY_SPACE ) == GLFW_PRESS ) {
+    if ( 
+        glfwGetKey( &this->window, GLFW_KEY_SPACE ) == GLFW_PRESS && 
+        !this->circle->hasBrain 
+    ) {
         this->circle->ApplyForce( glm::vec3( 0, this->jumpForce, 0 ) );
 	}
 
@@ -62,7 +69,7 @@ void World::Update() {
 }
 
 void World::Destroy() {
-    
+    std::cout << "\nWorld Destroy";
 }
 
 void World::Restart() {
@@ -79,6 +86,7 @@ bool World::IsDead() {
 
     // If all the organisms have collided
         // Perform Speciation
+        
         // Increment Generation
         // Perform crossover of the best parents
         // Perform mutation on the new offsprings

@@ -49,6 +49,14 @@ void Genome::GetExcessDisjointCount( const Genome& other, int& eCount, int& dCou
     int thisLength = this->connections.size();
     int otherLength = other.connections.size();
 
+    // Make sure connection have size that can be compared
+    if( thisLength <= 0 || otherLength <= 0 ) {
+        eCount = std::max( thisLength, otherLength );
+        return;
+    }
+
+    //std::cout << "\n This Length: " << thisLength << ", Other Length: " << otherLength << std::endl << std::endl;
+
     // Calculate the upper and lower bounds for the common range
     int lowerbound = std::max( 
         this->connections[0].innovNum, other.connections[0].innovNum 
@@ -480,7 +488,7 @@ bool Genome::IsCompatible( const Genome& other ) {
     int excess = 0, disjoint = 0;
     // Calculate Disjoint and Excess Genes
     this->GetExcessDisjointCount( other, excess, disjoint );
-
+    //std::cout << "\nExcess: " << excess << ", Disjoint: " << disjoint << std::endl << std::endl;
     // Calculate N- Number of Genes in larger genome
     int N = std::max( this->connections.size(), other.connections.size() );
     N = N < DEFAULT_SMALL_GENOME_SIZE ? 1 : N;

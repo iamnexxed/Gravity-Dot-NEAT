@@ -7,7 +7,7 @@
 #include "Rectangle.h"
 #include "Primitives.h"
 #include "PillarManager.h"
-
+#include "NeuroEvolution.h"
 
 
 class World {
@@ -24,7 +24,8 @@ class World {
 
     GLFWwindow& window;
 
-    // Boolean to enable Neuroevolution
+    // Neuroevolution object pointer
+    NeuroEvolution* neuroEvolution;
     
     public:
         const float gravity = -0.0025;

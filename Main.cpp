@@ -65,11 +65,12 @@ int main()
 
 	//glViewport( 0, 0, WIDTH, HEIGHT );
 
-
 	World world( *window, WIDTH, HEIGHT );
+	//std::cout << "\nWorld Constructed.";
 	world.Start();
-	
-	
+
+	// For terminal to show the lines correctly
+	std::cout << "\n\n";
 	// Only close when user decides to close the window
 	while ( !glfwWindowShouldClose( window ) )
 	{

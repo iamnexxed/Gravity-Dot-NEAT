@@ -14,13 +14,19 @@ class Circle {
         glm::vec3 initialPosition = glm::vec3(-3.3, 0, 0);
         NeuralNetwork *brain;
 
+        void createSprite( float rad );
+
     public:
         float radius = 1.0f;
         glm::vec3 translation = glm::vec3( 0.0f, 0.0f, 0.0f );
 		glm::vec3 scale = glm::vec3( 1.0f, 1.0f, 1.0f );
 
+        bool hasBrain;
+
         Circle( float rad );
-        void CreateBrain();
+        Circle( const Genome& genome, float rad );
+        void CreateTestBrain();
+        void CreateBrain( Genome& genome );
         void MoveTo( glm::vec3 position );
         void DrawInstance( Shader& shader, Camera& camera );
         void ApplyForce( glm::vec3 force );
@@ -29,6 +35,8 @@ class Circle {
         void ResetPosition();
         // void CheckDeath();
         bool CheckCollision( const Rectangle& rect );
+
+        float CalculateFitness();
 };
 
 
