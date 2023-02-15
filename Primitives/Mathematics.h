@@ -30,15 +30,15 @@ class Mathematics
     }
 
     static float RandomInRange( float min, float max ) {
+        if( min >= max ) return min;
         return min + 
             static_cast <float> ( rand() ) / 
                 ( static_cast <float> ( RAND_MAX / ( max - min ) ) );
-
     }
 
     // Reference: https://www.simplilearn.com/tutorials/cpp-tutorial/random-number-generator-in-cpp
     static int RandomInRange( int min, int max ) {
-        if( min == max ) return min;
+        if( min >= max ) return min;
         return min + ( rand() % ( max - min + 1 ) );
     }
 
@@ -54,6 +54,15 @@ class Mathematics
                 currentVal - prevMin
             )
         );
+    }
+
+    static float Clamp( float value, float min, float max ) {
+        if( value < min ) {
+            return min;
+        } else if( value > max ) {
+            return max;
+        }
+        return value;
     }
 };
 

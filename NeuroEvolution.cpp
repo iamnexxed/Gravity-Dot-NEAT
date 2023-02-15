@@ -20,7 +20,14 @@ void NeuroEvolution::Initiate() {
 
 
 void NeuroEvolution::Mutate() {
+    //this->genomes[0]->ShowNodeData();
+    //std::cout << "\n\n--------TEst Mutation--------";
     // Perform mutation for all the genomes  
+    for( int i = 0; i < this->genomes.size(); ++i ) {
+        this->genomes[i]->Mutate();
+    }
+    //this->genomes[0]->Mutate();
+    //this->genomes[0]->ShowNodeData();
 }
 
 void NeuroEvolution::Speciate() {
@@ -59,24 +66,24 @@ void NeuroEvolution::Speciate() {
         }
    
         // Calculate the shared fitness for the genome wrt other genomes
-        int sum = 0;
+        float sum = 0;
         for( int j = 0; j < this->genomes.size(); ++j ) {
             if( i != j ) {
                 sum += this->genomes[i]->IsCompatible(
                     *this->genomes[j] 
-                ) ? 1 : 0;
+                ) ? 1.0f : 0.0f;
             }
         }
         if( sum > 0 )
             this->genomes[i]->fitness /= sum;
     } 
-    std::cout << "\nSpeciate. Genomes Array Size: " << this->genomes.size();
-    std::cout << "\nSpeciate. Species Array Size: " << this->speciesArray.size();
+    //std::cout << "\nSpeciate. Genomes Array Size: " << this->genomes.size();
+    //std::cout << "\nSpeciate. Species Array Size: " << this->speciesArray.size();
 }
 
 void NeuroEvolution::CrossOver() {
     // Every species is assigned a potentially different number of offspring in proportion to the sum of adjusted fitnesses of its member organisms
-    // Remove a percentage of population from from the total based on the fitness
+    // Remove a percentage of population from from the total based on the fitness including stale species
     // For every species
         // Loop till population is recovered for that species
             // Select two available parents randomly

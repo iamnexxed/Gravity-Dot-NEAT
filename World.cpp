@@ -24,13 +24,14 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
 
     // Construct NeuroEvolution Object
     this->neuroEvolution = new NeuroEvolution();
-    std::cout << "\nWorld Constructor";
+    std::cout << "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ World Constructed ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 }
 
 void World::Start() {
-    std::cout << "\nWorld Start";
+    //std::cout << "\nWorld Start";
     this->neuroEvolution->Initiate();
     this->neuroEvolution->Speciate();
+    this->neuroEvolution->Mutate();
 }
 
 void World::Update() {

@@ -183,6 +183,16 @@ bool Genome::CreateConnection( const Connection& connection ) {
     );
 }
 
+bool Genome::SetConnectionEnable( int index, bool value ) {
+    if( index >= 0 && index < this->connections.size() ) {
+        if( this->connections[index].isEnabled != value ) {
+            this->connections[index].isEnabled = value; 
+        }
+        return true;
+    }
+    return false;
+}
+
 int Genome::AddNode( LayerType type ) {
     Node node( this->nodeCounter, type );
     this->nodes.push_back( node );
@@ -238,14 +248,71 @@ Genome Genome::GenerateTestGenome() {
 }
 
 void Genome::Mutate() {
-
     // Mutation in NEAT can change both connection weights and network structures
     // Connection weights mutate as in any NE system at each generation
 
     // Create a new hidden node based on probability
+    float probability = Mathematics::RandomInRange( 0.0f, 1.0f );
+    //std::cout << "\nProbability: " << probability << std::endl << std::endl;
+    if( probability < NODE_ADD_PROBABILITY ) {
+        this->InsertNodeRandom();
+        //std::cout << "\nAdded Random Node";
+    }
+
     // Create connections to the other nodes based on probability
-    // Assign weights randomly to the connections created
+    probability = Mathematics::RandomInRange( 0.0f, 1.0f );
+    if( probability < CONNECTION_ADD_PROBABILITY ) {
+        //std::cout << "\nAdded Random Connection";
+        this->AddRandomConnection();
+    }
+
     // Enable/Disable connections based on probability
+    probability = Mathematics::RandomInRange( 0.0f, 1.0f );
+    if( probability < CONNECTION_ENABLE_PROBABILITY ) {
+        int randIndex = Mathematics::RandomInRange( 
+            0, this->connections.size() - 1
+        );
+        //std::cout << "\nEnabled Random Connection";
+        this->SetConnectionEnable( randIndex, true );
+    }
+
+    probability = Mathematics::RandomInRange( 0.0f, 1.0f );
+    if( probability < CONNECTION_DISABLE_PROBABILITY ) {
+        int randIndex = Mathematics::RandomInRange( 
+            0, this->connections.size() - 1
+        );
+        //std::cout << "\nDisabled Random Connection";
+        this->SetConnectionEnable( randIndex, false );
+    }
+
+    // Assign weights randomly to the connections created
+    this->MutateConnectionWeights();
+}
+
+void Genome::MutateConnectionWeights() {
+    float probability = 0.0f;
+    for( int i = 0; i < this->connections.size(); ++i ) {
+        probability = Mathematics::RandomInRange( 0.0f, 1.0f );
+        // Choose a connection based on probability
+        if( probability < CONNECTION_SELECTION_PROBABILITY ) {
+            // Choose if to mutate weight or to set a different weight
+            probability = Mathematics::RandomInRange( 0.0f, 1.0f );
+            if( probability < WEIGHT_MUTATION_PROBABILITY ) {
+                this->connections[i].weight += Mathematics::RandomInRange(
+                    -WEIGHT_MUTATION_FACTOR, WEIGHT_MUTATION_FACTOR
+                );
+                this->connections[i].weight = Mathematics::Clamp(
+                    this->connections[i].weight, 
+                    -MAX_CONNECTION_WEIGHT, 
+                    MAX_CONNECTION_WEIGHT
+                );
+            } else {
+                this->connections[i].weight = Mathematics::RandomInRange( 
+                    -MAX_CONNECTION_WEIGHT, MAX_CONNECTION_WEIGHT 
+                );
+            }
+        }
+    }
 }
 
 std::vector<int> Genome::GetRandomConnIndices() {
@@ -348,9 +415,11 @@ bool Genome::AddRandomConnection() {
     // Create connection between the two by randomly assigning a weight between -1 and 1
     if( nodeIndices[0] != -1 && nodeIndices[1] != -1 &&
         this->CreateConnection(
-            nodeIndices[1],
-            nodeIndices[0],
-            Mathematics::RandomInRange( -1.0f, 1.0f ),
+            nodeIndices[1],     // In Index
+            nodeIndices[0],     // Out Index
+            Mathematics::RandomInRange( 
+                -MAX_CONNECTION_WEIGHT, MAX_CONNECTION_WEIGHT 
+            ),
             true
         )
     ) return true;
@@ -359,30 +428,34 @@ bool Genome::AddRandomConnection() {
 }
 
 void Genome::InsertNodeRandom() {
-    // Select a random connection index
-    int rndIndex = Mathematics::RandomInRange( 0, this->connections.size() - 1 );
-    // Disable the connection at that index
-    this->connections[rndIndex].isEnabled = false;
-    // Create a new hidden node
-    int newIndex = this->AddNode( LayerType::Hidden );
+    if( this->connections.size() > 0 ) {
+        // Select a random connection index
+        int rndIndex = Mathematics::RandomInRange( 0, this->connections.size() - 1 );
+        //std::cout << "\nRandIndex : " << rndIndex << std::endl << std::endl;
+        // Disable the connection at that index
+        this->connections[rndIndex].isEnabled = false;
+        // Create a new hidden node
+        int newIndex = this->AddNode( LayerType::Hidden );
 
-    // Create a new connection from the previous connection's inIndex to newNodeIndex 
-    // Assign weight as 1
-    this->CreateConnection( 
-        this->connections[rndIndex].inNodeIndex, 
-        newIndex,
-        1.0f,
-        true
-    );
-   
-    // Create a new connection from newNodeIndex to previous connection's outIndex 
-    // Assign weight as previous connection
-    this->CreateConnection( 
-        newIndex,
-        this->connections[rndIndex].outNodeIndex, 
-        this->connections[rndIndex].weight,
-        true
-    );
+        // Create a new connection from the previous connection's inIndex to newNodeIndex 
+        // Assign weight as 1
+        this->CreateConnection( 
+            this->connections[rndIndex].inNodeIndex, 
+            newIndex,
+            1.0f,
+            true
+        );
+    
+        // Create a new connection from newNodeIndex to previous connection's outIndex 
+        // Assign weight as previous connection
+        this->CreateConnection( 
+            newIndex,
+            this->connections[rndIndex].outNodeIndex, 
+            this->connections[rndIndex].weight,
+            true
+        );
+    }
+    
 }
 
 Genome Genome::CrossOver( const Genome& other ) {
@@ -491,7 +564,7 @@ bool Genome::IsCompatible( const Genome& other ) {
     //std::cout << "\nExcess: " << excess << ", Disjoint: " << disjoint << std::endl << std::endl;
     // Calculate N- Number of Genes in larger genome
     int N = std::max( this->connections.size(), other.connections.size() );
-    N = N < DEFAULT_SMALL_GENOME_SIZE ? 1 : N;
+    N = N < LEAST_BIG_GENOME_SIZE ? 1 : N;
 
     // Calculate WBar- Average weight differences of matching genes
     float thisW = this->GetAverageGeneWeight();

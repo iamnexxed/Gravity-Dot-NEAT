@@ -13,12 +13,27 @@
 #include "Primitives/Utils.h"
 
 
-// Default Genome Configuration variables:
+// DEFAULT GENOME CONFIG VARIABLES:
+
+// Compatibility Calculation
 const float C1 = 1.0f;
 const float C2 = 1.0f;
 const float C3 = 0.4f;
 const float COMPATIBILITY_THRESHOLD = 3.0f;
-const int DEFAULT_SMALL_GENOME_SIZE = 20;
+const int LEAST_BIG_GENOME_SIZE = 20;
+
+// Mutation Probabilities: 0.0 - 1.0
+const float NODE_ADD_PROBABILITY = 0.3f;
+const float CONNECTION_ADD_PROBABILITY = 0.4f;
+const float CONNECTION_ENABLE_PROBABILITY = 0.2f;
+const float CONNECTION_DISABLE_PROBABILITY = 0.1f;
+const float CHANGE_WEIGHT_PROBABILITY = 0.3f;
+const float CONNECTION_SELECTION_PROBABILITY = 0.2f;
+const float WEIGHT_MUTATION_PROBABILITY = 0.7f;
+
+const float MAX_CONNECTION_WEIGHT = 1.0f;
+const float WEIGHT_MUTATION_FACTOR = 0.1f;
+
 
 
 enum LayerType {
@@ -71,11 +86,10 @@ class Genome {
     public:    
         int inputCount = 0;
         int outputCount = 0;
-
         float fitness = 0;
-
         std::vector<Node> nodes;
         std::vector<Connection> connections;
+
 
         static Genome GenerateTestGenome();
 
@@ -88,10 +102,12 @@ class Genome {
             bool isEnabled
         );
         bool CreateConnection( const Connection& connection );
+        bool SetConnectionEnable( int index, bool value );
         void ShowNodeData();
         int AddNode( LayerType type );
         int GetHiddenNodeCount() const;
         void Mutate();
+        void MutateConnectionWeights();
         bool AddRandomConnection();
         void InsertNodeRandom();
         Genome CrossOver( const Genome& other );

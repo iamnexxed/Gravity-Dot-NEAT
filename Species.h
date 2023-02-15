@@ -11,6 +11,7 @@ class Species {
         std::vector<int> genomeTracker;
         // Representative Genome
         int representativeIndexLocation;
+        // Stale Species Generation counter
         
     public:
         Species( int index );
