@@ -34,6 +34,9 @@ const float WEIGHT_MUTATION_PROBABILITY = 0.7f;
 const float MAX_CONNECTION_WEIGHT = 1.0f;
 const float WEIGHT_MUTATION_FACTOR = 0.1f;
 
+// Speciation constants
+const float SPECIES_KEEP_FACTOR = 0.1f;
+
 
 
 enum LayerType {

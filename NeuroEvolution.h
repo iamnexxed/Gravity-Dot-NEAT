@@ -25,6 +25,8 @@ class NeuroEvolution {
         // Genomes Array
         std::vector<Genome*> genomes;
 
+        float meanAdjustedFitness = 0.0f;
+
         bool SetGenomeFitness( int index, float fitness );
     
         // Initiate a population

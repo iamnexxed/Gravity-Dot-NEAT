@@ -212,7 +212,7 @@ void Genome::ShowNodeData() {
         this->nodes[i].ShowData();
   
     }
-
+    std::cout << "\n++++++++++++++++++++++++++++++++++++\n";
     // Show connections
     std::cout << "\n\nConnections: \n";
     for( int i = 0; i < this->connections.size(); ++i ) {
@@ -225,8 +225,7 @@ void Genome::ShowNodeData() {
         std::cout << "\nInnovation Num: " << this->connections[i].innovNum;
         std::cout << "\n";
     }
-
-    std::cout << "\n\n";
+    std::cout << "\n-------------------------------------------\n\n";
 }
 
 Genome Genome::GenerateTestGenome() {
@@ -256,13 +255,13 @@ void Genome::Mutate() {
     //std::cout << "\nProbability: " << probability << std::endl << std::endl;
     if( probability < NODE_ADD_PROBABILITY ) {
         this->InsertNodeRandom();
-        //std::cout << "\nAdded Random Node";
+        std::cout << "\nATTEMPT: Added Random Node";
     }
 
     // Create connections to the other nodes based on probability
     probability = Mathematics::RandomInRange( 0.0f, 1.0f );
     if( probability < CONNECTION_ADD_PROBABILITY ) {
-        //std::cout << "\nAdded Random Connection";
+        std::cout << "\nATTEMPT: Added Random Connection";
         this->AddRandomConnection();
     }
 
@@ -272,7 +271,7 @@ void Genome::Mutate() {
         int randIndex = Mathematics::RandomInRange( 
             0, this->connections.size() - 1
         );
-        //std::cout << "\nEnabled Random Connection";
+        std::cout << "\nATTEMPT: Enabled Random Connection";
         this->SetConnectionEnable( randIndex, true );
     }
 
@@ -281,7 +280,7 @@ void Genome::Mutate() {
         int randIndex = Mathematics::RandomInRange( 
             0, this->connections.size() - 1
         );
-        //std::cout << "\nDisabled Random Connection";
+        std::cout << "\nATTEMPT: Disabled Random Connection";
         this->SetConnectionEnable( randIndex, false );
     }
 

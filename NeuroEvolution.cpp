@@ -20,17 +20,18 @@ void NeuroEvolution::Initiate() {
 
 
 void NeuroEvolution::Mutate() {
-    //this->genomes[0]->ShowNodeData();
-    //std::cout << "\n\n--------TEst Mutation--------";
+    this->genomes[0]->ShowNodeData();
+    std::cout << "\n\n--------TEst Mutation--------";
     // Perform mutation for all the genomes  
     for( int i = 0; i < this->genomes.size(); ++i ) {
-        this->genomes[i]->Mutate();
+        //this->genomes[i]->Mutate();
     }
-    //this->genomes[0]->Mutate();
-    //this->genomes[0]->ShowNodeData();
+    this->genomes[0]->Mutate();
+    this->genomes[0]->ShowNodeData();
 }
 
 void NeuroEvolution::Speciate() {
+    this->meanAdjustedFitness = 0.0f;
     // For each genome in global genomes
     for( int i = 0; i < this->genomes.size(); ++i ) {
         bool foundMatch = false;
@@ -76,20 +77,63 @@ void NeuroEvolution::Speciate() {
         }
         if( sum > 0 )
             this->genomes[i]->fitness /= sum;
+
+        this->meanAdjustedFitness += this->genomes[i]->fitness;
     } 
+
+    // Store the mean adjusted fitness of all the genomes
+    this->meanAdjustedFitness /= this->genomes.size();
+    
     //std::cout << "\nSpeciate. Genomes Array Size: " << this->genomes.size();
     //std::cout << "\nSpeciate. Species Array Size: " << this->speciesArray.size();
 }
 
 void NeuroEvolution::CrossOver() {
-    // Every species is assigned a potentially different number of offspring in proportion to the sum of adjusted fitnesses of its member organisms
-    // Remove a percentage of population from from the total based on the fitness including stale species
+    // Prerequisite: CrossOver operation must be performed after Speciation
+
+    // Create a new genomes array
+    std::vector<Genome> nextGenomes;
     // For every species
+    for( int i = 0; i < this->speciesArray.size(); ++i ) {
+        // Calculate the sum of adjusted fitnesses for the species
+        float sumAdjustedFitness = 0.0f;
+        for( int j = 0; j < this->speciesArray[i]->Size(); ++j ) {
+            int index = this->speciesArray[i]->GetGenomeIndexAt( j );
+            sumAdjustedFitness += this->genomes[index]->fitness;
+        }
+
+        // Calculate the offspring length of the new generation for the species
+        // Every species is assigned a potentially different number of offspring in proportion to the sum of adjusted fitnesses of its member organisms    
+        // offspring_length = ( sum_of_adjusted_fitness of all the genomes in the species ) / ( mean adjusted fitness of all the genomes )
+        int offspringLength = this->meanAdjustedFitness > 0 
+            ? (int)std::round( sumAdjustedFitness / this->meanAdjustedFitness )
+            : this->speciesArray[i]->Size();
+
+        // Cull the species and keep parents
+        this->speciesArray[i]->CullSpecies( this->genomes );
+        // TO DO: Keep topmost parent for a small number of possibilities since it will be the fittest
+        
         // Loop till population is recovered for that species
+        while( offspringLength-- > 0 ) {
             // Select two available parents randomly
+            int rand1Index = this->speciesArray[i]->GetRandomParent();
+            int rand2Index = this->speciesArray[i]->GetRandomParent();
             // Create a new offspring through crossover
+            Genome *newGenome = this->genomes[rand1Index]->CrossOver( 
+                this->genomes[rand2Index] 
+            );
             // Mutate the offspring
-    
+            newGenome.Mutate();
+            // Add the offspring genome to the new genomes array
+            nextGenomes.push_back( newGenome );
+        }            
+    }
+
+    // Reassign the new genomes array with the previous genomes
+    this->genomes.clear();
+    for( int i = 0; i < nextGenomes.size(); ++i ) {
+        
+    }
 }
 
  NeuroEvolution::~NeuroEvolution() {

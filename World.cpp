@@ -35,8 +35,13 @@ void World::Start() {
 }
 
 void World::Update() {
-
+    // If all the organisms have collided
     if( this->IsDead() ) {
+        // Perform Speciation 
+        // Increment Generation
+        // Perform crossover of the best parents
+        // Perform mutation on the new offsprings
+        // Restart the world with the  new offsprings
         // If there are no dot organisms left restart the level
         this->Restart();
     }
@@ -74,7 +79,11 @@ void World::Destroy() {
 }
 
 void World::Restart() {
+    // Create new organims based on all the genomes in the neuro evolution object
+    // Reset the positions of the organisms
+
     this->circle->ResetPosition();
+    
     // Reset Pillars
     // Reset PillarManager
     this->pillarManager->Reset();
@@ -85,12 +94,7 @@ bool World::IsDead() {
         // Evaluate the fitness of the organism based on the distance traveled, the energy spent and the brain size
         // Remove the organism from the scene
 
-    // If all the organisms have collided
-        // Perform Speciation
-        
-        // Increment Generation
-        // Perform crossover of the best parents
-        // Perform mutation on the new offsprings
+   
 
     if( this->circle->CheckCollision( *this->groundRectangle ) || 
         this->circle->CheckCollision( *this->ceilRectangle ) 
