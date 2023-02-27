@@ -1,5 +1,10 @@
 #include "Genome.h"
 
+// Initialize static variables
+int Genome::innovNumber = 0;
+int Genome::globalCounter = 0;
+std::map<std::string, int> Genome::innoDictionary;
+
 Node::Node( int id, LayerType type ) {
     this->index = id;
     this->type = type;
@@ -116,20 +121,104 @@ void Genome::GetExcessDisjointCount( const Genome& other, int& eCount, int& dCou
     }
 }
 
-Genome::Genome( int inputCount, int outputCount ) {
-
+Genome::Genome( int inputCount, int outputCount, int gen ) {
+    this->generation = gen;
     this->Initialize( inputCount, outputCount );
 }
 
+Genome::Genome( const Genome& copy, int gen ) {
+    this->generation = gen;
+    // Assign same input count
+    // Assign same output count
+    this->Initialize( copy.inputCount, copy.outputCount );
+  
+    // Add nodes
+    for( 
+        int i = copy.inputCount + copy.outputCount; 
+        i < copy.nodes.size(); 
+        ++i 
+    ) {
+        if( !this->AddHiddenNodeWithId( copy.nodes[i].index ) ) {
+            std::cout   << "\n" << __FILE__ << " line " << __LINE__ 
+                        << " Cannot add node index : "
+                        << copy.nodes[i].index;
+        }
+    }
+
+    // Set connections
+    for( int i = 0; i < copy.connections.size(); ++i ) {
+        if( !this->CreateConnection( copy.connections[i] ) ) {
+            std::cout   << "\n" << __FILE__ << " line " << __LINE__ 
+                        << " Cannot create connection : "
+                        << " In Index: " << copy.connections[i].inNodeIndex
+                        << " Out Index: " << copy.connections[i].outNodeIndex;
+        }
+    }
+}
+
+Genome::Genome( const char* path ) {
+    using json = nlohmann::json;
+
+}
+
+void Genome::SaveToJSON( const char* path ) {
+    using json = nlohmann::json;
+    json j;
+
+    // Store the id
+    j["id"] = this->id;
+
+    // Store the generation
+    j["generation"] = this->generation;
+
+    // Store Input count
+    j["inputCount"] = this->inputCount;
+
+    // Store output count
+    j["outputCount"] = this->outputCount;
+
+    // Store Hidden node count
+    j["hiddenCount"] = this->GetHiddenNodeCount();
+
+    // Store connection count
+    j["connectionsCount"] = this->connections.size();
+
+    // Store the fitness
+    j["fitness"] = this->fitness;
+
+    // Store the nodes
+    for( int i = 0; i < this->nodes.size(); ++i ) {
+        // Node properties
+        j["nodes"][i]["index"] = this->nodes[i].index;
+        j["nodes"][i]["type"] = (int)this->nodes[i].type;
+    }
+
+    // Store the connections
+    for( int i = 0; i < this->connections.size(); ++i ) {
+        j["connections"][i]["id"] = i;
+        j["connections"][i]["inNodeIndex"] = this->connections[i].inNodeIndex;
+        j["connections"][i]["outNodeIndex"] = this->connections[i].outNodeIndex;
+        j["connections"][i]["weight"] = this->connections[i].weight;
+        j["connections"][i]["isEnabled"] = this->connections[i].isEnabled;
+        j["connections"][i]["innovNum"] = this->connections[i].innovNum;
+    }
+    std::string uPath = path + std::to_string(this->id);
+    // write the json at output path
+    std::string s = j.dump();
+    Utils::writeToFile( uPath.c_str(), s.c_str() );
+}
+
 void Genome::Initialize( int inputCount, int outputCount ) {
+    this->id = Genome::globalCounter++;
     this->inputCount = inputCount;
     this->outputCount = outputCount;
     this->nodeCounter = 0;
     this->nodes.clear();
+    // Indices ranging from 0 to ( inputCount - 1 ) are input nodes
     for( int i = 0; i < inputCount; ++i ) {
         this->AddNode( LayerType::Sensor );
     } 
-
+    // Indices ranging from inputCount to ( inputCount + outputCount - 1 ) are output nodes
     for( int i = 0; i < outputCount; ++i ) {
         this->AddNode( LayerType::Output );
     } 
@@ -196,7 +285,20 @@ bool Genome::SetConnectionEnable( int index, bool value ) {
 int Genome::AddNode( LayerType type ) {
     Node node( this->nodeCounter, type );
     this->nodes.push_back( node );
-    return this->nodeCounter++;
+    this->nodeCounter = this->nodes.size();
+    return this->nodeCounter;
+}
+
+bool Genome::AddHiddenNodeWithId( int id ) {
+    // Check if the id already exists, as we don't want nodes with same ids
+    for( int i = 0; i < this->nodeCounter; ++i ) {
+        if( id == this->nodes[i].index )
+            return false;
+    }
+    Node node( id, LayerType::Hidden );
+    this->nodes.push_back( node );
+    this->nodeCounter = this->nodes.size();
+    return true;
 }
 
 int Genome::GetHiddenNodeCount() const { 
@@ -255,13 +357,13 @@ void Genome::Mutate() {
     //std::cout << "\nProbability: " << probability << std::endl << std::endl;
     if( probability < NODE_ADD_PROBABILITY ) {
         this->InsertNodeRandom();
-        std::cout << "\nATTEMPT: Added Random Node";
+        //std::cout << "\nATTEMPT: Added Random Node";
     }
 
     // Create connections to the other nodes based on probability
     probability = Mathematics::RandomInRange( 0.0f, 1.0f );
     if( probability < CONNECTION_ADD_PROBABILITY ) {
-        std::cout << "\nATTEMPT: Added Random Connection";
+        //std::cout << "\nATTEMPT: Added Random Connection";
         this->AddRandomConnection();
     }
 
@@ -271,7 +373,7 @@ void Genome::Mutate() {
         int randIndex = Mathematics::RandomInRange( 
             0, this->connections.size() - 1
         );
-        std::cout << "\nATTEMPT: Enabled Random Connection";
+        //std::cout << "\nATTEMPT: Enabled Random Connection";
         this->SetConnectionEnable( randIndex, true );
     }
 
@@ -280,7 +382,7 @@ void Genome::Mutate() {
         int randIndex = Mathematics::RandomInRange( 
             0, this->connections.size() - 1
         );
-        std::cout << "\nATTEMPT: Disabled Random Connection";
+        //std::cout << "\nATTEMPT: Disabled Random Connection";
         this->SetConnectionEnable( randIndex, false );
     }
 
@@ -379,10 +481,6 @@ std::vector<int> Genome::GetRandomConnIndices() {
     // Return the vector array
     return indices;
 }
-
-// Initialize static variables
-int Genome::innovNumber = 0;
-std::map<std::string, int> Genome::innoDictionary;
 
 // Static function for getting the global innovation number
 int Genome::GetInnovationNum( int inIndex, int outIndex ) {

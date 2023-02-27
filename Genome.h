@@ -9,6 +9,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <json/json.h>
 #include "Primitives/Mathematics.h"
 #include "Primitives/Utils.h"
 
@@ -76,6 +77,8 @@ class Genome {
     private:    
         // static global innovation Number
         static int innovNumber;
+        // Global Genome Counter
+        static int globalCounter;
         // HashMap var containing connection innovation history
         static std::map<std::string, int> innoDictionary;
 
@@ -86,7 +89,9 @@ class Genome {
 
         std::vector<int> GetRandomConnIndices();
 
-    public:    
+    public:   
+        int id = -1; 
+        int generation = -1;
         int inputCount = 0;
         int outputCount = 0;
         float fitness = 0;
@@ -95,8 +100,12 @@ class Genome {
 
 
         static Genome GenerateTestGenome();
+        
 
-        Genome( int inputCount, int outputCount );
+        Genome( int inputCount, int outputCount, int gen = -1 );
+        Genome( const Genome& copy, int gen = -1 );
+        Genome( const char* path );
+        void SaveToJSON( const char* path );
         void Initialize( int inputCount, int outputCount );
         bool CreateConnection( 
             int inNodeIndex, 
@@ -108,6 +117,7 @@ class Genome {
         bool SetConnectionEnable( int index, bool value );
         void ShowNodeData();
         int AddNode( LayerType type );
+        bool AddHiddenNodeWithId( int id );
         int GetHiddenNodeCount() const;
         void Mutate();
         void MutateConnectionWeights();

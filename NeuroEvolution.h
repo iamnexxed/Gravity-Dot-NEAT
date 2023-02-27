@@ -5,14 +5,12 @@
 #include "Species.h"
 #include "NeuralNetwork.h"
 
-// Initial Neural Network configuration
-const int INPUTCOUNT = 4;
-const int OUTPUTCOUNT = 1;
-
 class NeuroEvolution {
     private:
         // Species Array
         std::vector<Species*> speciesArray;
+        void clearSpecies();
+        void clearGenomes();
 
     public:
 
@@ -22,10 +20,19 @@ class NeuroEvolution {
         // Total Population
         const int populationSize = 100;
 
+        // Initial Neural Network configuration
+        const int INPUTCOUNT = 4;
+         
+        const int OUTPUTCOUNT = 1;
+
+        const char* SAVE_PATH = "Data/";
+
         // Genomes Array
         std::vector<Genome*> genomes;
 
         float meanAdjustedFitness = 0.0f;
+
+        int currentGeneration = 0;
 
         bool SetGenomeFitness( int index, float fitness );
     
@@ -40,6 +47,8 @@ class NeuroEvolution {
         
         // Speciation
         void Speciate();
+
+        void SaveGenomesToJSON();
 
         ~NeuroEvolution();
 };

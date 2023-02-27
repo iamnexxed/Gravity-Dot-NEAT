@@ -56,6 +56,6 @@ int Species::GetParentGenomeIndexAt( int location ) {
 }
 
 int Species::GetRandomParent() {
-    int rnd = Mathematic::RandomInRange( 0, this->parents.size() - 1 );
+    int rnd = Mathematics::RandomInRange( 0, this->parents.size() - 1 );
     return this->parents[rnd];
 }

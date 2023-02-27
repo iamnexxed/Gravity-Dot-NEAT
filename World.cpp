@@ -31,7 +31,8 @@ void World::Start() {
     //std::cout << "\nWorld Start";
     this->neuroEvolution->Initiate();
     this->neuroEvolution->Speciate();
-    this->neuroEvolution->Mutate();
+    this->neuroEvolution->CrossOver();
+    this->neuroEvolution->SaveGenomesToJSON();
 }
 
 void World::Update() {

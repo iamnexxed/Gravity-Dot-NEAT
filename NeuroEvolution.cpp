@@ -10,12 +10,15 @@ bool NeuroEvolution::SetGenomeFitness( int index, float fitness ) {
 }
 
 void NeuroEvolution::Initiate() {
+    this->currentGeneration = 0;
     // Create a new random population 
     for( int i = 0; i < this->populationSize; ++i ) {
-        this->genomes.push_back( new Genome( INPUTCOUNT, OUTPUTCOUNT ) );
+        this->genomes.push_back( 
+            new Genome( 
+                this->INPUTCOUNT, this->OUTPUTCOUNT, this->currentGeneration 
+            ) 
+        );
     }
-    //std::cout << "\nInitiate. Species Array Size: " << this->speciesArray.size();
-    //std::cout << "\nInitiate. Genomes Array Size: " << this->genomes.size();
 }
 
 
@@ -119,8 +122,8 @@ void NeuroEvolution::CrossOver() {
             int rand1Index = this->speciesArray[i]->GetRandomParent();
             int rand2Index = this->speciesArray[i]->GetRandomParent();
             // Create a new offspring through crossover
-            Genome *newGenome = this->genomes[rand1Index]->CrossOver( 
-                this->genomes[rand2Index] 
+            Genome newGenome = this->genomes[rand1Index]->CrossOver( 
+                *this->genomes[rand2Index] 
             );
             // Mutate the offspring
             newGenome.Mutate();
@@ -129,19 +132,39 @@ void NeuroEvolution::CrossOver() {
         }            
     }
 
-    // Reassign the new genomes array with the previous genomes
-    this->genomes.clear();
+    // Reassign the previous genomes with the new genomes array
+    this->clearGenomes();
+    this->currentGeneration++;
     for( int i = 0; i < nextGenomes.size(); ++i ) {
-        
+        this->genomes.push_back( 
+            new Genome( nextGenomes[i], this->currentGeneration ) 
+        );
     }
+    // New generation of genomes are ready to ROCK!
+    std::cout << "\nAfter CrossOver genome size is: " << this->genomes.size() << "\n\n";
 }
 
- NeuroEvolution::~NeuroEvolution() {
+void NeuroEvolution::clearSpecies() {
     for(int i = 0; i < this->speciesArray.size(); ++i ) {
         delete this->speciesArray[i];
     } 
+    this->speciesArray.clear();
+}
 
+void NeuroEvolution::clearGenomes() {
     for(int i = 0; i < this->genomes.size(); ++i ) {
         delete this->genomes[i];
     } 
+    this->genomes.clear();
+}
+
+void NeuroEvolution::SaveGenomesToJSON() {
+    for(int i = 0; i < this->genomes.size(); ++i ) {
+        this->genomes[i]->SaveToJSON( SAVE_PATH );
+    } 
+}
+
+ NeuroEvolution::~NeuroEvolution() {
+    this->clearSpecies();
+    this->clearGenomes();
  }

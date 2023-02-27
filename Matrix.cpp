@@ -14,7 +14,7 @@ void Matrix::Accumulate( const Matrix& other) {
         if( this->data.size() != other.data.size() || 
             this->data[i].size() != other.data[i].size()
         ) {
-            std::cout << "Matrices are not similar in dimensions\n Addition Not Possible!";
+            std::cout << "\nMatrices are not similar in dimensions\n Addition Not Possible!";
             return;
         }
         for( int j = 0; j < this->data[i].size(); ++j ) {
