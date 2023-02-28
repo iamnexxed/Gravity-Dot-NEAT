@@ -26,10 +26,11 @@ class World {
 
     // Neuroevolution object pointer
     NeuroEvolution* neuroEvolution;
+
+    bool canJump = true;
     
     public:
         const float gravity = -0.0025;
-        const float jumpForce = 0.015;
         const float spawnInterval = 2.0f;
         World( GLFWwindow& window, int windowWidth, int windowHeight );
         void Start();

@@ -78,6 +78,11 @@ void Circle::ApplyForce( glm::vec3 force ) {
     this->velocity += force;
 }
 
+void Circle::Jump() {
+    this->velocity = glm::vec3( 0, 0, 0 );
+    this->ApplyForce( glm::vec3( 0, this->JUMPFORCE, 0 ) );
+}
+
 void Circle::Update() {
     this->translation += this->velocity;
     // Increase alive time

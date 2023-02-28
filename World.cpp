@@ -29,7 +29,7 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
 
 void World::Start() {
     //std::cout << "\nWorld Start";
-    this->Initialize();
+    this->Initiate();
     // this->neuroEvolution->Initiate();
     // this->neuroEvolution->Speciate();
     // this->neuroEvolution->CrossOver();
@@ -59,8 +59,8 @@ void World::Update() {
         glfwGetKey( &this->window, GLFW_KEY_SPACE ) == GLFW_PRESS && 
         !this->circle->hasBrain 
     ) {
-        this->circle->ApplyForce( glm::vec3( 0, this->jumpForce, 0 ) );
-	}
+        this->circle->Jump();
+	} 
 
     this->camera->UpdateMatrix( 60.0f, 0.1f, 100.0f );
     
@@ -92,7 +92,7 @@ void World::Restart() {
     // Reset the positions of all the organisms
     this->circle->ResetPosition();
     // Reinitialize setup
-    this->Initialize();
+    this->Initiate();
     // Reset Pillars
     // Reset PillarManager
     this->pillarManager->Reset();
