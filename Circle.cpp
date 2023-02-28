@@ -4,12 +4,12 @@ Circle::Circle( float rad ) {
 
     this->createSprite( rad );
     this->hasBrain = false;
-    //this->CreateBrain();
 }
 
-Circle:: Circle( const Genome& genome, float rad ) {
+Circle:: Circle( Genome& genome, float rad ) {
     this->createSprite( rad );
     this->hasBrain = true;
+    this->CreateBrain( genome );
 }
 
 void Circle::createSprite( float rad ) {
@@ -80,6 +80,7 @@ void Circle::ApplyForce( glm::vec3 force ) {
 
 void Circle::Update() {
     this->translation += this->velocity;
+    // Increase alive time
 }
 
 void Circle::Translate( glm::vec3 translationVec ) {
@@ -89,6 +90,24 @@ void Circle::Translate( glm::vec3 translationVec ) {
 void Circle::ResetPosition() {
     this->MoveTo( glm::vec3( this->translation.x, 0, 0 ) );
     this->velocity = glm::vec3( 0, 0, 0 );
+}
+
+bool Circle::Predict( 
+    float xDistance, 
+    float yUpperPillarDistance, 
+    float yLowerPillarDistance, 
+    float yCeilDistance,
+    float yGroundDistance
+) {
+    // Normalize all the parameters
+
+    // Create a vector array
+
+    // Neural Network prediction
+
+    // If the output[0] is greater than the jump threshold return true
+
+    return false;
 }
 
 bool Circle::CheckCollision( const Rectangle& rect ) {
@@ -155,6 +174,8 @@ void Circle::CreateTestBrain() {
 }
 
 float Circle::CalculateFitness() {
+    // Fitness function
+    // return A * aliveTime + B / hidden_nodes_in_brain
     return 0;
 }
 

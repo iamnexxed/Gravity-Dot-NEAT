@@ -102,7 +102,7 @@ class Genome {
 
 
         static Genome GenerateTestGenome();
-        
+        static void ResetGenomeCounter();
 
         Genome( int inputCount, int outputCount, int gen = -1 );
         Genome( const Genome& copy, int gen = -1 );

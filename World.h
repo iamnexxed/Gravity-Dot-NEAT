@@ -37,6 +37,7 @@ class World {
         void Destroy();
         bool IsDead();
         void Restart();
+        void Initiate();
 
         virtual ~World();
 };

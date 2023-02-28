@@ -395,6 +395,10 @@ Genome Genome::GenerateTestGenome() {
     return g;
 }
 
+void Genome::ResetGenomeCounter() {
+    Genome::globalCounter = 0;
+}
+
 void Genome::Mutate() {
     // Mutation in NEAT can change both connection weights and network structures
     // Connection weights mutate as in any NE system at each generation

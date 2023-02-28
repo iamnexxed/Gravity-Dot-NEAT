@@ -96,7 +96,7 @@ void NeuroEvolution::Speciate() {
 
 void NeuroEvolution::CrossOver() {
     // Prerequisite: CrossOver operation must be performed after Speciation
-
+    Genome::ResetGenomeCounter();
     // Create a new genomes array
     std::vector<Genome*> nextGenomes;
     // For every species

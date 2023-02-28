@@ -13,6 +13,7 @@ class Circle {
         glm::vec3 velocity = glm::vec3( 0.0f, 0.0f, 0.0f );
         glm::vec3 initialPosition = glm::vec3(-3.3, 0, 0);
         NeuralNetwork *brain;
+        float aliveTime = 0.0f;
 
         void createSprite( float rad );
 
@@ -24,7 +25,7 @@ class Circle {
         bool hasBrain;
 
         Circle( float rad );
-        Circle( const Genome& genome, float rad );
+        Circle( Genome& genome, float rad );
         void CreateTestBrain();
         void CreateBrain( Genome& genome );
         void MoveTo( glm::vec3 position );
@@ -33,7 +34,13 @@ class Circle {
         void Update();
         void Translate( glm::vec3 translationVec );
         void ResetPosition();
-        // void CheckDeath();
+        bool Predict( 
+            float xDistance, 
+            float yUpperPillarDistance, 
+            float yLowerPillarDistance, 
+            float yCeilDistance,
+            float yGroundDistance
+        );
         bool CheckCollision( const Rectangle& rect );
 
         float CalculateFitness();

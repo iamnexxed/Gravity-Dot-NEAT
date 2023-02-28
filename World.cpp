@@ -29,10 +29,11 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
 
 void World::Start() {
     //std::cout << "\nWorld Start";
-    this->neuroEvolution->Initiate();
-    this->neuroEvolution->Speciate();
-    this->neuroEvolution->CrossOver();
-    this->neuroEvolution->SaveGenomesToJSON();
+    this->Initialize();
+    // this->neuroEvolution->Initiate();
+    // this->neuroEvolution->Speciate();
+    // this->neuroEvolution->CrossOver();
+    // this->neuroEvolution->SaveGenomesToJSON();
 }
 
 void World::Update() {
@@ -50,10 +51,9 @@ void World::Update() {
     // Play the game
     
     // Update Calls
+
+    // Apply Gravity on all organisms
     this->circle->ApplyForce( glm::vec3( 0, gravity, 0 ) );
-
-
-
 
     if ( 
         glfwGetKey( &this->window, GLFW_KEY_SPACE ) == GLFW_PRESS && 
@@ -63,15 +63,24 @@ void World::Update() {
 	}
 
     this->camera->UpdateMatrix( 60.0f, 0.1f, 100.0f );
+    
+    // For each organism make a decision as to jump or not
+    // Update all organisms
     this->circle->Update();
+
     // Update PillarManager
     this->pillarManager->Update();
 
     // Draw Calls
+
+    // Draw all organisms
     this->circle->DrawInstance( *shaderProgram, *camera );
+
+    // Draw ground
     this->groundRectangle->Draw( *shaderProgram, *camera );
+    // Draw ceiling
     this->ceilRectangle->Draw( *shaderProgram, *camera );
-    // Draw PillarManager
+    // Draw Pillars
     this->pillarManager->Draw( *shaderProgram, *camera );
 }
 
@@ -80,20 +89,25 @@ void World::Destroy() {
 }
 
 void World::Restart() {
-    // Create new organims based on all the genomes in the neuro evolution object
-    // Reset the positions of the organisms
-
+    // Reset the positions of all the organisms
     this->circle->ResetPosition();
-    
+    // Reinitialize setup
+    this->Initialize();
     // Reset Pillars
     // Reset PillarManager
     this->pillarManager->Reset();
 }
 
 bool World::IsDead() {
-    // if the organism collides 
-        // Evaluate the fitness of the organism based on the distance traveled, the energy spent and the brain size
-        // Remove the organism from the scene
+
+    // For all organisms
+        // if the organism collides 
+            // Reduce the living count
+            // Evaluate the fitness of the organism based on the distance traveled, the energy spent and the brain size
+            // Set the genome index fitness
+            // Remove the organism from the scene
+    
+    // If living count is zero return true
 
    
 
@@ -113,6 +127,11 @@ bool World::IsDead() {
 
     //this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 1.0f, 1.0f ) );
     return false;
+}
+
+void World::Initiate() {
+    // For each genome in the neuroevolution
+        // Create a new circle with a brain and store it in the circle array
 }
 
 World::~World() {
