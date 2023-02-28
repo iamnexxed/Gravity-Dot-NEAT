@@ -4,6 +4,7 @@
 int Genome::innovNumber = 0;
 int Genome::globalCounter = 0;
 std::map<std::string, int> Genome::innoDictionary;
+const char* Genome::EXTENSION = ".genome";
 
 Node::Node( int id, LayerType type ) {
     this->index = id;
@@ -158,7 +159,45 @@ Genome::Genome( const Genome& copy, int gen ) {
 
 Genome::Genome( const char* path ) {
     using json = nlohmann::json;
+    std::string text = Utils::getFileContents(path);
+    json j = json::parse(text);
+    int inputCount = j["inputCount"];
+    int outputCount = j["outputCount"];
+    int hiddenCount = j["hiddenCount"];
+    int totalCount = inputCount + outputCount + hiddenCount;
+    this->Initialize( inputCount, outputCount );
 
+    // Add nodes
+     for( 
+        int i = inputCount + outputCount; 
+        i < totalCount; 
+        ++i 
+    ) {
+        int index = j["nodes"][i]["index"];
+        if( !this->AddHiddenNodeWithId( index ) ) {
+            std::cout   << "\n" << __FILE__ << " line " << __LINE__ 
+                        << " Cannot add node index : "
+                        << index;
+        }
+    }
+
+    int connectionsCount = j["connectionsCount"];
+    // Add connections
+    for( int i = 0; i < connectionsCount; ++i ) {
+        if( 
+            !this->CreateConnection( 
+                j["connections"][i]["inNodeIndex"],
+                j["connections"][i]["outNodeIndex"],
+                j["connections"][i]["weight"],
+                j["connections"][i]["isEnabled"]
+            ) 
+        ) {
+            std::cout   << "\n" << __FILE__ << " line " << __LINE__ 
+                        << " Cannot create connection : "
+                        << " In Index: " << j["connections"][i]["inNodeIndex"]
+                        << " Out Index: " << j["connections"][i]["outNodeIndex"];
+        }
+    }
 }
 
 void Genome::SaveToJSON( const char* path ) {
@@ -202,7 +241,13 @@ void Genome::SaveToJSON( const char* path ) {
         j["connections"][i]["isEnabled"] = this->connections[i].isEnabled;
         j["connections"][i]["innovNum"] = this->connections[i].innovNum;
     }
-    std::string uPath = path + std::to_string(this->id);
+    std::string uPath = 
+        path + 
+        std::to_string(this->generation) + 
+        "_" + 
+        std::to_string(this->id) +
+        Genome::EXTENSION;
+
     // write the json at output path
     std::string s = j.dump();
     Utils::writeToFile( uPath.c_str(), s.c_str() );
@@ -210,9 +255,11 @@ void Genome::SaveToJSON( const char* path ) {
 
 void Genome::Initialize( int inputCount, int outputCount ) {
     this->id = Genome::globalCounter++;
+    std::cout << "\nGenome Id: " << this->id;
     this->inputCount = inputCount;
     this->outputCount = outputCount;
     this->nodeCounter = 0;
+    this->fitness = -1.0f;
     this->nodes.clear();
     // Indices ranging from 0 to ( inputCount - 1 ) are input nodes
     for( int i = 0; i < inputCount; ++i ) {

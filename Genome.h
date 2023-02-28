@@ -75,6 +75,8 @@ struct Connection {
  // Consists of Nodes and Connections
 class Genome {
     private:    
+        // File Extension
+        static const char* EXTENSION;
         // static global innovation Number
         static int innovNumber;
         // Global Genome Counter
@@ -94,7 +96,7 @@ class Genome {
         int generation = -1;
         int inputCount = 0;
         int outputCount = 0;
-        float fitness = 0;
+        float fitness = -1.0f;
         std::vector<Node> nodes;
         std::vector<Connection> connections;
 

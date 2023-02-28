@@ -34,6 +34,8 @@ void NeuroEvolution::Mutate() {
 }
 
 void NeuroEvolution::Speciate() {
+    // This function changes the fitness of all the genomes according to their species classification
+
     this->meanAdjustedFitness = 0.0f;
     // For each genome in global genomes
     for( int i = 0; i < this->genomes.size(); ++i ) {
@@ -85,7 +87,8 @@ void NeuroEvolution::Speciate() {
     } 
 
     // Store the mean adjusted fitness of all the genomes
-    this->meanAdjustedFitness /= this->genomes.size();
+    if( this->genomes.size() > 0 )
+        this->meanAdjustedFitness /= this->genomes.size();
     
     //std::cout << "\nSpeciate. Genomes Array Size: " << this->genomes.size();
     //std::cout << "\nSpeciate. Species Array Size: " << this->speciesArray.size();
@@ -93,6 +96,7 @@ void NeuroEvolution::Speciate() {
 
 void NeuroEvolution::CrossOver() {
     // Prerequisite: CrossOver operation must be performed after Speciation
+    // Optmisation: Make the crossover function for genome return a pointer to a new memory location
 
     // Create a new genomes array
     std::vector<Genome> nextGenomes;
@@ -115,7 +119,7 @@ void NeuroEvolution::CrossOver() {
         // Cull the species and keep parents
         this->speciesArray[i]->CullSpecies( this->genomes );
         // TO DO: Keep topmost parent for a small number of possibilities since it will be the fittest
-        
+        std::cout << "\nCreating new genomes for species....";
         // Loop till population is recovered for that species
         while( offspringLength-- > 0 ) {
             // Select two available parents randomly
@@ -133,6 +137,7 @@ void NeuroEvolution::CrossOver() {
     }
 
     // Reassign the previous genomes with the new genomes array
+    std::cout << "\nReassigning new genomes for species....";
     this->clearGenomes();
     this->currentGeneration++;
     for( int i = 0; i < nextGenomes.size(); ++i ) {
@@ -141,7 +146,7 @@ void NeuroEvolution::CrossOver() {
         );
     }
     // New generation of genomes are ready to ROCK!
-    std::cout << "\nAfter CrossOver genome size is: " << this->genomes.size() << "\n\n";
+    //std::cout << "\nAfter CrossOver genome size is: " << this->genomes.size() << "\n\n";
 }
 
 void NeuroEvolution::clearSpecies() {
