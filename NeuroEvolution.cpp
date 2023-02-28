@@ -96,10 +96,9 @@ void NeuroEvolution::Speciate() {
 
 void NeuroEvolution::CrossOver() {
     // Prerequisite: CrossOver operation must be performed after Speciation
-    // Optmisation: Make the crossover function for genome return a pointer to a new memory location
 
     // Create a new genomes array
-    std::vector<Genome> nextGenomes;
+    std::vector<Genome*> nextGenomes;
     // For every species
     for( int i = 0; i < this->speciesArray.size(); ++i ) {
         // Calculate the sum of adjusted fitnesses for the species
@@ -126,11 +125,11 @@ void NeuroEvolution::CrossOver() {
             int rand1Index = this->speciesArray[i]->GetRandomParent();
             int rand2Index = this->speciesArray[i]->GetRandomParent();
             // Create a new offspring through crossover
-            Genome newGenome = this->genomes[rand1Index]->CrossOver( 
+            Genome *newGenome = this->genomes[rand1Index]->CrossOver( 
                 *this->genomes[rand2Index] 
             );
             // Mutate the offspring
-            newGenome.Mutate();
+            newGenome->Mutate();
             // Add the offspring genome to the new genomes array
             nextGenomes.push_back( newGenome );
         }            
@@ -141,9 +140,8 @@ void NeuroEvolution::CrossOver() {
     this->clearGenomes();
     this->currentGeneration++;
     for( int i = 0; i < nextGenomes.size(); ++i ) {
-        this->genomes.push_back( 
-            new Genome( nextGenomes[i], this->currentGeneration ) 
-        );
+        nextGenomes[i]->generation = this->currentGeneration;
+        this->genomes.push_back( nextGenomes[i] );
     }
     // New generation of genomes are ready to ROCK!
     //std::cout << "\nAfter CrossOver genome size is: " << this->genomes.size() << "\n\n";

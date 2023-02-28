@@ -142,10 +142,10 @@ void Circle::CreateTestBrain() {
     std::cout << "\nIs G1 compatible with G4 ? " << g1.IsCompatible( g4 );
     std::cout << "\nIs G1 compatible with G2 ? " << g1.IsCompatible( g2 );
 
-    Genome offspring = g1.CrossOver( g4 );
+    Genome *offspring = g1.CrossOver( g4 );
     //offspring.ShowNodeData();
 
-    this->brain = new NeuralNetwork( offspring );
+    this->brain = new NeuralNetwork( *offspring );
     //this->brain->ShowLayers();
     std::vector<float> inputs = { 0.5f, 0.2f, 0.3f };
     std::vector<float> outputs = this->brain->Predict( inputs );

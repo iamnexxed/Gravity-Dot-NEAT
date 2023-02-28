@@ -602,11 +602,11 @@ void Genome::InsertNodeRandom() {
     
 }
 
-Genome Genome::CrossOver( const Genome& other ) {
+Genome* Genome::CrossOver( const Genome& other ) {
     // Preconditions
     // 1. Connections of this and the other genome should be sorted in ascending order
 
-    Genome g( this->inputCount, this->outputCount );
+    Genome* g = new Genome( this->inputCount, this->outputCount );
 
     // Create nodes in genome for connections if they don't exist
     int hiddenCount = std::max( 
@@ -614,7 +614,7 @@ Genome Genome::CrossOver( const Genome& other ) {
         other.GetHiddenNodeCount() 
     ); 
     for( int i = 0; i < hiddenCount; ++i ) {
-        g.AddNode( LayerType::Hidden );
+        g->AddNode( LayerType::Hidden );
     }
 
 
@@ -631,7 +631,7 @@ Genome Genome::CrossOver( const Genome& other ) {
                     this->connections[i].innovNum > other.connections[j].innovNum 
                 )
             ) { // Excess found in other genome OR Disjoint found
-                if( this->fitness < other.fitness && g.CreateConnection( other.connections[j] ) ) {
+                if( this->fitness < other.fitness && g->CreateConnection( other.connections[j] ) ) {
                     // Include other.connections[j] in the child connections
                     //std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
                 }
@@ -639,7 +639,7 @@ Genome Genome::CrossOver( const Genome& other ) {
                     // Include other.connections[j] in the child connections based on random probability
                     int rndInt = Mathematics::RandomInRange( 0, 1 );
                     //std::cout << "\nrndInt: " << rndInt;
-                    if( rndInt == 1 && g.CreateConnection( other.connections[j] ) ) {
+                    if( rndInt == 1 && g->CreateConnection( other.connections[j] ) ) {
                         //std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
                     }
                 }   
@@ -659,7 +659,7 @@ Genome Genome::CrossOver( const Genome& other ) {
                     this->connections[i].innovNum < other.connections[j].innovNum 
                 )
             ) { // Disjoint found
-                if( this->fitness > other.fitness && g.CreateConnection( this->connections[i] ) ) {
+                if( this->fitness > other.fitness && g->CreateConnection( this->connections[i] ) ) {
                     // Include this->connections[i] in the child connections
                     //std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
 
@@ -668,7 +668,7 @@ Genome Genome::CrossOver( const Genome& other ) {
                     // Include this->connections[i] in the child connections based on random probability
                     int rndInt = Mathematics::RandomInRange( 0, 1 );
                     //std::cout << "\nrndInt: " << rndInt;
-                    if( rndInt == 0 && g.CreateConnection( this->connections[i] ) ) {
+                    if( rndInt == 0 && g->CreateConnection( this->connections[i] ) ) {
                         //std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
                     }
                 }   
@@ -686,9 +686,9 @@ Genome Genome::CrossOver( const Genome& other ) {
             // Include any of this->connections[i] and other.connections[j] in the child connections randomly
             int rndInt = Mathematics::RandomInRange( 0, 1 );
             //std::cout << "\nrndInt: " << rndInt;
-            if( rndInt == 0 && g.CreateConnection( this->connections[i] ) ) {
+            if( rndInt == 0 && g->CreateConnection( this->connections[i] ) ) {
                 //std::cout << "\nConnection Created for innoNum: " << this->connections[i].innovNum;
-            } else if( g.CreateConnection( other.connections[j] ) ) {
+            } else if( g->CreateConnection( other.connections[j] ) ) {
                 //std::cout << "\nConnection Created for innoNum: " << other.connections[j].innovNum;
             }
             // Increment i and j

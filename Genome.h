@@ -125,7 +125,7 @@ class Genome {
         void MutateConnectionWeights();
         bool AddRandomConnection();
         void InsertNodeRandom();
-        Genome CrossOver( const Genome& other );
+        Genome* CrossOver( const Genome& other );
         float GetAverageGeneWeight() const;
         void GetExcessDisjointCount( const Genome& other, int& eCount, int& dCount );
         // Compare function that inputs other genome. Returns the number of Disjoint, Excess genes, avg diff weights, and N
