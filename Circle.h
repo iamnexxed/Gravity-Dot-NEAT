@@ -10,7 +10,7 @@ class Circle {
     private:
         const int step = 10;
         const float JUMPFORCE = 0.045;
-        const float A_PARAM = 1.0f;
+        const float A_PARAM = 3.0f;
         const float B_PARAM = 1.0f;
         const float DELTA = 0.033f;
         const float MAXHEIGHT = 720;

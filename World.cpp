@@ -23,11 +23,13 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
 
     // Construct NeuroEvolution Object
     this->neuroEvolution = new NeuroEvolution();
+    this->ShouldPlayWorld = true;
     std::cout << "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ World Constructed ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 }
 
 void World::Start() {
     //std::cout << "\nWorld Start";
+    this->neuroEvolution->Initiate();
     this->Initiate();
     // this->neuroEvolution->Initiate();
     // this->neuroEvolution->Speciate();
@@ -36,10 +38,16 @@ void World::Start() {
 }
 
 void World::Update() {
+    if( 
+        this->neuroEvolution->currentGeneration > this->neuroEvolution->MAXGENS 
+    ) this->ShouldPlayWorld = false;
+
+    //std::cout << "\nGen: " << this->neuroEvolution->currentGeneration;
     // Play the game
 
     // Check If all the organisms have collided
     if( this->IsDead() ) {
+        //this->neuroEvolution->SaveGenomesToJSON();
         // Perform Speciation 
         this->neuroEvolution->Speciate();
         // Perform crossover of the best parents
@@ -173,9 +181,10 @@ bool World::IsDead() {
 }
 
 void World::Initiate() {
-    this->neuroEvolution->Initiate();
+   
     int genomeSize = this->neuroEvolution->genomes.size();
     this->lifeCount = genomeSize;
+    std::cout << "\nGen: " << this->neuroEvolution->currentGeneration << ", Life count: " << this->lifeCount;
     this->clearCircles();
     // For each genome in the neuroevolution
     for( int i = 0; i < genomeSize; ++i ) {

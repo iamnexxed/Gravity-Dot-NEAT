@@ -33,6 +33,9 @@ class World {
         const float gravity = -0.0025;
         const float spawnInterval = 2.0f;
         const float organismRadius = 0.15f;
+
+        bool ShouldPlayWorld = true;
+
         World( GLFWwindow& window, int windowWidth, int windowHeight );
         void Start();
         void Update();

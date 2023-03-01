@@ -118,7 +118,8 @@ bool Circle::Predict(
         yUpperPillarDistance,
         yLowerPillarDistance,
         yCeilDistance,
-        yGroundDistance
+        yGroundDistance,
+        this->velocity.y
      };
 
     // Neural Network prediction

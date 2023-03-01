@@ -114,7 +114,9 @@ void NeuroEvolution::CrossOver() {
         int offspringLength = this->meanAdjustedFitness > 0 
             ? (int)std::round( sumAdjustedFitness / this->meanAdjustedFitness )
             : this->speciesArray[i]->Size();
+        //std::cout << "\nSpecies: " << i << ", Mean Adjusted Fitness: " << this->meanAdjustedFitness << ", Sum Adjusted Fitness:" << sumAdjustedFitness;
 
+        //std::cout << "\nSpecies: " << i << ", Offspring length:" << offspringLength;
         // Cull the species and keep parents
         this->speciesArray[i]->CullSpecies( this->genomes );
         // TO DO: Keep topmost parent for a small number of possibilities since it will be the fittest
@@ -139,6 +141,7 @@ void NeuroEvolution::CrossOver() {
     //std::cout << "\nReassigning new genomes for species....";
     this->clearGenomes();
     this->currentGeneration++;
+    //std::cout << "\nNext Genome Size:" << nextGenomes.size();
     for( int i = 0; i < nextGenomes.size(); ++i ) {
         nextGenomes[i]->generation = this->currentGeneration;
         this->genomes.push_back( nextGenomes[i] );
