@@ -155,3 +155,7 @@ std::vector<float> NeuralNetwork::Predict( const std::vector<float>& inputs ) {
     // Get Output associated with the last layer
     return this->layers[this->layers.size() - 1].GetActivationOutput();
 }
+
+int NeuralNetwork::GetNodeCount() {
+    return this->genome.nodes.size();
+}

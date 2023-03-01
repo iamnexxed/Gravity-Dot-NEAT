@@ -14,24 +14,25 @@ class World {
     Camera* camera;
     Shader* shaderProgram;
     Primitives* primitives;
-    Circle* circle;
+    GLFWwindow& window;
+
+    // Neuroevolution object pointer
+    NeuroEvolution* neuroEvolution;
 
     Rectangle* groundRectangle;
     Rectangle* ceilRectangle;
     PillarManager* pillarManager;
     std::vector<Rectangle*> rects;
 
+    std::vector<Circle*> circles;
+    int lifeCount;
 
-    GLFWwindow& window;
+    void clearCircles();
 
-    // Neuroevolution object pointer
-    NeuroEvolution* neuroEvolution;
-
-    bool canJump = true;
-    
     public:
         const float gravity = -0.0025;
         const float spawnInterval = 2.0f;
+        const float organismRadius = 0.15f;
         World( GLFWwindow& window, int windowWidth, int windowHeight );
         void Start();
         void Update();

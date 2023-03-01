@@ -86,6 +86,10 @@ float Pillar::GetXPos() {
     return this->translation.x;
 }
 
+float Pillar::GetYPos() {
+    return this->translation.y;
+}
+
 bool Pillar::CanMove() {
     return this->shouldMove;
 }

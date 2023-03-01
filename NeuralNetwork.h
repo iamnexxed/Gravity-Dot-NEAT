@@ -33,6 +33,7 @@ class NeuralNetwork {
         NeuralNetwork( Genome& genome );
         void ShowLayers();
         std::vector<float> Predict( const std::vector<float>& inputs );
+        int GetNodeCount();
 };
 
 

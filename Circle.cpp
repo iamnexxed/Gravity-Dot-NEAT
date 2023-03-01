@@ -8,7 +8,7 @@ Circle::Circle( float rad ) {
 
 Circle:: Circle( Genome& genome, float rad ) {
     this->createSprite( rad );
-    this->hasBrain = true;
+    this->id = genome.id;
     this->CreateBrain( genome );
 }
 
@@ -86,6 +86,7 @@ void Circle::Jump() {
 void Circle::Update() {
     this->translation += this->velocity;
     // Increase alive time
+    this->aliveTime += this->DELTA;
 }
 
 void Circle::Translate( glm::vec3 translationVec ) {
@@ -105,14 +106,25 @@ bool Circle::Predict(
     float yGroundDistance
 ) {
     // Normalize all the parameters
+    xDistance /= this->MAXWIDTH;
+    yUpperPillarDistance /= this->MAXHEIGHT;
+    yLowerPillarDistance /= this->MAXHEIGHT;
+    yCeilDistance /= this->MAXHEIGHT;
+    yGroundDistance /= this->MAXHEIGHT;
 
     // Create a vector array
+    const std::vector<float> inputs = {
+        xDistance,
+        yUpperPillarDistance,
+        yLowerPillarDistance,
+        yCeilDistance,
+        yGroundDistance
+     };
 
     // Neural Network prediction
-
+    std::vector<float> output = this->brain->Predict( inputs );
     // If the output[0] is greater than the jump threshold return true
-
-    return false;
+    return ( output.size() > 0 && output[0] > this->JUMP_PREDICTION_THRES );   
 }
 
 bool Circle::CheckCollision( const Rectangle& rect ) {
@@ -180,10 +192,15 @@ void Circle::CreateTestBrain() {
 
 float Circle::CalculateFitness() {
     // Fitness function
-    // return A * aliveTime + B / hidden_nodes_in_brain
+    // return A * aliveTime + B / nodes_in_brain
+    int nodeCount = this->brain->GetNodeCount();
+    if( this->hasBrain && nodeCount > 0 )
+        return this->A_PARAM * this->aliveTime + this->B_PARAM / nodeCount;
     return 0;
 }
 
 void Circle::CreateBrain( Genome& genome ) {
     this->brain = new NeuralNetwork( genome );
+    this->hasBrain = true;
+    this->isAlive = true;
 }

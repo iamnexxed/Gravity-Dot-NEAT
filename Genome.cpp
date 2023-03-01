@@ -51,6 +51,9 @@ void Node::ShowData() {
 void Genome::GetExcessDisjointCount( const Genome& other, int& eCount, int& dCount ) {
     // Disjoint Genes-  Genes that occur within the range of the other parent's innovation numbers
     // Excess Genes-  Genes that occur outside the range of the other parent's innovation numbers
+    // Reset the arguments
+    eCount = 0;
+    dCount = 0;
 
     int thisLength = this->connections.size();
     int otherLength = other.connections.size();
@@ -255,7 +258,7 @@ void Genome::SaveToJSON( const char* path ) {
 
 void Genome::Initialize( int inputCount, int outputCount ) {
     this->id = Genome::globalCounter++;
-    std::cout << "\nGenome Id: " << this->id;
+    //std::cout << "\nGenome Id: " << this->id;
     this->inputCount = inputCount;
     this->outputCount = outputCount;
     this->nodeCounter = 0;

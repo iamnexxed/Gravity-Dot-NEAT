@@ -118,7 +118,7 @@ void NeuroEvolution::CrossOver() {
         // Cull the species and keep parents
         this->speciesArray[i]->CullSpecies( this->genomes );
         // TO DO: Keep topmost parent for a small number of possibilities since it will be the fittest
-        std::cout << "\nCreating new genomes for species....";
+        //std::cout << "\nCreating new genomes for species....";
         // Loop till population is recovered for that species
         while( offspringLength-- > 0 ) {
             // Select two available parents randomly
@@ -136,7 +136,7 @@ void NeuroEvolution::CrossOver() {
     }
 
     // Reassign the previous genomes with the new genomes array
-    std::cout << "\nReassigning new genomes for species....";
+    //std::cout << "\nReassigning new genomes for species....";
     this->clearGenomes();
     this->currentGeneration++;
     for( int i = 0; i < nextGenomes.size(); ++i ) {

@@ -24,6 +24,7 @@ class PillarManager {
         std::vector<Rectangle*> GetAllRectangles();
         void IncreaseVelocity();
         float GetVelocity();
+        Pillar& GetNearestPillarTo( const glm::vec3& position );
 
 };
 

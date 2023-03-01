@@ -18,10 +18,10 @@ class NeuroEvolution {
         const int maxGenerations = 100;
 
         // Total Population
-        const int populationSize = 100;
+        const int populationSize = 5;
 
         // Initial Neural Network configuration
-        const int INPUTCOUNT = 4;
+        const int INPUTCOUNT = 5;
          
         const int OUTPUTCOUNT = 1;
 

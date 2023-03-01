@@ -10,6 +10,12 @@ class Circle {
     private:
         const int step = 10;
         const float JUMPFORCE = 0.045;
+        const float A_PARAM = 1.0f;
+        const float B_PARAM = 1.0f;
+        const float DELTA = 0.033f;
+        const float MAXHEIGHT = 720;
+        const float MAXWIDTH = 480;
+        const float JUMP_PREDICTION_THRES = 0.1f;
         Mesh *circleMesh;
         glm::vec3 velocity = glm::vec3( 0.0f, 0.0f, 0.0f );
         glm::vec3 initialPosition = glm::vec3(-3.3, 0, 0);
@@ -19,6 +25,8 @@ class Circle {
         void createSprite( float rad );
 
     public:
+        bool isAlive;
+        int id = -1;
         float radius = 1.0f;
         glm::vec3 translation = glm::vec3( 0.0f, 0.0f, 0.0f );
 		glm::vec3 scale = glm::vec3( 1.0f, 1.0f, 1.0f );
