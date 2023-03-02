@@ -43,8 +43,20 @@ void PillarManager::Update() {
 }
 
 void PillarManager::Draw( Shader& shader, Camera& camera ) {
-    for( int i = 0; i < this->numOfPillars; ++i )
+    for( int i = 0; i < this->numOfPillars; ++i ) 
             this->pillars[i]->Draw( shader, camera );
+}
+
+void PillarManager::Draw( Shader& shader1, Shader& shader2, Camera& camera ) {
+    for( int i = 0; i < this->numOfPillars; ++i ) {
+        if( this->pillars[i]->IsSelected ) {
+            this->pillars[i]->Draw( shader2, camera );
+        } else {
+             this->pillars[i]->Draw( shader1, camera );
+        }
+
+
+    }
 }
 
 void PillarManager::Reset() {

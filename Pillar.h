@@ -25,6 +25,8 @@ class Pillar {
         const float pillarHeight = 4.5f;
         const float gapDistance = 1.2f;
 
+        bool IsSelected = false;
+
         Rectangle* upperRect;
         Rectangle* lowerRect;
         Pillar( const Primitives& primitives, glm::vec3 iPosition );

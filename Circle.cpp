@@ -103,22 +103,24 @@ bool Circle::Predict(
     float yUpperPillarDistance, 
     float yLowerPillarDistance, 
     float yCeilDistance,
-    float yGroundDistance
+    float yGroundDistance,
+    float yPillar
 ) {
     // Normalize all the parameters
-    xDistance /= this->MAXWIDTH;
-    yUpperPillarDistance /= this->MAXHEIGHT;
-    yLowerPillarDistance /= this->MAXHEIGHT;
-    yCeilDistance /= this->MAXHEIGHT;
-    yGroundDistance /= this->MAXHEIGHT;
+    //xDistance /= this->MAXWIDTH;
+    //yUpperPillarDistance /= this->MAXHEIGHT;
+    //yLowerPillarDistance /= this->MAXHEIGHT;
+    //yCeilDistance /= this->MAXHEIGHT;
+    //yGroundDistance /= this->MAXHEIGHT;
 
     // Create a vector array
     const std::vector<float> inputs = {
         xDistance,
         yUpperPillarDistance,
         yLowerPillarDistance,
-        yCeilDistance,
-        yGroundDistance,
+        //std::abs( translation.y - yPillar),
+        //yCeilDistance,
+        //yGroundDistance,
         this->velocity.y
      };
 

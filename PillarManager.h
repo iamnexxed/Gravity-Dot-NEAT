@@ -19,6 +19,7 @@ class PillarManager {
         PillarManager( const Primitives& primitives, glm::vec3 iPosition );
         void Update();
         void Draw( Shader& shader, Camera& camera );
+        void Draw( Shader& shader1, Shader& shader2, Camera& camera );
         void Reset();
         ~PillarManager();
         std::vector<Rectangle*> GetAllRectangles();

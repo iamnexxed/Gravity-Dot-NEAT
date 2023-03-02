@@ -34,9 +34,11 @@ void NeuroEvolution::Mutate() {
 }
 
 void NeuroEvolution::Speciate() {
+    this->clearSpecies();
     // This function changes the fitness of all the genomes according to their species classification
 
     this->meanAdjustedFitness = 0.0f;
+    std::cout << "\nSpeciate. Genome Size: " << this->genomes.size();
     // For each genome in global genomes
     for( int i = 0; i < this->genomes.size(); ++i ) {
         bool foundMatch = false;
@@ -46,6 +48,10 @@ void NeuroEvolution::Speciate() {
             // Get species representative index
             int representativeIndex = 
                 this->speciesArray[j]->GetRepresentativeGenomeIndex();
+
+            std::cout << "\nRepresentative Index: " << representativeIndex;
+            //std::cout << "\nSpecies Array Size: " << this->speciesArray.size();
+
         
             if( i != representativeIndex ) {
                 // if the genome is compatible with the species
@@ -165,6 +171,7 @@ void NeuroEvolution::clearGenomes() {
 }
 
 void NeuroEvolution::SaveGenomesToJSON() {
+    Utils::deleteDirContent( SAVE_PATH );
     for(int i = 0; i < this->genomes.size(); ++i ) {
         this->genomes[i]->SaveToJSON( SAVE_PATH );
     } 

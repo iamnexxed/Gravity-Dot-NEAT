@@ -13,19 +13,15 @@ class NeuroEvolution {
         void clearGenomes();
 
     public:
-
-       // Maximum generations allowed
-        const int maxGenerations = 100;
-
         // Total Population
         const int populationSize = 100;
 
         // Initial Neural Network configuration
-        const int INPUTCOUNT = 6;
+        const int INPUTCOUNT = 4;
          
         const int OUTPUTCOUNT = 1;
 
-        const int MAXGENS = 100;
+        const int MAXGENS = 500;
 
         const char* SAVE_PATH = "Data/";
 

@@ -10,6 +10,11 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
     this->shaderProgram = new Shader( "sprite.vert", "sprite.frag" );
     this->shaderProgram->Activate();
     this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 1.0f, 1.0f ) );
+    
+    this->selectShader = new Shader( "sprite.vert", "sprite.frag" );
+    this->selectShader->Activate();
+    this->selectShader->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 0.0f ) );
+    
     this->primitives = new Primitives();
 
     this->groundRectangle = new Rectangle( *this->primitives, 10.0f, 0.4f );
@@ -47,7 +52,7 @@ void World::Update() {
 
     // Check If all the organisms have collided
     if( this->IsDead() ) {
-        //this->neuroEvolution->SaveGenomesToJSON();
+        this->neuroEvolution->SaveGenomesToJSON();
         // Perform Speciation 
         this->neuroEvolution->Speciate();
         // Perform crossover of the best parents
@@ -73,6 +78,8 @@ void World::Update() {
         Pillar& pillar = this->pillarManager->GetNearestPillarTo( 
             this->circles[i]->translation
         );
+
+        pillar.IsSelected = true;
 
         float xDistance = std::abs( 
             pillar.GetXPos()- this->circles[i]->translation.x 
@@ -103,7 +110,8 @@ void World::Update() {
                 yUpperPillarDistance, 
                 yLowerPillarDistance, 
                 yCeilDistance,
-                yGroundDistance
+                yGroundDistance,
+                pillar.GetYPos()
             )
         ) {
             this->circles[i]->Jump();
@@ -127,7 +135,7 @@ void World::Update() {
     // Draw ceiling
     this->ceilRectangle->Draw( *shaderProgram, *camera );
     // Draw Pillars
-    this->pillarManager->Draw( *shaderProgram, *camera );
+    this->pillarManager->Draw( *shaderProgram, *selectShader, *camera );
 }
 
 void World::Destroy() {
@@ -184,7 +192,7 @@ void World::Initiate() {
    
     int genomeSize = this->neuroEvolution->genomes.size();
     this->lifeCount = genomeSize;
-    std::cout << "\nGen: " << this->neuroEvolution->currentGeneration << ", Life count: " << this->lifeCount;
+    //std::cout << "\nGen: " << this->neuroEvolution->currentGeneration << ", Life count: " << this->lifeCount;
     this->clearCircles();
     // For each genome in the neuroevolution
     for( int i = 0; i < genomeSize; ++i ) {

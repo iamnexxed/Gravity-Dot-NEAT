@@ -58,13 +58,15 @@ void Genome::GetExcessDisjointCount( const Genome& other, int& eCount, int& dCou
     int thisLength = this->connections.size();
     int otherLength = other.connections.size();
 
+    std::cout << "\nThis Length: " << thisLength << ", Other Length: " << otherLength << std::endl << std::endl;
+
+
     // Make sure connection have size that can be compared
     if( thisLength <= 0 || otherLength <= 0 ) {
         eCount = std::max( thisLength, otherLength );
         return;
     }
 
-    //std::cout << "\n This Length: " << thisLength << ", Other Length: " << otherLength << std::endl << std::endl;
 
     // Calculate the upper and lower bounds for the common range
     int lowerbound = std::max( 

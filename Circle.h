@@ -49,7 +49,8 @@ class Circle {
             float yUpperPillarDistance, 
             float yLowerPillarDistance, 
             float yCeilDistance,
-            float yGroundDistance
+            float yGroundDistance,
+            float yPillar
         );
         bool CheckCollision( const Rectangle& rect );
 

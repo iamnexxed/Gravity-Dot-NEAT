@@ -13,6 +13,7 @@
 class World {
     Camera* camera;
     Shader* shaderProgram;
+    Shader* selectShader;
     Primitives* primitives;
     GLFWwindow& window;
 

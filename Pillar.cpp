@@ -49,7 +49,7 @@ void Pillar::Draw( Shader& shader, Camera& camera ) {
         this->upperRect->Draw( shader, camera );
         this->lowerRect->Draw( shader, camera );
     }
-
+    if( this->IsSelected ) this->IsSelected = false;
 }
 
 void Pillar::Reset() {

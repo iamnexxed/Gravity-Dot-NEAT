@@ -7,6 +7,9 @@
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 #include <fstream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 class Utils
 {
@@ -152,6 +155,12 @@ class Utils
         }
         throw (errno);
     }
+
+    static void deleteDirContent(const fs::path& dir_path) {
+        for (auto& path: fs::directory_iterator(dir_path)) {
+            fs::remove_all(path);
+    }
+}
 
 
 };
