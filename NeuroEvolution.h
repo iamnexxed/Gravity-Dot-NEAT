@@ -14,14 +14,17 @@ class NeuroEvolution {
 
     public:
         // Total Population
-        const int populationSize = 100;
+        const int populationSize = 20;
 
         // Initial Neural Network configuration
-        const int INPUTCOUNT = 4;
+        const int INPUTCOUNT = 5;
          
         const int OUTPUTCOUNT = 1;
 
         const int MAXGENS = 500;
+
+        // How many parents to keep from the last generation
+        const int ELITISM = 2;
 
         const char* SAVE_PATH = "Data/";
 
@@ -31,6 +34,8 @@ class NeuroEvolution {
         float meanAdjustedFitness = 0.0f;
 
         int currentGeneration = 0;
+
+        int bestGenomeIndex = -1;
 
         bool SetGenomeFitness( int index, float fitness );
     
@@ -47,6 +52,8 @@ class NeuroEvolution {
         void Speciate();
 
         void SaveGenomesToJSON();
+
+        int SpeciesCount();
 
         ~NeuroEvolution();
 };

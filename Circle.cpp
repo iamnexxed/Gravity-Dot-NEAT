@@ -56,6 +56,8 @@ void Circle::createSprite( float rad ) {
     this->radius = rad;
     this->scale.x = rad;
     this->scale.y = rad;
+
+    this->lines.resize(3);
 }
 
 
@@ -86,7 +88,8 @@ void Circle::Jump() {
 void Circle::Update() {
     this->translation += this->velocity;
     // Increase alive time
-    this->aliveTime += this->DELTA;
+    // this->aliveTime += this->DELTA;
+    this->aliveTime += 1;
 }
 
 void Circle::Translate( glm::vec3 translationVec ) {
@@ -106,12 +109,65 @@ bool Circle::Predict(
     float yGroundDistance,
     float yPillar
 ) {
+    std::cout << "\nGot inputs: ";
+    std::cout << "\n - xDist: " << xDistance;
+    std::cout << "\n - yUpperPillarDistance: " << yUpperPillarDistance;
+    std::cout << "\n - yLowerPillarDistance: " << yLowerPillarDistance;
+    std::cout << "\n - this->velocity.y: " << this->velocity.y;
+
+    glm::vec3 point = this->translation;
+    point.x += xDistance;
+
+    this->lines[0].setPoints(
+        this->translation, point // <<<<<<<<<<<<<<<<<<<<<<<< DEBUG SHADER 1
+    );
+
+
+    point = this->translation;
+    point.y += yUpperPillarDistance;
+
+    this->lines[1].setPoints(
+        this->translation, point // <<<<<<<<<<<<<<<<<<<<<<<< DEBUG SHADER 2
+    );
+
+    point = this->translation;
+    point.y += yLowerPillarDistance;
+
+    this->lines[2].setPoints(
+        this->translation, point // <<<<<<<<<<<<<<<<<<<<<<<< DEBUG SHADER 3
+    );
+
     // Normalize all the parameters
-    //xDistance /= this->MAXWIDTH;
-    //yUpperPillarDistance /= this->MAXHEIGHT;
-    //yLowerPillarDistance /= this->MAXHEIGHT;
+    xDistance = Mathematics::Map( 
+        xDistance, 
+        0, 
+        this->MAXWIDTH,
+        -1.0f,
+        1.0f
+    );
+    yUpperPillarDistance = Mathematics::Map( 
+        yUpperPillarDistance, 
+        -this->MAXHEIGHT / 2, 
+        this->MAXHEIGHT / 2,
+        -1.0f,
+        1.0f
+    );
+    yLowerPillarDistance = Mathematics::Map( 
+        yLowerPillarDistance, 
+        -this->MAXHEIGHT / 2, 
+        this->MAXHEIGHT / 2,
+        -1.0f,
+        1.0f
+    );
     //yCeilDistance /= this->MAXHEIGHT;
     //yGroundDistance /= this->MAXHEIGHT;
+    float y = Mathematics::Map( 
+        this->velocity.y, 
+        -this->MAXHEIGHT / 2, 
+        this->MAXHEIGHT / 2,
+        -1.0f,
+        1.0f
+    );
 
     // Create a vector array
     const std::vector<float> inputs = {
@@ -121,7 +177,9 @@ bool Circle::Predict(
         //std::abs( translation.y - yPillar),
         //yCeilDistance,
         //yGroundDistance,
-        this->velocity.y
+        this->velocity.y,
+        //y,
+        1.0f
      };
 
     // Neural Network prediction
@@ -198,7 +256,8 @@ float Circle::CalculateFitness() {
     // return A * aliveTime + B / nodes_in_brain
     int nodeCount = this->brain->GetNodeCount();
     if( this->hasBrain && nodeCount > 0 )
-        return this->A_PARAM * this->aliveTime + this->B_PARAM / nodeCount;
+        //return this->A_PARAM * this->aliveTime + this->B_PARAM / nodeCount;
+        return this->aliveTime + this->pillarsCrossed * 100; //<<<<<<<<<<<<<<<<
     return 0;
 }
 
@@ -206,4 +265,21 @@ void Circle::CreateBrain( Genome& genome ) {
     this->brain = new NeuralNetwork( genome );
     this->hasBrain = true;
     this->isAlive = true;
+}
+
+void Circle::CrossedPillar() {
+    this->pillarsCrossed++;
+}
+
+void Circle::DrawDebugView( Shader& shader, Camera& camera ) {
+    for(int i = 0; i < this->lines.size(); ++i) {
+        this->lines[i].Draw(shader, camera);
+    }
+}
+ void Circle::DrawDebugView( 
+            Shader& shader1, Shader& shader2, Shader& shader3, Camera& camera 
+) {
+    this->lines[0].Draw(shader1, camera);
+    this->lines[1].Draw(shader2, camera);
+    this->lines[2].Draw(shader3, camera);
 }

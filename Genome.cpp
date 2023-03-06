@@ -25,8 +25,14 @@ float Node::SigmoidActivation( float value ) {
     return 1 / ( 1 + std::pow( E, -value ) );
 }
 
+float Node::TanHActivation( float value ) {
+    return ( std::pow( E, value ) - std::pow( E, -value ) ) / 
+        ( std::pow( E, value ) + std::pow( E, -value ) );
+}
+
 void Node::Activate() {
-    this->outputActivation = Node::SigmoidActivation( this->input );
+    this->outputActivation = Node::TanHActivation( this->input );
+    //std::cout << "\nActivation: " << this->outputActivation;
 }
 
 void Node::ShowData() {
@@ -58,9 +64,7 @@ void Genome::GetExcessDisjointCount( const Genome& other, int& eCount, int& dCou
     int thisLength = this->connections.size();
     int otherLength = other.connections.size();
 
-    std::cout << "\nThis Length: " << thisLength << ", Other Length: " << otherLength << std::endl << std::endl;
-
-
+    //std::cout << "\nThis Length: " << thisLength << ", Other Length: " << otherLength << std::endl << std::endl;
     // Make sure connection have size that can be compared
     if( thisLength <= 0 || otherLength <= 0 ) {
         eCount = std::max( thisLength, otherLength );

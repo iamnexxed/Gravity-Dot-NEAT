@@ -14,6 +14,18 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
     this->selectShader = new Shader( "sprite.vert", "sprite.frag" );
     this->selectShader->Activate();
     this->selectShader->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 0.0f ) );
+
+    this->shader1 = new Shader( "sprite.vert", "sprite.frag" );
+    this->shader1->Activate();
+    this->shader1->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 1.0f, 0.0f ) );
+    
+    this->shader2 = new Shader( "sprite.vert", "sprite.frag" );
+    this->shader2->Activate();
+    this->shader2->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 1.0f ) );
+
+    this->shader3 = new Shader( "sprite.vert", "sprite.frag" );
+    this->shader3->Activate();
+    this->shader3->SetFloatVecUniform3fv( "baseColor", glm::vec3( 0.0f, 1.0f, 1.0f ) );
     
     this->primitives = new Primitives();
 
@@ -81,15 +93,23 @@ void World::Update() {
 
         pillar.IsSelected = true;
 
-        float xDistance = std::abs( 
-            pillar.GetXPos()- this->circles[i]->translation.x 
-        );
+        float xDistance = 
+            pillar.GetXPos() -
+            this->circles[i]->translation.x;    
 
         float yUpperPillarDistance = 
             pillar.GetYPos() - pillar.gapDistance / 2;
 
+        yUpperPillarDistance = //std::abs(
+            yUpperPillarDistance - this->circles[i]->translation.y ;
+        //);
+
         float yLowerPillarDistance = 
             pillar.GetYPos() + pillar.gapDistance / 2;
+
+        yLowerPillarDistance = //std::abs(
+            yLowerPillarDistance - this->circles[i]->translation.y ;
+        //);
 
         float yCeilDistance = std::abs(
             ( this->ceilRectangle->translation.x + 
@@ -128,6 +148,7 @@ void World::Update() {
         this->circles[i]->Update();
         // Draw all organisms
         this->circles[i]->DrawInstance( *shaderProgram, *camera );
+        this->circles[i]->DrawDebugView( *shader1, *shader2, *shader3, *camera );
     }
     
     // Draw ground
@@ -139,7 +160,7 @@ void World::Update() {
 }
 
 void World::Destroy() {
-    std::cout << "\nWorld Destroy";
+    std::cout << "\nWorld Destroy\n";
 }
 
 void World::Restart() {
@@ -192,7 +213,8 @@ void World::Initiate() {
    
     int genomeSize = this->neuroEvolution->genomes.size();
     this->lifeCount = genomeSize;
-    //std::cout << "\nGen: " << this->neuroEvolution->currentGeneration << ", Life count: " << this->lifeCount;
+    std::cout << "\nGen: " << this->neuroEvolution->currentGeneration << ", Life count: " << this->lifeCount;
+    std::cout << "\nSpecies Count: " << this->neuroEvolution->SpeciesCount();
     this->clearCircles();
     // For each genome in the neuroevolution
     for( int i = 0; i < genomeSize; ++i ) {

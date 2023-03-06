@@ -19,17 +19,17 @@
 // Compatibility Calculation
 const float C1 = 1.0f;
 const float C2 = 1.0f;
-const float C3 = 0.4f;
+const float C3 = 0.25f;
 const float COMPATIBILITY_THRESHOLD = 3.0f;
 const int LEAST_BIG_GENOME_SIZE = 20;
 
 // Mutation Probabilities: 0.0 - 1.0
-const float NODE_ADD_PROBABILITY = 0.3f;
+const float NODE_ADD_PROBABILITY = 0.1f;
 const float CONNECTION_ADD_PROBABILITY = 0.4f;
 const float CONNECTION_ENABLE_PROBABILITY = 0.2f;
-const float CONNECTION_DISABLE_PROBABILITY = 0.1f;
-const float CHANGE_WEIGHT_PROBABILITY = 0.3f;
-const float CONNECTION_SELECTION_PROBABILITY = 0.2f;
+const float CONNECTION_DISABLE_PROBABILITY = 0.4f;
+const float CHANGE_WEIGHT_PROBABILITY = 0.7f;
+const float CONNECTION_SELECTION_PROBABILITY = 0.5f;
 const float WEIGHT_MUTATION_PROBABILITY = 0.7f;
 
 const float MAX_CONNECTION_WEIGHT = 1.0f;
@@ -60,6 +60,7 @@ class Node {
         // Activation Function
         void Activate();
         static float SigmoidActivation( float value );
+        static float TanHActivation( float value );
         void ShowData();
 
 };

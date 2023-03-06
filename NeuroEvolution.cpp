@@ -38,7 +38,8 @@ void NeuroEvolution::Speciate() {
     // This function changes the fitness of all the genomes according to their species classification
 
     this->meanAdjustedFitness = 0.0f;
-    std::cout << "\nSpeciate. Genome Size: " << this->genomes.size();
+    float maxFitness = -1.0f;
+    //std::cout << "\nSpeciate. Genome Size: " << this->genomes.size();
     // For each genome in global genomes
     for( int i = 0; i < this->genomes.size(); ++i ) {
         bool foundMatch = false;
@@ -49,7 +50,7 @@ void NeuroEvolution::Speciate() {
             int representativeIndex = 
                 this->speciesArray[j]->GetRepresentativeGenomeIndex();
 
-            std::cout << "\nRepresentative Index: " << representativeIndex;
+            //std::cout << "\nRepresentative Index: " << representativeIndex;
             //std::cout << "\nSpecies Array Size: " << this->speciesArray.size();
 
         
@@ -88,6 +89,11 @@ void NeuroEvolution::Speciate() {
         }
         if( sum > 0 )
             this->genomes[i]->fitness /= sum;
+        
+        if( this->genomes[i]->fitness > maxFitness ) {
+            maxFitness = this->genomes[i]->fitness;
+            this->bestGenomeIndex = i;
+        }
 
         this->meanAdjustedFitness += this->genomes[i]->fitness;
     } 
@@ -95,7 +101,9 @@ void NeuroEvolution::Speciate() {
     // Store the mean adjusted fitness of all the genomes
     if( this->genomes.size() > 0 )
         this->meanAdjustedFitness /= this->genomes.size();
-    
+
+    std::cout << "\n- Best Genome Fitness: " << this->genomes[this->bestGenomeIndex]->fitness;
+    std::cout << "\n\n";
     //std::cout << "\nSpeciate. Genomes Array Size: " << this->genomes.size();
     //std::cout << "\nSpeciate. Species Array Size: " << this->speciesArray.size();
 }
@@ -126,6 +134,17 @@ void NeuroEvolution::CrossOver() {
         // Cull the species and keep parents
         this->speciesArray[i]->CullSpecies( this->genomes );
         // TO DO: Keep topmost parent for a small number of possibilities since it will be the fittest
+        for( int j = 0; j < this->ELITISM; ++j ) {
+            int parentIndex = this->speciesArray[i]->GetParentGenomeIndexAt(j);
+            if( parentIndex != -1 ) {
+                Genome* elite = new Genome( 
+                    *this->genomes[parentIndex], this->currentGeneration + 1
+                );
+                nextGenomes.push_back( elite );
+                offspringLength--;
+            }
+           
+        }
         //std::cout << "\nCreating new genomes for species....";
         // Loop till population is recovered for that species
         while( offspringLength-- > 0 ) {
@@ -142,6 +161,7 @@ void NeuroEvolution::CrossOver() {
             nextGenomes.push_back( newGenome );
         }            
     }
+
 
     // Reassign the previous genomes with the new genomes array
     //std::cout << "\nReassigning new genomes for species....";
@@ -175,6 +195,10 @@ void NeuroEvolution::SaveGenomesToJSON() {
     for(int i = 0; i < this->genomes.size(); ++i ) {
         this->genomes[i]->SaveToJSON( SAVE_PATH );
     } 
+}
+
+int NeuroEvolution::SpeciesCount() {
+    return this->speciesArray.size();
 }
 
  NeuroEvolution::~NeuroEvolution() {

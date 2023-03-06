@@ -33,7 +33,7 @@ glm::vec3 Line::getEndPosition()
 	return this->line_vertices[1].position;
 }
 
-void Line::setPoints(glm::vec3 startPosition,glm::vec3 endPosition)
+void Line::setPoints(glm::vec3 startPosition, glm::vec3 endPosition)
 {
 	this->setStartPosition(startPosition);
 	this->setEndPosition(endPosition);

@@ -51,7 +51,7 @@ int Species::GetGenomeIndexAt( int location ) {
 }
 
 int Species::GetParentGenomeIndexAt( int location ) {
-    if( location < 0 ) return -1;
+    if( location < 0 || location >= this->parents.size() ) return -1;
     return this->parents[location];
 }
 

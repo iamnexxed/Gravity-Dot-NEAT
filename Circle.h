@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include "Rectangle.h"
 #include "NeuralNetwork.h"
+#include "Line.h"
 
 class Circle {
     private:
@@ -15,12 +16,17 @@ class Circle {
         const float DELTA = 0.033f;
         const float MAXHEIGHT = 720;
         const float MAXWIDTH = 480;
-        const float JUMP_PREDICTION_THRES = 0.1f;
+        const float JUMP_PREDICTION_THRES = 0.0f;
+
         Mesh *circleMesh;
         glm::vec3 velocity = glm::vec3( 0.0f, 0.0f, 0.0f );
         glm::vec3 initialPosition = glm::vec3(-3.3, 0, 0);
+
+        std::vector<Line> lines;
+
         NeuralNetwork *brain;
         float aliveTime = 0.0f;
+        int pillarsCrossed = 0;
 
         void createSprite( float rad );
 
@@ -53,8 +59,14 @@ class Circle {
             float yPillar
         );
         bool CheckCollision( const Rectangle& rect );
+        void CrossedPillar();
 
         float CalculateFitness();
+
+        void DrawDebugView( Shader& shader, Camera& camera );
+        void DrawDebugView( 
+            Shader& shader1, Shader& shader2, Shader& shader3, Camera& camera 
+        );
 };
 
 

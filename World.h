@@ -14,6 +14,11 @@ class World {
     Camera* camera;
     Shader* shaderProgram;
     Shader* selectShader;
+
+    Shader* shader1;
+    Shader* shader2;
+    Shader* shader3;
+
     Primitives* primitives;
     GLFWwindow& window;
 
