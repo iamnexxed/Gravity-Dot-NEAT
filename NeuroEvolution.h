@@ -14,7 +14,7 @@ class NeuroEvolution {
 
     public:
         // Total Population
-        const int populationSize = 20;
+        const int populationSize = 80;
 
         // Initial Neural Network configuration
         const int INPUTCOUNT = 5;

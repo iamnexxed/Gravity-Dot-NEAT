@@ -95,7 +95,12 @@ void World::Update() {
 
         float xDistance = 
             pillar.GetXPos() -
-            this->circles[i]->translation.x;    
+            pillar.pillarWidth / 2 -
+            this->circles[i]->translation.x;   
+
+        if( ( xDistance + pillar.pillarWidth ) <= 0.1f ) {
+            this->circles[i]->CrossedPillar();
+        } 
 
         float yUpperPillarDistance = 
             pillar.GetYPos() - pillar.gapDistance / 2;

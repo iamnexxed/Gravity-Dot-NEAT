@@ -109,11 +109,11 @@ bool Circle::Predict(
     float yGroundDistance,
     float yPillar
 ) {
-    std::cout << "\nGot inputs: ";
-    std::cout << "\n - xDist: " << xDistance;
-    std::cout << "\n - yUpperPillarDistance: " << yUpperPillarDistance;
-    std::cout << "\n - yLowerPillarDistance: " << yLowerPillarDistance;
-    std::cout << "\n - this->velocity.y: " << this->velocity.y;
+    // std::cout << "\nGot inputs: ";
+    // std::cout << "\n - xDist: " << xDistance;
+    // std::cout << "\n - yUpperPillarDistance: " << yUpperPillarDistance;
+    // std::cout << "\n - yLowerPillarDistance: " << yLowerPillarDistance;
+    // std::cout << "\n - this->velocity.y: " << this->velocity.y;
 
     glm::vec3 point = this->translation;
     point.x += xDistance;
@@ -269,6 +269,7 @@ void Circle::CreateBrain( Genome& genome ) {
 
 void Circle::CrossedPillar() {
     this->pillarsCrossed++;
+    //std::cout << "\nId: " << this->id << ", Pillar Crossed!";
 }
 
 void Circle::DrawDebugView( Shader& shader, Camera& camera ) {

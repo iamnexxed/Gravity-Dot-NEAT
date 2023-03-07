@@ -88,8 +88,10 @@ Pillar& PillarManager::GetNearestPillarTo( const glm::vec3& position ) {
     float xDist = INFINITY;
     Pillar* pillar = this->pillars[0];
     for( int i = 0; i < this->numOfPillars; ++i ) {
-        if( this->pillars[i]->GetXPos() > position.x ) {
-            float dist = this->pillars[i]->GetXPos() - position.x;
+        float x = this->pillars[i]->GetXPos() +
+                this->pillars[i]->pillarWidth / 2; 
+        if( x > position.x ) {
+            float dist = x - position.x;
             if( dist < xDist ) {
                 xDist = dist;
                 pillar = this->pillars[i];
