@@ -46,13 +46,9 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
 
 void World::Start() {
     //std::cout << "\nWorld Start";
-    //this->neuroEvolution->Initiate( "Data/46_12.genome" );
-    this->neuroEvolution->Initiate( "Data/38_67.genome" );
+    //this->neuroEvolution->Initiate( "Data/38_67.genome" );
+    this->neuroEvolution->Initiate();
     this->Initiate();
-    // this->neuroEvolution->Initiate();
-    // this->neuroEvolution->Speciate();
-    // this->neuroEvolution->CrossOver();
-    // this->neuroEvolution->SaveGenomesToJSON();
 }
 
 void World::Update() {
@@ -65,7 +61,7 @@ void World::Update() {
 
     // Check If all the organisms have collided
     if( this->IsDead() ) {
-        this->neuroEvolution->SaveBestGenome();
+        //this->neuroEvolution->SaveBestGenome();
         // Perform Speciation 
         this->neuroEvolution->Speciate();
         // Perform crossover of the best parents
