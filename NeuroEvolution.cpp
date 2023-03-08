@@ -21,6 +21,12 @@ void NeuroEvolution::Initiate() {
     }
 }
 
+void NeuroEvolution::Initiate( const char* path ) {
+    for( int i = 0; i < this->populationSize; ++i ) {
+        this->genomes.push_back( new Genome( path ) );
+    }
+}
+
 
 void NeuroEvolution::Mutate() {
     this->genomes[0]->ShowNodeData();
@@ -70,6 +76,12 @@ void NeuroEvolution::Speciate() {
             }  
         } 
 
+        // Store index of genome with highest fitness
+        if( this->genomes[i]->fitness > maxFitness ) {
+            maxFitness = this->genomes[i]->fitness;
+            this->bestGenomeIndex = i;
+        }
+
         // Otherwise if no species match found
         if( !foundMatch ) {
             // Create a new species 
@@ -90,10 +102,7 @@ void NeuroEvolution::Speciate() {
         if( sum > 0 )
             this->genomes[i]->fitness /= sum;
         
-        if( this->genomes[i]->fitness > maxFitness ) {
-            maxFitness = this->genomes[i]->fitness;
-            this->bestGenomeIndex = i;
-        }
+       
 
         this->meanAdjustedFitness += this->genomes[i]->fitness;
     } 
@@ -102,8 +111,8 @@ void NeuroEvolution::Speciate() {
     if( this->genomes.size() > 0 )
         this->meanAdjustedFitness /= this->genomes.size();
 
-    std::cout << "\n- Best Genome Fitness: " << this->genomes[this->bestGenomeIndex]->fitness;
-    std::cout << "\n\n";
+    //std::cout << "\n- Best Genome Fitness: " << this->genomes[this->bestGenomeIndex]->fitness;
+    //std::cout << "\n\n";
     //std::cout << "\nSpeciate. Genomes Array Size: " << this->genomes.size();
     //std::cout << "\nSpeciate. Species Array Size: " << this->speciesArray.size();
 }
@@ -195,6 +204,12 @@ void NeuroEvolution::SaveGenomesToJSON() {
     for(int i = 0; i < this->genomes.size(); ++i ) {
         this->genomes[i]->SaveToJSON( SAVE_PATH );
     } 
+}
+
+void NeuroEvolution::SaveBestGenome() {
+    if( this->bestGenomeIndex != -1 ) {
+        this->genomes[this->bestGenomeIndex]->SaveToJSON( SAVE_PATH );
+    }
 }
 
 int NeuroEvolution::SpeciesCount() {

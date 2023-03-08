@@ -42,6 +42,8 @@ class NeuroEvolution {
         // Initiate a population
         void Initiate();
 
+        void Initiate( const char* path );
+
         // Mutation
         void Mutate();
         
@@ -54,6 +56,8 @@ class NeuroEvolution {
         void SaveGenomesToJSON();
 
         int SpeciesCount();
+
+        void SaveBestGenome();
 
         ~NeuroEvolution();
 };

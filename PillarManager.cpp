@@ -17,7 +17,7 @@ PillarManager::PillarManager( const Primitives& primitives, glm::vec3 iPosition 
 void PillarManager::Update() {
     time( &this->timer );
    
-    std::cout << "\nPillar Queue size: " << this->queue.size();
+    // std::cout << "\nPillar Queue size: " << this->queue.size();
     
     if( difftime( this->timer, this->startTime ) >= 
         ( ( this->spawnTime ) ) ) {
@@ -35,7 +35,7 @@ void PillarManager::Update() {
         this->pillars[i]->Update();
         if( !this->pillars[i]->CanMove() && !this->pillars[i]->IsInQueue ) {
             this->queue.push( i );
-            std::cout << "\nPushed: " << i;
+            // std::cout << "\nPushed: " << i;
             this->pillars[i]->IsInQueue = true;
         }
         
