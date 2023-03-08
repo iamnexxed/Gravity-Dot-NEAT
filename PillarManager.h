@@ -10,7 +10,6 @@ class PillarManager {
         std::vector<Pillar*> pillars;
         std::queue<int> queue;
         const int numOfPillars = 5;
-        const float respawnXLocation = -5.0f;
         const float spawnTime = 2.0f;
         time_t startTime;
         time_t timer;
@@ -25,6 +24,7 @@ class PillarManager {
         std::vector<Rectangle*> GetAllRectangles();
         void IncreaseVelocity();
         float GetVelocity();
+        float GetPillarPosX( int index );
         Pillar& GetNearestPillarTo( const glm::vec3& position );
 
 };

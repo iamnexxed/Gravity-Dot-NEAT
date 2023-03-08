@@ -27,6 +27,8 @@ class Pillar {
 
         bool IsSelected = false;
 
+        bool IsInQueue = false;
+
         Rectangle* upperRect;
         Rectangle* lowerRect;
         Pillar( const Primitives& primitives, glm::vec3 iPosition );

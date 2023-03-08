@@ -2,15 +2,13 @@
 
 Pillar::Pillar( const Primitives& primitives, glm::vec3 iPosition ) {
 
-    this->upperRect = new 
-    Rectangle( 
+    this->upperRect = new Rectangle( 
         primitives, 
         this->pillarWidth, 
         this->pillarHeight 
     );
 
-    this->lowerRect = new
-     Rectangle( 
+    this->lowerRect = new Rectangle( 
         primitives, 
         this->pillarWidth, 
         this->pillarHeight 
@@ -22,7 +20,9 @@ Pillar::Pillar( const Primitives& primitives, glm::vec3 iPosition ) {
 }
 
 void Pillar::Spawn() {
-    this->initialPosition.y = Mathematics::RandomInRange( -yBoundDistance, yBoundDistance );
+    this->initialPosition.y = Mathematics::RandomInRange( 
+        -yBoundDistance, yBoundDistance 
+    );
     this->translation = this->initialPosition;
     this->shouldMove = true;
     //std::cout << "Spawn Time: " << this->spawnTime << std::endl;

@@ -8,8 +8,6 @@ PillarManager::PillarManager( const Primitives& primitives, glm::vec3 iPosition 
                 iPosition
             ) 
         );
-        // Push all the pillars to the queue
-        this->queue.push( i );
         
     }
     this->Reset();
@@ -19,12 +17,13 @@ PillarManager::PillarManager( const Primitives& primitives, glm::vec3 iPosition 
 void PillarManager::Update() {
     time( &this->timer );
    
-        
+    std::cout << "\nPillar Queue size: " << this->queue.size();
     
     if( difftime( this->timer, this->startTime ) >= 
         ( ( this->spawnTime ) ) ) {
         if( !this->queue.empty() ) {
             this->pillars[this->queue.front()]->Spawn();
+            this->pillars[this->queue.front()]->IsInQueue = false;
             this->queue.pop();
             time( &this->startTime ); 
             //this->IncreaseVelocity();
@@ -34,8 +33,10 @@ void PillarManager::Update() {
     for( int i = 0; i < this->pillars.size(); ++i ) {
 
         this->pillars[i]->Update();
-        if( !this->pillars[i]->CanMove() ) {
+        if( !this->pillars[i]->CanMove() && !this->pillars[i]->IsInQueue ) {
             this->queue.push( i );
+            std::cout << "\nPushed: " << i;
+            this->pillars[i]->IsInQueue = true;
         }
         
     }
@@ -61,8 +62,15 @@ void PillarManager::Draw( Shader& shader1, Shader& shader2, Camera& camera ) {
 
 void PillarManager::Reset() {
     time( &this->startTime ); 
-    for( int i = 0; i < this->numOfPillars; ++i )
+    for( int i = 0; i < this->numOfPillars; ++i ) {
+        // Push all the pillars to the queue
+        if( !this->pillars[i]->IsInQueue ) {
+            this->queue.push( i );
+            this->pillars[i]->IsInQueue = true;
+        }
         this->pillars[i]->Reset();
+    }
+        
 }
 
 std::vector<Rectangle*> PillarManager::GetAllRectangles() {

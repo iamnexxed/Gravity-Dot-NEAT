@@ -80,6 +80,15 @@ void World::Update() {
     // Update PillarManager
     this->pillarManager->Update();
 
+    Pillar& pillar = this->pillarManager->GetNearestPillarTo( 
+        this->circles[0]->translation
+    );
+
+    pillar.IsSelected = true;
+
+    // std::cout << "\nIndex 0 Pillar X: " <<  
+    //     this->pillarManager->GetPillarPosX( 0 );
+
     // For each organism
     for( int i = 0; i < this->circles.size(); ++i ) {
         if( !this->circles[i]->isAlive ) continue;
@@ -87,11 +96,11 @@ void World::Update() {
         // Apply Gravity on all organisms
         this->circles[i]->ApplyForce( glm::vec3( 0, gravity, 0 ) );
 
-        Pillar& pillar = this->pillarManager->GetNearestPillarTo( 
-            this->circles[i]->translation
-        );
+        // pillar = this->pillarManager->GetNearestPillarTo( 
+        //     this->circles[i]->translation
+        // );
 
-        pillar.IsSelected = true;
+        
 
         float xDistance = 
             pillar.GetXPos() -
