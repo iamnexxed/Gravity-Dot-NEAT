@@ -39,7 +39,7 @@ Here's a GENOME/GENOTYPE example
   "nodes": [
     {
       "index": 0,             // ID of the node
-      "type": 0               // Type: 0 - Input Node, 1 - Hidden Node, 2- Output Node
+      "type": 0               // Type: 0- Input Node, 1- Hidden Node, 2- Output Node
     },
     {
       "index": 1,
