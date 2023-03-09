@@ -47,7 +47,7 @@ namespace Globals {
     extern const int OUTPUTCOUNT = 1;
 
     // Organism Parameters
-    extern const int STEP = 10; // <<<<<< Angle steps for drawing circle
+    extern const int STEP = 10; // Angle steps for drawing circle
     extern const float JUMPFORCE = 0.045;
     extern const float A_PARAM = 3.0f; // <<<<< Parameter preference currently disabled
     extern const float B_PARAM = 1.0f; // <<<<< Parameter preference currently disabled
