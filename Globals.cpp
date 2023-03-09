@@ -34,7 +34,7 @@ namespace Globals {
 
     // Genome Save File Extension
     const char* EXTENSION = ".genome";
-    const char* SAVE_PATH = "Data/";
+    const char* SAVE_PATH = "Data/";    // Create a folder called Data in the project directory
 
     // Total Population
     extern const int POPULATION = 80;
