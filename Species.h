@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "Genome.h"
-#include "Primitives/Mathematics.h"
+#include "Helpers/Mathematics.h"
 
 class Species {
     private:

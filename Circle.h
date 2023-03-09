@@ -1,7 +1,7 @@
 #ifndef CIRCLE_CLASS_H
 #define CIRCLE_CLASS_H
 
-#include "Primitives/Utils.h"
+#include "Helpers/Utils.h"
 #include "Mesh.h"
 #include "Rectangle.h"
 #include "NeuralNetwork.h"

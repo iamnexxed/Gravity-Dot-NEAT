@@ -6,10 +6,7 @@
 
 #include "Model.h"
 
-
-#include "Physics/physics.h"
-
-#include "Primitives/Mathematics.h"
+#include "Helpers/Mathematics.h"
 
 #include <cmath>
 

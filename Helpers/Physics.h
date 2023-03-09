@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "../VBO.h"
-#include "../Primitives/Utils.h"
+#include "Utils.h"
 
 namespace Physics
 {

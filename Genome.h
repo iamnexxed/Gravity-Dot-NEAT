@@ -10,8 +10,8 @@
 #include <iostream>
 #include <algorithm>
 #include <json/json.h>
-#include "Primitives/Mathematics.h"
-#include "Primitives/Utils.h"
+#include "Helpers/Mathematics.h"
+#include "Helpers/Utils.h"
 
 
 // DEFAULT GENOME CONFIG VARIABLES:

@@ -2,7 +2,7 @@
 #define PILLAR_CLASS_H
 
 #include "Rectangle.h"
-#include "Primitives/Mathematics.h"
+#include "Helpers/Mathematics.h"
 
 // The pillar moves w.r.t. the origin which is located at top left corner of the screen
 class Pillar {
