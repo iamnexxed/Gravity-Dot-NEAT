@@ -1,13 +1,12 @@
 #include "Globals.h"
 
-
 namespace Globals {
+    // GENERAL COLOR CONSTANTS
 
     extern const float kBG_COLOR_R = 1 / 255.0f;
     extern const float kBG_COLOR_G = 1 / 255.0f;
     extern const float kBG_COLOR_B = 2 / 255.0f;
     extern const float kBG_COLOR_A = 255 / 255.0f;
-
 
     // DEFAULT GENOME CONFIG VARIABLES:
 
@@ -32,29 +31,26 @@ namespace Globals {
 
     // Speciation constants
     extern const float SPECIES_KEEP_FACTOR = 0.1f;
+
     // Genome Save File Extension
     const char* EXTENSION = ".genome";
+    const char* SAVE_PATH = "Data/";
 
     // Total Population
     extern const int POPULATION = 80;
-
-    // Initial Neural Network configuration
-    extern const int INPUTCOUNT = 5;
-        
-    extern const int OUTPUTCOUNT = 1;
-
     extern const int MAXGENS = 500;
-
     // How many parents to keep from the last generation
     extern const int ELITISM = 2;
 
-    const char* SAVE_PATH = "Data/";
+    // Initial Neural Network configuration
+    extern const int INPUTCOUNT = 5;
+    extern const int OUTPUTCOUNT = 1;
 
     // Organism Parameters
     extern const int STEP = 10;
     extern const float JUMPFORCE = 0.045;
-    extern const float A_PARAM = 3.0f;
-    extern const float B_PARAM = 1.0f;
+    extern const float A_PARAM = 3.0f; // <<<<< Parameter preference currently disabled
+    extern const float B_PARAM = 1.0f; // <<<<< Parameter preference currently disabled
     extern const float DELTA = 1.0f;
     extern const float MAXHEIGHT = 720;
     extern const float MAXWIDTH = 480;
@@ -70,6 +66,4 @@ namespace Globals {
     extern const float UPPER_LOWER_GAP = 1.2f;
     extern const int PILLAR_COUNT = 5;
     extern const float PILLAR_SPAWN_TIME = 2.0f;
-
-
 }

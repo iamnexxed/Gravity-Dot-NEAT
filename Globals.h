@@ -1,19 +1,16 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-
 #define WIDTH 720
 #define HEIGHT 480
-
 #define WINDOW_NAME "Gravity Dot"
 
+// Note: Please check Globals.cpp for correct comments and values
 namespace Globals {
-
     extern const float kBG_COLOR_R;
     extern const float kBG_COLOR_G;
     extern const float kBG_COLOR_B;
     extern const float kBG_COLOR_A;
-
 
     // DEFAULT GENOME CONFIG VARIABLES:
 
@@ -76,7 +73,6 @@ namespace Globals {
     extern const float UPPER_LOWER_GAP;
     extern const int PILLAR_COUNT;
     extern const float PILLAR_SPAWN_TIME;
-
 }
 
 #endif
