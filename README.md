@@ -23,10 +23,10 @@ Here's a GENOME/GENOTYPE example
   "connections": [            // Connections associated with the nodes
     {
       "id": 0,                // Connection ID
-      "inNodeIndex": 3,       // Input of the connection
+      "inNodeIndex": 3,       // Input Node Index of the connection
       "innovNum": 1,          // Innovation number of the connection
       "isEnabled": false,     // If the connection is enabled/disabled
-      "outNodeIndex": 5,      // Output of the connection
+      "outNodeIndex": 5,      // Output Node Index of the connection
       "weight": -0.5446997284889221   // Weight associated with the connection
     }
   ],
