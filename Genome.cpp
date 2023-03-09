@@ -4,7 +4,7 @@
 int Genome::innovNumber = 0;
 int Genome::globalCounter = 0;
 std::map<std::string, int> Genome::innoDictionary;
-const char* Genome::EXTENSION = ".genome";
+
 
 Node::Node( int id, LayerType type ) {
     this->index = id;
@@ -255,7 +255,7 @@ void Genome::SaveToJSON( const char* path ) {
         std::to_string(this->generation) + 
         "_" + 
         std::to_string(this->id) +
-        Genome::EXTENSION;
+        Globals::EXTENSION;
 
     // write the json at output path
     std::string s = j.dump();
@@ -415,21 +415,21 @@ void Genome::Mutate() {
     // Create a new hidden node based on probability
     float probability = Mathematics::RandomInRange( 0.0f, 1.0f );
     //std::cout << "\nProbability: " << probability << std::endl << std::endl;
-    if( probability < NODE_ADD_PROBABILITY ) {
+    if( probability < Globals::NODE_ADD_PROBABILITY ) {
         this->InsertNodeRandom();
         //std::cout << "\nATTEMPT: Added Random Node";
     }
 
     // Create connections to the other nodes based on probability
     probability = Mathematics::RandomInRange( 0.0f, 1.0f );
-    if( probability < CONNECTION_ADD_PROBABILITY ) {
+    if( probability < Globals::CONNECTION_ADD_PROBABILITY ) {
         //std::cout << "\nATTEMPT: Added Random Connection";
         this->AddRandomConnection();
     }
 
     // Enable/Disable connections based on probability
     probability = Mathematics::RandomInRange( 0.0f, 1.0f );
-    if( probability < CONNECTION_ENABLE_PROBABILITY ) {
+    if( probability < Globals::CONNECTION_ENABLE_PROBABILITY ) {
         int randIndex = Mathematics::RandomInRange( 
             0, this->connections.size() - 1
         );
@@ -438,7 +438,7 @@ void Genome::Mutate() {
     }
 
     probability = Mathematics::RandomInRange( 0.0f, 1.0f );
-    if( probability < CONNECTION_DISABLE_PROBABILITY ) {
+    if( probability < Globals::CONNECTION_DISABLE_PROBABILITY ) {
         int randIndex = Mathematics::RandomInRange( 
             0, this->connections.size() - 1
         );
@@ -455,21 +455,23 @@ void Genome::MutateConnectionWeights() {
     for( int i = 0; i < this->connections.size(); ++i ) {
         probability = Mathematics::RandomInRange( 0.0f, 1.0f );
         // Choose a connection based on probability
-        if( probability < CONNECTION_SELECTION_PROBABILITY ) {
+        if( probability < Globals::CONNECTION_SELECTION_PROBABILITY ) {
             // Choose if to mutate weight or to set a different weight
             probability = Mathematics::RandomInRange( 0.0f, 1.0f );
-            if( probability < WEIGHT_MUTATION_PROBABILITY ) {
+            if( probability < Globals::WEIGHT_MUTATION_PROBABILITY ) {
                 this->connections[i].weight += Mathematics::RandomInRange(
-                    -WEIGHT_MUTATION_FACTOR, WEIGHT_MUTATION_FACTOR
+                    -Globals::WEIGHT_MUTATION_FACTOR, 
+                    Globals::WEIGHT_MUTATION_FACTOR
                 );
                 this->connections[i].weight = Mathematics::Clamp(
                     this->connections[i].weight, 
-                    -MAX_CONNECTION_WEIGHT, 
-                    MAX_CONNECTION_WEIGHT
+                    -Globals::MAX_CONNECTION_WEIGHT, 
+                    Globals::MAX_CONNECTION_WEIGHT
                 );
             } else {
                 this->connections[i].weight = Mathematics::RandomInRange( 
-                    -MAX_CONNECTION_WEIGHT, MAX_CONNECTION_WEIGHT 
+                    -Globals::MAX_CONNECTION_WEIGHT, 
+                    Globals::MAX_CONNECTION_WEIGHT 
                 );
             }
         }
@@ -575,7 +577,7 @@ bool Genome::AddRandomConnection() {
             nodeIndices[1],     // In Index
             nodeIndices[0],     // Out Index
             Mathematics::RandomInRange( 
-                -MAX_CONNECTION_WEIGHT, MAX_CONNECTION_WEIGHT 
+                -Globals::MAX_CONNECTION_WEIGHT, Globals::MAX_CONNECTION_WEIGHT 
             ),
             true
         )
@@ -721,7 +723,7 @@ bool Genome::IsCompatible( const Genome& other ) {
     //std::cout << "\nExcess: " << excess << ", Disjoint: " << disjoint << std::endl << std::endl;
     // Calculate N- Number of Genes in larger genome
     int N = std::max( this->connections.size(), other.connections.size() );
-    N = N < LEAST_BIG_GENOME_SIZE ? 1 : N;
+    N = N < Globals::LEAST_BIG_GENOME_SIZE ? 1 : N;
 
     // Calculate WBar- Average weight differences of matching genes
     float thisW = this->GetAverageGeneWeight();
@@ -729,9 +731,11 @@ bool Genome::IsCompatible( const Genome& other ) {
     float barW = std::abs( thisW - otherW );
 
     // Calulate delta = c1 * E / N + c2 * D / N + c3 * WBar
-    float delta = C1 * excess / N + C2 * disjoint / N + C3 * barW;
+    float delta = Globals::C1 * excess / N + 
+        Globals::C2 * disjoint / N + 
+        Globals::C3 * barW;
 
-    return delta < COMPATIBILITY_THRESHOLD;
+    return delta < Globals::COMPATIBILITY_THRESHOLD;
 }
 
 float Genome::GetAverageGeneWeight() const {

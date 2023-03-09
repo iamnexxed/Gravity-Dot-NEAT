@@ -4,14 +4,14 @@ Pillar::Pillar( const Primitives& primitives, glm::vec3 iPosition ) {
 
     this->upperRect = new Rectangle( 
         primitives, 
-        this->pillarWidth, 
-        this->pillarHeight 
+        Globals::PILLAR_WIDTH, 
+        Globals::PILLAR_HEIGHT 
     );
 
     this->lowerRect = new Rectangle( 
         primitives, 
-        this->pillarWidth, 
-        this->pillarHeight 
+        Globals::PILLAR_WIDTH, 
+        Globals::PILLAR_HEIGHT 
     );
 
     this->initialPosition = iPosition;
@@ -21,7 +21,7 @@ Pillar::Pillar( const Primitives& primitives, glm::vec3 iPosition ) {
 
 void Pillar::Spawn() {
     this->initialPosition.y = Mathematics::RandomInRange( 
-        -yBoundDistance, yBoundDistance 
+        -Globals::Y_BOUND_DISTANCE, Globals::Y_BOUND_DISTANCE 
     );
     this->translation = this->initialPosition;
     this->shouldMove = true;
@@ -37,7 +37,7 @@ void Pillar::Update() {
         this->MoveRectangles();
     }
         
-    if( this->translation.x <= this->respawnXLocation ) {
+    if( this->translation.x <= Globals::X_RESPAWN_LOCATION ) {
         this->shouldMove = false;
     }
 
@@ -53,7 +53,7 @@ void Pillar::Draw( Shader& shader, Camera& camera ) {
 }
 
 void Pillar::Reset() {
-    this->currentVelocity = this->initialVelocity;    
+    this->currentVelocity = glm::vec3( Globals::I_PILLAR_VELOCITY, 0, 0 );  
     this->translation = this->initialPosition;
     this->shouldMove = false;
     this->MoveRectangles();
@@ -64,7 +64,7 @@ void Pillar::MoveRectangles() {
         glm::vec3( 
             this->translation.x, 
             this->translation.y + 
-                ( this->pillarHeight + this->gapDistance ) / 2, 
+                ( Globals::PILLAR_HEIGHT + Globals::UPPER_LOWER_GAP ) / 2, 
             0 
         ) 
     );
@@ -72,14 +72,14 @@ void Pillar::MoveRectangles() {
         glm::vec3( 
             this->translation.x,
             this->translation.y +  
-                -( this->pillarHeight + this->gapDistance ) / 2, 
+                -( Globals::PILLAR_HEIGHT + Globals::UPPER_LOWER_GAP ) / 2, 
             0 
         ) 
     );
 }
 
 void Pillar::IncreaseVelocity() {
-    this->currentVelocity += glm::vec3( -this->acceleration, 0, 0 );
+    this->currentVelocity += glm::vec3( -Globals::PILLAR_ACCEL, 0, 0 );
 }
 
 float Pillar::GetXPos() {

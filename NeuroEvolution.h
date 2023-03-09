@@ -13,21 +13,7 @@ class NeuroEvolution {
         void clearGenomes();
 
     public:
-        // Total Population
-        const int populationSize = 80;
-
-        // Initial Neural Network configuration
-        const int INPUTCOUNT = 5;
-         
-        const int OUTPUTCOUNT = 1;
-
-        const int MAXGENS = 500;
-
-        // How many parents to keep from the last generation
-        const int ELITISM = 2;
-
-        const char* SAVE_PATH = "Data/";
-
+     
         // Genomes Array
         std::vector<Genome*> genomes;
 

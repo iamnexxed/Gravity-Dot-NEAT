@@ -71,7 +71,12 @@ int main()
 	// Only close when user decides to close the window
 	while ( !glfwWindowShouldClose( window ) )
 	{
-		glClearColor( kBG_COLOR_R, kBG_COLOR_G, kBG_COLOR_B, kBG_COLOR_A );
+		glClearColor( 
+			Globals::kBG_COLOR_R, 
+			Globals::kBG_COLOR_G, 
+			Globals::kBG_COLOR_B, 
+			Globals::kBG_COLOR_A 
+		);
 
 		// Clear the depth buffer and the color buffer bit
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );

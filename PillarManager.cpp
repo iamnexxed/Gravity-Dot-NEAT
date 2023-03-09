@@ -1,7 +1,7 @@
 #include "PillarManager.h"
 
 PillarManager::PillarManager( const Primitives& primitives, glm::vec3 iPosition ) {
-    for( int i = 0; i < this->numOfPillars; ++i ) {
+    for( int i = 0; i < Globals::PILLAR_COUNT; ++i ) {
         this->pillars.push_back(
             new Pillar( 
                 primitives, 
@@ -19,8 +19,10 @@ void PillarManager::Update() {
    
     // std::cout << "\nPillar Queue size: " << this->queue.size();
     
-    if( difftime( this->timer, this->startTime ) >= 
-        ( ( this->spawnTime ) ) ) {
+    if(
+        difftime( this->timer, this->startTime ) >= 
+        Globals::PILLAR_SPAWN_TIME 
+    ) {
         if( !this->queue.empty() ) {
             this->pillars[this->queue.front()]->Spawn();
             this->pillars[this->queue.front()]->IsInQueue = false;
@@ -44,12 +46,12 @@ void PillarManager::Update() {
 }
 
 void PillarManager::Draw( Shader& shader, Camera& camera ) {
-    for( int i = 0; i < this->numOfPillars; ++i ) 
+    for( int i = 0; i < Globals::PILLAR_COUNT; ++i ) 
             this->pillars[i]->Draw( shader, camera );
 }
 
 void PillarManager::Draw( Shader& shader1, Shader& shader2, Camera& camera ) {
-    for( int i = 0; i < this->numOfPillars; ++i ) {
+    for( int i = 0; i < Globals::PILLAR_COUNT; ++i ) {
         if( this->pillars[i]->IsSelected ) {
             this->pillars[i]->Draw( shader2, camera );
         } else {
@@ -62,7 +64,7 @@ void PillarManager::Draw( Shader& shader1, Shader& shader2, Camera& camera ) {
 
 void PillarManager::Reset() {
     time( &this->startTime ); 
-    for( int i = 0; i < this->numOfPillars; ++i ) {
+    for( int i = 0; i < Globals::PILLAR_COUNT; ++i ) {
         // Push all the pillars to the queue
         if( !this->pillars[i]->IsInQueue ) {
             this->queue.push( i );
@@ -75,7 +77,7 @@ void PillarManager::Reset() {
 
 std::vector<Rectangle*> PillarManager::GetAllRectangles() {
     std::vector<Rectangle*> rects;
-    for( int i = 0; i < this->numOfPillars; ++i ) {
+    for( int i = 0; i < Globals::PILLAR_COUNT; ++i ) {
         rects.push_back( pillars[i]->lowerRect );
         rects.push_back( pillars[i]->upperRect );
     }
@@ -83,7 +85,7 @@ std::vector<Rectangle*> PillarManager::GetAllRectangles() {
 }
 
 void PillarManager::IncreaseVelocity() {
-    for( int i = 0; i < this->numOfPillars; ++i ) {
+    for( int i = 0; i < Globals::PILLAR_COUNT; ++i ) {
         pillars[i]->IncreaseVelocity();
     }
 }
@@ -95,9 +97,9 @@ float PillarManager::GetVelocity() {
 Pillar& PillarManager::GetNearestPillarTo( const glm::vec3& position ) {
     float xDist = INFINITY;
     Pillar* pillar = this->pillars[0];
-    for( int i = 0; i < this->numOfPillars; ++i ) {
+    for( int i = 0; i < Globals::PILLAR_COUNT; ++i ) {
         float x = this->pillars[i]->GetXPos() +
-                this->pillars[i]->pillarWidth / 2; 
+                Globals::PILLAR_WIDTH / 2; 
         if( x > position.x ) {
             float dist = x - position.x;
             if( dist < xDist ) {
@@ -110,6 +112,6 @@ Pillar& PillarManager::GetNearestPillarTo( const glm::vec3& position ) {
 }
 
 PillarManager::~PillarManager() {
-    for( int i = 0; i < this->numOfPillars; ++i )
+    for( int i = 0; i < Globals::PILLAR_COUNT; ++i )
         delete this->pillars[i];
 }

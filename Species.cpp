@@ -27,7 +27,7 @@ void Species::CullSpecies( const std::vector<Genome*>& genomeArray ) {
     );
     // Get parent_length = ceil( CULLFACTOR * genomeTracker.size() );
     int parentLength = ( int )std::ceil( 
-        SPECIES_KEEP_FACTOR * this->genomeTracker.size() 
+        Globals::SPECIES_KEEP_FACTOR * this->genomeTracker.size() 
     );
 
     // Empty the parent store array

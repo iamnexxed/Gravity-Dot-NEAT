@@ -22,7 +22,7 @@ void Circle::createSprite( float rad ) {
         }
     };
 
-    for( int i = 0; i < 360; i += this->step ) {
+    for( int i = 0; i < 360; i += Globals::STEP ) {
 
         circle_vertices.push_back(
             Vertex { 
@@ -82,14 +82,13 @@ void Circle::ApplyForce( glm::vec3 force ) {
 
 void Circle::Jump() {
     this->velocity = glm::vec3( 0, 0, 0 );
-    this->ApplyForce( glm::vec3( 0, this->JUMPFORCE, 0 ) );
+    this->ApplyForce( glm::vec3( 0, Globals::JUMPFORCE, 0 ) );
 }
 
 void Circle::Update() {
     this->translation += this->velocity;
     // Increase alive time
-    // this->aliveTime += this->DELTA;
-    this->aliveTime += 1;
+    this->aliveTime += Globals::DELTA;
 }
 
 void Circle::Translate( glm::vec3 translationVec ) {
@@ -141,21 +140,21 @@ bool Circle::Predict(
     xDistance = Mathematics::Map( 
         xDistance, 
         0, 
-        this->MAXWIDTH,
+        Globals::MAXWIDTH,
         -1.0f,
         1.0f
     );
     yUpperPillarDistance = Mathematics::Map( 
         yUpperPillarDistance, 
-        -this->MAXHEIGHT / 2, 
-        this->MAXHEIGHT / 2,
+        -Globals::MAXHEIGHT / 2, 
+        Globals::MAXHEIGHT / 2,
         -1.0f,
         1.0f
     );
     yLowerPillarDistance = Mathematics::Map( 
         yLowerPillarDistance, 
-        -this->MAXHEIGHT / 2, 
-        this->MAXHEIGHT / 2,
+        -Globals::MAXHEIGHT / 2, 
+        Globals::MAXHEIGHT / 2,
         -1.0f,
         1.0f
     );
@@ -163,8 +162,8 @@ bool Circle::Predict(
     //yGroundDistance /= this->MAXHEIGHT;
     float y = Mathematics::Map( 
         this->velocity.y, 
-        -this->MAXHEIGHT / 2, 
-        this->MAXHEIGHT / 2,
+        -Globals::MAXHEIGHT / 2, 
+        Globals::MAXHEIGHT / 2,
         -1.0f,
         1.0f
     );
@@ -185,7 +184,7 @@ bool Circle::Predict(
     // Neural Network prediction
     std::vector<float> output = this->brain->Predict( inputs );
     // If the output[0] is greater than the jump threshold return true
-    return ( output.size() > 0 && output[0] > this->JUMP_PREDICTION_THRES );   
+    return ( output.size() > 0 && output[0] > Globals::JUMP_PREDICTION_THRES );   
 }
 
 bool Circle::CheckCollision( const Rectangle& rect ) {

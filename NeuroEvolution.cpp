@@ -12,17 +12,19 @@ bool NeuroEvolution::SetGenomeFitness( int index, float fitness ) {
 void NeuroEvolution::Initiate() {
     this->currentGeneration = 0;
     // Create a new random population 
-    for( int i = 0; i < this->populationSize; ++i ) {
+    for( int i = 0; i < Globals::POPULATION; ++i ) {
         this->genomes.push_back( 
             new Genome( 
-                this->INPUTCOUNT, this->OUTPUTCOUNT, this->currentGeneration 
+                Globals::INPUTCOUNT, 
+                Globals::OUTPUTCOUNT, 
+                this->currentGeneration 
             ) 
         );
     }
 }
 
 void NeuroEvolution::Initiate( const char* path ) {
-    for( int i = 0; i < this->populationSize; ++i ) {
+    for( int i = 0; i < Globals::POPULATION; ++i ) {
         this->genomes.push_back( new Genome( path ) );
     }
 }
@@ -143,7 +145,7 @@ void NeuroEvolution::CrossOver() {
         // Cull the species and keep parents
         this->speciesArray[i]->CullSpecies( this->genomes );
         // TO DO: Keep topmost parent for a small number of possibilities since it will be the fittest
-        for( int j = 0; j < this->ELITISM; ++j ) {
+        for( int j = 0; j < Globals::ELITISM; ++j ) {
             int parentIndex = this->speciesArray[i]->GetParentGenomeIndexAt(j);
             if( parentIndex != -1 ) {
                 Genome* elite = new Genome( 
@@ -200,15 +202,15 @@ void NeuroEvolution::clearGenomes() {
 }
 
 void NeuroEvolution::SaveGenomesToJSON() {
-    Utils::deleteDirContent( SAVE_PATH );
+    Utils::deleteDirContent( Globals::SAVE_PATH );
     for(int i = 0; i < this->genomes.size(); ++i ) {
-        this->genomes[i]->SaveToJSON( SAVE_PATH );
+        this->genomes[i]->SaveToJSON( Globals::SAVE_PATH );
     } 
 }
 
 void NeuroEvolution::SaveBestGenome() {
     if( this->bestGenomeIndex != -1 ) {
-        this->genomes[this->bestGenomeIndex]->SaveToJSON( SAVE_PATH );
+        this->genomes[this->bestGenomeIndex]->SaveToJSON( Globals::SAVE_PATH );
     }
 }
 

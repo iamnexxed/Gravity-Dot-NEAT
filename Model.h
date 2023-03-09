@@ -12,9 +12,6 @@ private:
 	const char* file;
 	std::vector<unsigned char> data;
 	json JSON;
-
-	
-
 	std::vector<std::string> loadedTexName;
 	std::vector<Texture> loadedTex;
 

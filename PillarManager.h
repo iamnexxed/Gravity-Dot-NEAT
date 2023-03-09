@@ -9,8 +9,6 @@ class PillarManager {
     private:
         std::vector<Pillar*> pillars;
         std::queue<int> queue;
-        const int numOfPillars = 5;
-        const float spawnTime = 2.0f;
         time_t startTime;
         time_t timer;
 

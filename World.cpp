@@ -55,7 +55,7 @@ void World::Start() {
 
 void World::Update() {
     if( 
-        this->neuroEvolution->currentGeneration > this->neuroEvolution->MAXGENS 
+        this->neuroEvolution->currentGeneration > Globals::MAXGENS 
     ) this->ShouldPlayWorld = false;
 
     //std::cout << "\nGen: " << this->neuroEvolution->currentGeneration;
@@ -103,22 +103,22 @@ void World::Update() {
 
         float xDistance = 
             pillar.GetXPos() -
-            pillar.pillarWidth / 2 -
+            Globals::PILLAR_WIDTH / 2 -
             this->circles[i]->translation.x;   
 
-        if( ( xDistance + pillar.pillarWidth ) <= 0.1f ) {
+        if( ( xDistance + Globals::PILLAR_WIDTH ) <= 0.1f ) {
             this->circles[i]->CrossedPillar();
         } 
 
         float yUpperPillarDistance = 
-            pillar.GetYPos() - pillar.gapDistance / 2;
+            pillar.GetYPos() - Globals::UPPER_LOWER_GAP / 2;
 
         yUpperPillarDistance = //std::abs(
             yUpperPillarDistance - this->circles[i]->translation.y ;
         //);
 
         float yLowerPillarDistance = 
-            pillar.GetYPos() + pillar.gapDistance / 2;
+            pillar.GetYPos() + Globals::UPPER_LOWER_GAP / 2;
 
         yLowerPillarDistance = //std::abs(
             yLowerPillarDistance - this->circles[i]->translation.y ;
@@ -142,14 +142,15 @@ void World::Update() {
                 xDistance, 
                 yUpperPillarDistance, 
                 yLowerPillarDistance, 
-                yCeilDistance,
-                yGroundDistance,
+                yCeilDistance,  // <<<<<<< not being used
+                yGroundDistance, // <<<<<< not being used
                 pillar.GetYPos()
             )
         ) {
             this->circles[i]->Jump();
         }
 
+        // For Manual Jump Input
         // if ( 
         //     glfwGetKey( &this->window, GLFW_KEY_SPACE ) == GLFW_PRESS && 
         //     !this->circle->hasBrain 
