@@ -23,7 +23,7 @@ World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
     
     this->shader2 = new Shader( "sprite.vert", "sprite.frag" );
     this->shader2->Activate();
-    this->shader2->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 0.0f, 1.0f ) );
+    this->shader2->SetFloatVecUniform3fv( "baseColor", glm::vec3( 0.0f, 1.0f, 1.0f ) );
 
     this->shader3 = new Shader( "sprite.vert", "sprite.frag" );
     this->shader3->Activate();
