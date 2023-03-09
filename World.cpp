@@ -2,11 +2,13 @@
 
 World::World( GLFWwindow& window, int windowWidth, int windowHeight ) :
     window(window) {
+        
     this->camera = new Camera( 
         windowWidth, 
         windowHeight, 
         glm::vec3( 0.0f, 0.0f, 5.0f ) 
     );
+
     this->shaderProgram = new Shader( "sprite.vert", "sprite.frag" );
     this->shaderProgram->Activate();
     this->shaderProgram->SetFloatVecUniform3fv( "baseColor", glm::vec3( 1.0f, 1.0f, 1.0f ) );
