@@ -87,8 +87,9 @@ The output threshold determines if an organism should jump or not.
 
 
 Fitness function used to evaluate each organism:
-
+```
 Number of frames survived + ( Number of pillars passed * 100 )
+```
 
 References:
 - https://neat-python.readthedocs.io/en/latest/neat_overview.html
