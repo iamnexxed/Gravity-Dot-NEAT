@@ -17,7 +17,7 @@ Libraries used- GLAD, GLFW, GLM, JSON, STB
 
 You can save/load a genome into/from a JSON file.
 
-Here's a GENOME/GENOTYPE example
+Here's a GENOME/GENOTYPE example JSON
 
 
 ```
@@ -68,6 +68,27 @@ Here's a GENOME/GENOTYPE example
 }
 
 ```
+
+The Neural Network takes following inputs:
+
+1. The horizontal distance from organism to the next pillar
+
+2. The vertical distance from the organism to the next pillar's upper edge of the gap
+
+3. The vertical distance from the organism to the next pillar's lower edge of the gap
+
+4. The vertical velocity of the organism
+
+
+A TanH function is used to normalise the summation of the weights * inputs.
+
+
+The output threshold determines if an organism should jump or not.
+
+
+Fitness function used to evaluate each organism:
+
+Number of frames survived + ( Number of pillars passed * 100 )
 
 References:
 - https://neat-python.readthedocs.io/en/latest/neat_overview.html
