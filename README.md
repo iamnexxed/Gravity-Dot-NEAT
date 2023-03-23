@@ -4,7 +4,7 @@ Simulating Flappy Bird Clone with NeuroEvolution of Augmenting Topologies.
 
 Created with OpenGL C++. 
 
-Libraries used- GLAD, GLFW, GLM, JSON, STB
+Libraries used- GLAD, GLFW, GLM, JSON
 
 ### Generation 1
 ![](https://github.com/iamnexxed/Gravity-Dot-NEAT/blob/main/Images/GravityDotCapture1.gif)
