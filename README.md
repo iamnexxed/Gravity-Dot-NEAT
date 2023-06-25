@@ -11,7 +11,7 @@ https://www.glfw.org/download
 
 If you have correct libraries in place you can execute the project with the following command
 ```
-$ /usr/bin/clang++ -std=c++17 -ILibraries/include -g **.cpp glad.cc -o Main -LLibraries/lib -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit && ./Main
+/usr/bin/clang++ -std=c++17 -ILibraries/include -g **.cpp glad.cc -o Main -LLibraries/lib -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit && ./Main
 ```
 
 
