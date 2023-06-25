@@ -6,6 +6,15 @@ Created with OpenGL C++.
 
 Libraries used- GLAD, GLFW, GLM, JSON
 
+Make sure to download the binaries according to your system architecture:
+https://www.glfw.org/download
+
+If you have correct libraries in place you can execute the project with the following command
+```
+$ /usr/bin/clang++ -std=c++17 -ILibraries/include -g **.cpp glad.cc -o Main -LLibraries/lib -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit && ./Main
+```
+
+
 ### Generation 1
 ![](https://github.com/iamnexxed/Gravity-Dot-NEAT/blob/main/Images/GravityDotCapture1.gif)
 
