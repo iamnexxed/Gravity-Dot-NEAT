@@ -1,6 +1,6 @@
 # Gravity-Dot-NEAT
 
-Simulating Flappy Bird Clone with NeuroEvolution of Augmenting Topologies. The  bird aka "Dot" is affected by gravity (thus Gravity Dot). It is a game about avoiding the ceiling, the floor and the pillars.
+Simulating Flappy Bird Clone with NeuroEvolution of Augmenting Topologies. The  bird aka "Dot" is affected by gravity (thus Gravity Dot). It is a game about avoiding the ceiling, the floor and the pillars. The bird learns to play the game through reinforcement learning.
 
 Can also save custom neural networks as graphed models aka. "genomes". The model (or genome) can be parsed back to generate a neural network.
 
